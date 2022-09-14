@@ -25,14 +25,11 @@ public class User implements UserDetails{
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-
         roles.forEach(role -> {
             SimpleGrantedAuthority rAuthority = new SimpleGrantedAuthority(role.getName());
             authorities.add(rAuthority);
         });
-
         return authorities;
     }
 
