@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import de.osiem.leaguechat.auth.model.Role;
@@ -20,6 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public User saveUser(User user) {
@@ -52,6 +57,13 @@ public class UserServiceImpl implements UserService{
     public List<User> getUsers() {
         log.info("Getting all users");
         return userRepository.findAll();
+    }
+
+    @Override
+    public User createUser(User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+        return user;
     }
     
 }
