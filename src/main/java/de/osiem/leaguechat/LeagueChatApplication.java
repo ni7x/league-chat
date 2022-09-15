@@ -18,6 +18,7 @@ public class LeagueChatApplication {
 		SpringApplication.run(LeagueChatApplication.class, args);
 	}
 
+    /*
     @Bean
     CommandLineRunner run(UserService userService){
         return args -> {
@@ -26,10 +27,10 @@ public class LeagueChatApplication {
             userService.saveRole(new Role(null, "ROLE_ADMIN"));
             userService.saveRole(new Role(null, "ROLE_SUPER_ADMIN"));
 
-            userService.createUser(new User(null, "SorryMyBard", "adi123", "jebacstunera", new ArrayList<>()));
-            userService.createUser(new User(null, "TG TGGT TG TGGT", "7022707", "sznicel", new ArrayList<>()));
-            userService.createUser(new User(null, "Mangos", "username1", "password1", new ArrayList<>()));
-            userService.createUser(new User(null, "MangosV2", "username2", "password1", new ArrayList<>()));
+            userService.saveUser(new User(null, "SorryMyBard", "adi123", "jebacstunera", new ArrayList<>()));
+            userService.saveUser(new User(null, "TG TGGT TG TGGT", "7022707", "sznicel", new ArrayList<>()));
+            userService.saveUser(new User(null, "Mangos", "username1", "password1", new ArrayList<>()));
+            userService.saveUser(new User(null, "MangosV2", "username2", "password1", new ArrayList<>()));
 
             userService.addRoleToUser("username1", "ROLE_USER");
             userService.addRoleToUser("username2", "ROLE_MANAGER");
@@ -39,5 +40,5 @@ public class LeagueChatApplication {
             userService.addRoleToUser("7022707", "ROLE_ADMIN");
             userService.addRoleToUser("7022707", "ROLE_MANAGER");
         };
-    }
+    }*/
 }
