@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import de.osiem.leaguechat.auth.model.Role;
 import de.osiem.leaguechat.auth.model.User;
 import de.osiem.leaguechat.auth.service.UserService;
 import lombok.Data;

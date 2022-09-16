@@ -1,14 +1,10 @@
 package de.osiem.leaguechat.auth.service;
 
-import java.util.Arrays;
+import java.io.Console;
 import java.util.List;
-
 import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import de.osiem.leaguechat.auth.model.Role;
 import de.osiem.leaguechat.auth.model.User;
 import de.osiem.leaguechat.auth.repository.UserRepository;
@@ -34,7 +30,9 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUser(String username) {
         log.info("Getting user " + username);
-        return userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
+        System.out.println(user);//it doesn't work without this line?
+        return user;
     }
 
     @Override
