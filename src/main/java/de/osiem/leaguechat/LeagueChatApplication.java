@@ -1,15 +1,7 @@
 package de.osiem.leaguechat;
-
-import java.util.ArrayList;
-
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
-import de.osiem.leaguechat.auth.model.Role;
-import de.osiem.leaguechat.auth.model.User;
-import de.osiem.leaguechat.auth.service.UserService;
 
 @SpringBootApplication
 public class LeagueChatApplication {
@@ -18,7 +10,7 @@ public class LeagueChatApplication {
 		SpringApplication.run(LeagueChatApplication.class, args);
 	}
 
-    @Bean
+    /*@Bean
     CommandLineRunner run(UserService userService){
         return args -> {
             userService.saveRole(new Role(null, "ROLE_USER"));
@@ -39,5 +31,5 @@ public class LeagueChatApplication {
             userService.addRoleToUser("7022707", "ROLE_ADMIN");
             userService.addRoleToUser("7022707", "ROLE_MANAGER");
         };
-    }
+    }*/
 }

@@ -1,5 +1,6 @@
 package de.osiem.leaguechat.auth.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import de.osiem.leaguechat.auth.model.Role;
 import de.osiem.leaguechat.auth.model.User;
-import de.osiem.leaguechat.auth.repository.RoleRepository;
 import de.osiem.leaguechat.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,30 +21,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public User saveUser(User user) {
-        log.info("Saving new user " + user.getUsername());
-        return userRepository.save(user);
-    }
-
-    @Override
-    public Role saveRole(Role role) {
-        log.info("Saving new role " + role.getName());
-        return roleRepository.save(role);
-    }
-
-    @Override
-    public void addRoleToUser(String username, String roleName) {
-        log.info("Adding role " + roleName + "to user: " + username);
-        User user = userRepository.findByUsername(username);
-        Role role = roleRepository.findByName(roleName);
-        user.getRoles().add(role);
-
+    public User saveUser(User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.getRoles().add(Role.USER);
+        userRepository.save(user);
+        return user;
     }
 
     @Override
@@ -60,10 +44,16 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User createUser(User user){
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        return user;
+    public void addRoleToUser(String username, Object role) {
+        User user = userRepository.findByUsername(username);
+
+        if(role instanceof String){
+            user.getRoles().add(Role.valueOf((String) role));
+        }else{
+            user.getRoles().add((Role) role);
+        }
+
+        log.info("Adding role " + role + "to user: " + username);
     }
     
 }

@@ -20,14 +20,15 @@ public class User implements UserDetails{
     private String username;
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Role> roles = new ArrayList<>();
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        Collection<GrantedAuthority> authorities = new HashSet<>();
         roles.forEach(role -> {
-            SimpleGrantedAuthority rAuthority = new SimpleGrantedAuthority(role.getName());
+            SimpleGrantedAuthority rAuthority = new SimpleGrantedAuthority(role.name());
             authorities.add(rAuthority);
         });
         return authorities;
