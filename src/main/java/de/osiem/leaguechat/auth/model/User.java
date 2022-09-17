@@ -15,7 +15,7 @@ public class User implements UserDetails{
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    //add validation
     private String ingameName;
     private String username;
     private String password;

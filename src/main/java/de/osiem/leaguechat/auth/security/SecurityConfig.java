@@ -1,6 +1,5 @@
 package de.osiem.leaguechat.auth.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -21,7 +20,9 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+
+import de.osiem.leaguechat.auth.security.jwt.CustomJwtAuthenticationConverter;
+import de.osiem.leaguechat.auth.security.jwt.RsaKeyProperties;
 
 
 
@@ -42,8 +43,12 @@ public class SecurityConfig {
                 .csrf(csfr -> csfr.disable())
                 .authorizeRequests(auth->auth
                     .antMatchers("/api/user/save").permitAll()
+                    .antMatchers("/api/users").hasAuthority("MODERATOR")
+                    .antMatchers("/api/user/addRoleToUser").hasAuthority("ADMIN")
+                    .antMatchers("/").hasAuthority("USER")
                     .anyRequest().authenticated())
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+                .oauth2ResourceServer(authorize -> authorize
+                    .jwt(jwt -> jwt.jwtAuthenticationConverter(new CustomJwtAuthenticationConverter())))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider())
                 .httpBasic(Customizer.withDefaults())

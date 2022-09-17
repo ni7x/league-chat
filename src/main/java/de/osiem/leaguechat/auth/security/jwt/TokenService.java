@@ -1,6 +1,7 @@
-package de.osiem.leaguechat.auth.security;
+package de.osiem.leaguechat.auth.security.jwt;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
@@ -20,16 +21,17 @@ public class TokenService {
 	
 	public String generateToken(Authentication authentication) {
 		Instant now = Instant.now();
-		String scope = authentication.getAuthorities().stream()
-				.map(GrantedAuthority::getAuthority)
-				.collect(Collectors.joining(" "));
-		JwtClaimsSet claims = JwtClaimsSet.builder()
-				.issuer("self")
-				.issuedAt(now)
-				.expiresAt(now.plus(1, ChronoUnit.HOURS))
-				.subject(authentication.getName())
-				.claim("scope", scope)
-				.build();
+        Set<String> roles = authentication.getAuthorities().stream()
+			.map(GrantedAuthority::getAuthority)
+			.collect(Collectors.toSet());
+
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                    .issuer("self")
+                    .issuedAt(now)
+                    .expiresAt(now.plus(1, ChronoUnit.HOURS))
+                    .subject(authentication.getName())
+                    .claim("roles", roles)
+                    .build();
 		return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 	}
 }

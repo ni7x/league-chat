@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +39,11 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/")
+	public String home(Authentication authentication) {
+		return "Hello, " + authentication.getName() + " - " + authentication.getAuthorities();
+	}
+	
 }
 
 @Data
