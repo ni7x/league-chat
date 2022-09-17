@@ -18,19 +18,33 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    private static final String PASSWORD_PATTERN =
+            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,20}$";
+
     @Override
     public User saveUser(User user){
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.getRoles().add(Role.USER);
-        userRepository.save(user);
-        return user;
+        log.info("Saving user " + user);
+        if(getUser(user.getUsername()) == null){
+            String password = user.getPassword();
+            if(password.matches(PASSWORD_PATTERN)){
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                user.getRoles().add(Role.USER);
+                userRepository.save(user);
+                return user;
+            }else{
+                log.error("Password doesn't match the pattern");
+                return null;
+            }    
+        }
+       log.error("This username is already taken!");
+       return null;
     }
 
     @Override
     public User getUser(String username) {
         log.info("Getting user " + username);
         User user = userRepository.findByUsername(username);
-        System.out.println(user);//it doesn't work without this line?
+        System.out.println(user);
         return user;
     }
 

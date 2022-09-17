@@ -44,7 +44,8 @@ public class SecurityConfig {
                 .authorizeRequests(auth->auth
                     .antMatchers("/api/user/save").permitAll()
                     .antMatchers("/api/users").hasAuthority("MODERATOR")
-                    .antMatchers("/api/user/addRoleToUser").hasAuthority("ADMIN")
+                    .antMatchers("/api/users").hasAuthority("ADMIN")
+                    .antMatchers("/api/user/addRole").hasAuthority("ADMIN")
                     .antMatchers("/").hasAuthority("USER")
                     .anyRequest().authenticated())
                 .oauth2ResourceServer(authorize -> authorize
