@@ -1,6 +1,5 @@
 package de.osiem.leaguechat.auth.service;
 
-import java.io.Console;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
