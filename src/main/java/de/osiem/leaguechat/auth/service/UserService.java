@@ -8,4 +8,6 @@ public interface UserService {
     void addRoleToUser(String username, Object role);
     User getUser(String username);
     List<User> getUsers();
+    void addPositionToUser(String username, Object position);
+    void addFriendToUser(String username, String friendName);
 }

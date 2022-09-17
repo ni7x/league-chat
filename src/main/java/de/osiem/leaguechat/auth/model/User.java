@@ -2,24 +2,20 @@ package de.osiem.leaguechat.auth.model;
 
 import java.util.*;
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.*;
 
 @Entity 
 @Data @NoArgsConstructor @AllArgsConstructor
 public class User implements UserDetails{
-
-    private static final String PASSWORD_PATTERN =
-            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,20}$";
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -36,6 +32,14 @@ public class User implements UserDetails{
     @ElementCollection
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany()
+    @JsonIgnoreProperties("friends")
+    private Set<User> friends = new HashSet<>();
+
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private Set<Position> positions = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -65,6 +69,28 @@ public class User implements UserDetails{
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof User)) {
+            return false;
+        }
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(ingameName, user.ingameName) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles) && Objects.equals(friends, user.friends) && Objects.equals(positions, user.positions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, ingameName, username, password, roles, positions);
+    }
+
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", ingameName=" + ingameName + ", password=" + password + ", positions=" + positions
+                + ", roles=" + roles + ", username=" + username + "]";
     }
     
 }
