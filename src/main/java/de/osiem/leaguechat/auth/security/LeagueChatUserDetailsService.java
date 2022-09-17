@@ -1,4 +1,4 @@
-package de.osiem.leaguechat.auth.service;
+package de.osiem.leaguechat.auth.security;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -6,11 +6,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import de.osiem.leaguechat.auth.model.User;
+import de.osiem.leaguechat.auth.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class jwtUserDetailsService implements UserDetailsService {
+public class LeagueChatUserDetailsService implements UserDetailsService {
 
     private final UserService userService;
 
