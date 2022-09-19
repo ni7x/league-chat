@@ -14,6 +14,8 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -41,7 +43,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
                 .csrf(csfr -> csfr.disable())
-                .authorizeRequests(auth->auth
+                .cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+                .and().authorizeRequests(auth->auth
+                    
                     .antMatchers("/api/user/save").permitAll()
                     .antMatchers("/api/users").hasAuthority("MODERATOR")
                     .antMatchers("/api/users").hasAuthority("ADMIN")

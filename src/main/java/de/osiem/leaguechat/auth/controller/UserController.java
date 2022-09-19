@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class UserController {
@@ -29,8 +31,9 @@ public class UserController {
 		return "Hello, " + authentication.getName() + " - " + authentication.getAuthorities();
 	}
 
-    @GetMapping("/me")
+    @GetMapping("/user/me")
 	public ResponseEntity<User> getMe(Authentication authentication) {
+        System.out.println("AUTH " + authentication);
 	    return ResponseEntity.ok().body(userService.getUser(authentication.getName()));
 	}
 
