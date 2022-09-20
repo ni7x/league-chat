@@ -1,23 +1,22 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import User from "../components/User";
 import { getUser } from "../services/AuthService";
 
-const Home = () => {
+const UserPage = () => {
     
     const [ userInfo, setUserInfo ] = useState(new Object());
+    const params = useParams();
     useEffect(() => {
-        getUser().then(user => setUserInfo(user));
+        console.log(params);
+        getUser(params.username).then(user => setUserInfo(user));
     }, [])
 
     return(
-        <>
+        <>  Page of this user
             <User ingameName={userInfo.ingameName} positions={userInfo.positions} />
-            <p>Friends: </p>
-            {userInfo.friends && userInfo.friends.map((friend)=>{
-                return <User key={friend.id} ingameName={friend.ingameName} positions={friend.positions} />
-            })}
         </>
     )
 }
 
-export default Home;
+export default UserPage;
