@@ -8,7 +8,6 @@ const UserPage = () => {
     const [ userInfo, setUserInfo ] = useState(new Object());
     const params = useParams();
     useEffect(() => {
-        console.log(params);
         getUser(params.username).then(user => setUserInfo(user));
     }, [])
 

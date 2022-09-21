@@ -9,5 +9,8 @@ public interface UserService {
     User getUser(String username);
     List<User> getUsers();
     void addPositionToUser(String username, Object position);
-    void addFriendToUser(String username, String friendName);
+    User addFriendToUser(String username, String friendName);
+    void deleteUser(String name);
+    User updateUser(User user);
+    User removeFriendFromUser(String username, String friendName);
 }

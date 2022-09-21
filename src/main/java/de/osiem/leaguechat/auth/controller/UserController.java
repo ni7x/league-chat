@@ -8,9 +8,11 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,15 +23,11 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true", allowedHeaders = "*", exposedHeaders = "If-Match")
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class UserController {
     private final UserService userService;
-    @GetMapping("/")
-	public String home(Authentication authentication) {
-		return "Hello, " + authentication.getName() + " - " + authentication.getAuthorities();
-	}
 
     @GetMapping("/user/me")
 	public ResponseEntity<User> getMe(Authentication authentication) {
@@ -39,21 +37,56 @@ public class UserController {
 
     @PostMapping("/user/save")
     public ResponseEntity<User> saveUser(@Valid @RequestBody User user){
-        //need to move validation logic of some form service i think and return errors instead of logs
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
-        return ResponseEntity.created(uri).body(userService.saveUser(user));
+        User newUser = userService.saveUser(user);
+        if(newUser != null){
+            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
+            return ResponseEntity.created(uri).body(newUser);
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PutMapping("/user/username/{username}")
+    public ResponseEntity<User> updateUser(@PathVariable String username, Authentication authentication, @Valid @RequestBody User user){
+        if(authentication.getName().equals(username)){
+            userService.updateUser(user);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
+      
+    }
+
+    @DeleteMapping("/user/username/{username}")
+    public ResponseEntity<?> deleteUser(@PathVariable String username, Authentication authentication){
+        if(authentication.getName().equals(username)){
+            userService.deleteUser(username);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
+      
     }
 
     @PostMapping("/user/addPosition")
-    public ResponseEntity<?> addPositionToUser(@RequestBody PositionToUser form){
+    public ResponseEntity<?> addPosition(@RequestBody PositionToUser form){
         userService.addPositionToUser(form.getUsername(), form.getPositionName());
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/user/addFriend")
-    public ResponseEntity<?> addFriendToUser(@RequestBody FriendToUser form){
-        userService.addFriendToUser(form.getUsername(), form.getFriendName());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<User> addFriend(@RequestBody FriendToUser form){
+        User user = userService.addFriendToUser(form.getUsername(), form.getFriendName());
+        if(user!=null){
+            return ResponseEntity.ok().body(user);
+        }
+        return ResponseEntity.badRequest().build();
+        
+    }
+    @PostMapping("/user/removeFriend")
+    public ResponseEntity<User> removeFriend(@RequestBody FriendToUser form){
+        User user = userService.removeFriendFromUser(form.getUsername(), form.getFriendName());
+        if(user!=null){
+            return ResponseEntity.ok().body(user);
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/users")
@@ -67,12 +100,14 @@ public class UserController {
     }
 
     @PostMapping("/user/addRole")
-    public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUser form){
+    public ResponseEntity<?> addRole(@RequestBody RoleToUser form){
         userService.addRoleToUser(form.getUsername(), form.getRoleName());
         return ResponseEntity.ok().build();
     }
 	
 }
+
+
 
 @Data
 class RoleToUser{

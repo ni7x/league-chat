@@ -1,6 +1,7 @@
 package de.osiem.leaguechat.auth.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -25,12 +26,19 @@ public class UserServiceImpl implements UserService{
     private static final String PASSWORD_PATTERN =
             "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,20}$";
 
+    private static boolean passwordIsValid(String password){
+        if(password.matches(PASSWORD_PATTERN)){
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public User saveUser(User user){
         log.info("Saving user " + user);
         if(getUser(user.getUsername()) == null){
             String password = user.getPassword();
-            if(password.matches(PASSWORD_PATTERN)){
+            if(passwordIsValid(password)){    
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 user.getRoles().add(Role.USER);
                 userRepository.save(user);
@@ -42,6 +50,35 @@ public class UserServiceImpl implements UserService{
         }
        log.error("This username is already taken!");
        return null;
+    }
+
+    @Override
+    public User updateUser(User updatedUserData){
+        Optional<User> user = userRepository.findById(updatedUserData.getId());
+        System.out.println(updatedUserData);
+        if(user.isPresent()){
+            User updatedUser = user.get();
+            updatedUser.setIngameName(updatedUserData.getIngameName());
+            updatedUser.setUsername(updatedUserData.getUsername());
+            if(passwordIsValid(updatedUserData.getPassword())){
+                updatedUser.setPassword(passwordEncoder.encode(updatedUserData.getPassword()));
+            }
+            updatedUser.setPositions(updatedUserData.getPositions());
+            userRepository.save(updatedUser);
+
+        }
+       return null;
+    }
+
+    @Override
+    public void deleteUser(String username){
+        log.info("Deleting user {}", username);
+        User user = getUser(username);
+        user.getFriends().forEach((friend)->{
+            friend.getFriends().remove(user);
+        });
+        user.setFriends(null);
+        userRepository.delete(user);
     }
 
     @Override
@@ -59,14 +96,32 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void addFriendToUser(String userName, String friendName){
+    public User addFriendToUser(String userName, String friendName){
         User user = userRepository.findByUsername(userName);
         User friend = userRepository.findByUsername(friendName);
-        log.info("Adding friend {} to friendlist of user {}", friendName, userName);
-        user.getFriends().add(friend);
-        friend.getFriends().add(user);
-        userRepository.save(user);
-    
+        if(friend != null && user != null){
+            log.info("Adding friend {} to friendlist of user {}", friendName, userName);
+            user.getFriends().add(friend);
+            friend.getFriends().add(user);
+            userRepository.save(user);
+            return user;
+        }
+        return null;
+    }
+
+    @Override
+    public User removeFriendFromUser(String userName, String friendName) {
+        User user = userRepository.findByUsername(userName);
+        User friend = userRepository.findByUsername(friendName);
+        if(friend != null && user != null){
+            log.info("Removing friend {} from friendlist of user {}", friendName, userName);
+            user.getFriends().remove(friend);
+            friend.getFriends().remove(user);
+            userRepository.save(user);   
+            return user; 
+        }
+        return null;
+       
     }
 
     @Override

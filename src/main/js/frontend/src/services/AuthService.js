@@ -1,20 +1,26 @@
+import { useContext } from "react";
+import { UserContext } from "../UserContext";
+
 const URL_PREFIX = "http://127.0.0.1:8080";
 
-export const login = async (username, password) => {
-    const response = await fetch(URL_PREFIX + "/token", {
-        method: "POST",
-        headers: {
-            'Authorization': 'Basic ' + btoa(username + ":" + password)
-        }
-    });
+export const useUser = () =>{
+    return useContext(UserContext);
+}
 
-    if (response.ok) {
-        response.text().then((token) => {
-            localStorage.setItem("token", token);
+export const login = async (username, password) => {
+        const response = await fetch(URL_PREFIX + "/token", {
+            method: "POST",
+            headers: {
+                'Authorization': 'Basic ' + btoa(username + ":" + password)
+            }
         });
-    }else {
-        throw new Error("Couldn't login!");
-    }
+        if(response.ok){
+            let user = await response.text();
+            localStorage.setItem("token", user);
+            return user;
+        }else{
+            return Promise.reject("XD");
+        }   
 }
 
 export const logout = () => {
@@ -53,7 +59,6 @@ export const getUser = async (username) => {
     }else{
         URL = "http://127.0.0.1:8080/api/user/username/" + username;
     }
-
     if(localStorage.getItem("token") !== null){
         const response = await fetch(URL, {
             method: "GET",
@@ -67,7 +72,7 @@ export const getUser = async (username) => {
             throw new Error("Couldn't get user");
         }
     }else{
-        throw new Error("Couldn't get user(No token provided)");
+        throw new Error("Couldn't get user (No token provided)");
     }
 }
 

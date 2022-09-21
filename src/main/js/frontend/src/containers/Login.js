@@ -1,17 +1,21 @@
-import { useRef, useState } from "react";
-import { login } from "../services/AuthService";
+import { useRef, useState} from "react";
+import { login, useUser } from "../services/AuthService";
+
 
 const Login = () => {
+    const [ user, setUser ] = useUser();
     const [ errorMessage, setErrorMessage ] = useState(""); 
     const formData = useRef();
     
-    const handleSubmit = (e) => {
-
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const { username, password } = formData.current;
-        login(username.value, password.value)
-            .catch((err) => setErrorMessage("Couldn't login"))
-            .finally(setErrorMessage("Logged in"));
+        try{
+            let user = await login(username.value, password.value);
+            setUser(user);
+        }catch(err){
+           setErrorMessage("Couldn't login");
+        }
     }
 
     return(

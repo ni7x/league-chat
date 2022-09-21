@@ -22,12 +22,8 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-
 import de.osiem.leaguechat.auth.security.jwt.CustomJwtAuthenticationConverter;
 import de.osiem.leaguechat.auth.security.jwt.RsaKeyProperties;
-
-
-
 import lombok.AllArgsConstructor;
 
 @Configuration
@@ -43,9 +39,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
                 .csrf(csfr -> csfr.disable())
-                .cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+                .cors().configurationSource(request -> {
+                    CorsConfiguration corsConfig = new CorsConfiguration();
+                    corsConfig.addAllowedOriginPattern( "*" );
+                    corsConfig.addAllowedMethod( CorsConfiguration.ALL ); 
+                    corsConfig.addAllowedHeader("*");
+                    return corsConfig;
+                })
                 .and().authorizeRequests(auth->auth
-                    
                     .antMatchers("/api/user/save").permitAll()
                     .antMatchers("/api/users").hasAuthority("MODERATOR")
                     .antMatchers("/api/users").hasAuthority("ADMIN")

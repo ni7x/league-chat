@@ -42,7 +42,7 @@ const Register = () => {
         let {username, ingameName, password} = formData.current;
         if(isValid(username.value, ingameName.value, password.value)){
             register(username.value, ingameName.value, password.value)
-            .then(window.location.href = "/");
+            .catch((err)=>addError("username", "Username is already taken!"));
         }   
     }
 
