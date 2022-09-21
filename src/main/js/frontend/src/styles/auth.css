@@ -1,0 +1,40 @@
+.auth{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    margin: 0;
+}
+
+.auth form{
+    background-color: var(--light-black);
+    width: 25rem;
+    padding: 1.5rem;
+}
+
+.auth form input{
+    width: 100%;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    box-sizing:border-box;
+    margin: 1rem 0;
+    padding: 0.75rem 1rem;
+    border-radius: 0.2rem;
+    border: none;
+}
+
+.auth form input[type="submit"]{
+    background-color: var(--turquoise);
+    border: none;
+    padding: 0.75rem 0;
+    color: var(--white)
+}
+
+.auth form input[type="submit"]:hover{
+    cursor: pointer;
+}
+
+.auth-error{
+    color: var(--red);
+    text-align: center;
+}

@@ -33,19 +33,17 @@ export const register = async (username, ingameName,  password) => {
         "ingameName": ingameName,
         "password": password
     };
-    
     const response = await fetch(URL_PREFIX + "/api/user/save", {
         method:"POST",
         body:JSON.stringify(data),
         headers: {
             'Content-Type': 'application/json'
     }});
-
-     if(response.ok){
-        login(username, password);
-     }else{
-        throw new Error("Couldn't register!");
-     }
+    if(response.ok){
+        return login(username, password);
+    }else{
+        return Promise.reject("XD");
+    }
 }
 
 export const getToken = () => {
@@ -53,11 +51,12 @@ export const getToken = () => {
 }
 
 export const getUser = async (username) => {
+    //jakis problem przy edytowaniu usera pewnie token z localsorage zawadza lub cus
     let URL = "";
     if(username === undefined){
-        URL = "http://127.0.0.1:8080/api/user/me";
+        URL = URL_PREFIX + "/api/user/me";
     }else{
-        URL = "http://127.0.0.1:8080/api/user/username/" + username;
+        URL = URL_PREFIX + "/api/user/username/" + username;
     }
     if(localStorage.getItem("token") !== null){
         const response = await fetch(URL, {
@@ -67,6 +66,7 @@ export const getUser = async (username) => {
               }
         });
         if(response.ok){
+            console.log(response);
             return response.json();
         }else{
             throw new Error("Couldn't get user");

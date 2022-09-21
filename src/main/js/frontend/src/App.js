@@ -1,9 +1,10 @@
-import './App.css';
+import './styles/app.css';
 import {
     BrowserRouter,
     Routes,
     Route,
-    Link
+    Link,
+    NavLink
   } from "react-router-dom";
 
 import Home from "./containers/Home.js";
@@ -18,40 +19,42 @@ import { UserContext } from "./UserContext";
 import LogoutButton from './components/LogoutButton';
 
 const App = () => {
-    const [ user, setUser ] = useState(null);
+    const [ user, setUser ] = useState(localStorage.getItem("token"));
     const value = useMemo(() => ({user, setUser}, [user, setUser]));
 
     return (
-        <div className="App">
+        <div className="app">
             <BrowserRouter>
                 <UserContext.Provider value={value}>
                     <nav>
                         <ul>
                             {user !== null ?
                                 <>
-                                    <li><Link to={"/"}>Home</Link></li>
+                                    <li><NavLink to={"/"}>Home</NavLink></li>
+                                    <li><NavLink to={"/settings"}>Settings</NavLink></li>
+                                    <li><NavLink to={"/addFriend"}>Add to friends</NavLink></li>
                                     <li><LogoutButton/></li>
-                                    <li><Link to={"/settings"}>Settings</Link></li>
-                                    <li><Link to={"/addFriend"}>Add to friends</Link></li>
                                 </> 
                             :
                                 <>
-                                    <li><Link to={"/login"}>Login</Link></li>
-                                    <li><Link to={"/register"}>Register</Link></li>
+                                    <li><NavLink to={"/login"}>Login</NavLink></li>
+                                    <li><NavLink to={"/register"}>Register</NavLink></li>
                                 </>
                             }
                         </ul>
                     </nav>
-                    <Routes>
-                        <Route element={<AuthGuard/>}>
-                            <Route path="/" element={<Home />} />
-                            <Route path="/settings" element={<UserSettings />} />
-                            <Route path="/user/:username" element={<UserPage />} />
-                            <Route path="/addFriend" element={<FriendAdd />} />
-                        </Route>
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/register" element={<Register />} />
-                    </Routes>
+                    <div className="app-wrapper">
+                        <Routes>
+                            <Route element={<AuthGuard/>}>
+                                <Route path="/" element={<Home />} />
+                                <Route path="/settings" element={<UserSettings />} />
+                                <Route path="/user/:username" element={<UserPage />} />
+                                <Route path="/addFriend" element={<FriendAdd />} />
+                            </Route>
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
+                        </Routes>
+                    </div>
                 </UserContext.Provider>
             </BrowserRouter>
         </div>

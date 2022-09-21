@@ -1,7 +1,11 @@
 import { useRef, useState } from "react";
-import { register } from "../services/AuthService";
+import { useNavigate } from "react-router";
+import { register, useUser } from "../services/AuthService";
+import "../styles/auth.css";
 
 const Register = () => {
+    const [ user, setUser ] = useUser();
+    const navigate = useNavigate();
     let [ errors, setErrors ] = useState(new Map());
     let formData = useRef();
 
@@ -36,31 +40,37 @@ const Register = () => {
     
     }
 
-    let handleSubmit = (e) => {
+    let handleSubmit = async (e) => {
         e.preventDefault();
         //check if  username exist database needs to send error
         let {username, ingameName, password} = formData.current;
         if(isValid(username.value, ingameName.value, password.value)){
-            register(username.value, ingameName.value, password.value)
-            .catch((err)=>addError("username", "Username is already taken!"));
+            try{
+                let user = await register(username.value, ingameName.value, password.value);
+                setUser(user);
+                navigate("/");
+            }catch{
+                setErrors("username", "Username is already taken!");
+            }
+          
         }   
     }
 
     return(
-        <>
+        <div className="auth">
             <form onSubmit={handleSubmit} ref={formData}>
                 <label htmlFor="username">Username: </label>
                 <input type="text" name="username"></input>
-                <p>{errors.get("username")}</p>
+                <p className="auth-error">{errors.get("username")}</p>
                 <label htmlFor="ingameName">Ingame Name: </label>
                 <input type="text" name="ingameName"></input>
-                <p>{errors.get("ingameName")}</p>
+                <p className="auth-error">{errors.get("ingameName")}</p>
                 <label htmlFor="password">Password: </label>
                 <input type="password" name="password"></input>
-                <p>{errors.get("password")}</p>
+                <p className="auth-error">{errors.get("password")}</p>
                 <input type="submit" name="submit" placeholder="Submit"></input>
             </form>
-        </>
+        </div>
     )
 }
 
