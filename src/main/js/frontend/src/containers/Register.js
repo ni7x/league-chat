@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { register, useUser } from "../services/AuthService";
+import ServerSelect from "../components/ServerSelect";
 import "../styles/auth.css";
 
 const Register = () => {
@@ -43,14 +44,19 @@ const Register = () => {
     let handleSubmit = async (e) => {
         e.preventDefault();
         //check if  username exist database needs to send error
-        let {username, ingameName, password} = formData.current;
+        let {username, ingameName, password, server} = formData.current;
         if(isValid(username.value, ingameName.value, password.value)){
             try{
-                let user = await register(username.value, ingameName.value, password.value);
+                let user = await register(username.value, ingameName.value, password.value, server.value);
                 setUser(user);
                 navigate("/");
-            }catch{
-                setErrors("username", "Username is already taken!");
+            }catch(err){
+                if(err==="UsernameException"){
+                    addError("username", "Username is already taken!");
+                }
+                else if(err==="IngameNameException"){
+                    addError("ingameName", "IngameName in this server is already taken!");
+                }
             }
           
         }   
@@ -68,6 +74,7 @@ const Register = () => {
                 <label htmlFor="password">Password: </label>
                 <input type="password" name="password"></input>
                 <p className="auth-error">{errors.get("password")}</p>
+                <ServerSelect/>
                 <input type="submit" name="submit" placeholder="Submit"></input>
             </form>
         </div>

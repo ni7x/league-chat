@@ -1,16 +1,16 @@
-package de.osiem.leaguechat.auth.model;
+package de.osiem.leaguechat.auth.model.user;
 
 import java.util.*;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import de.osiem.leaguechat.auth.model.friendRequest.FriendRequest;
 import lombok.*;
 
 @Entity 
@@ -32,6 +32,13 @@ public class User implements UserDetails{
     @ElementCollection
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Server server;
+
+    @OneToMany
+    private Set<FriendRequest> friendRequests = new HashSet<>();
 
     @ManyToMany()
     @JsonIgnoreProperties("friends")

@@ -3,10 +3,10 @@ import { getUser } from "../services/AuthService";
 
 const FriendAdd = () => {
     const formData = useRef();
-    const [user, setUser] = useState(new Object());
+    const [userData, setUserData] = useState(new Object());
 
     useEffect(()=>{
-        getUser().then((user)=>setUser(user));
+        getUser().then((userData)=>setUserData(userData));
     }, [])
 
     const handleSubmit = async (e) => {
@@ -14,7 +14,7 @@ const FriendAdd = () => {
         let { friendName } = formData.current;
        
         let data = {
-             "username": user.username ,
+             "username": userData.username ,
              "friendName" : friendName.value,
           
         };
@@ -25,8 +25,12 @@ const FriendAdd = () => {
                 "Authorization" : "Bearer " + localStorage.getItem("token"),
                 'Content-Type': 'application/json'
         }});
-        console.log(response);
     }
+
+    if(userData === null){
+        return <>Wrong token</>
+    }
+
     return(
         <>
             <form onSubmit={handleSubmit} ref={formData}>

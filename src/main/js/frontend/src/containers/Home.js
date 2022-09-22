@@ -3,7 +3,7 @@ import User from "../components/User";
 import { getUser } from "../services/AuthService";
 
 const Home = () => {
-    const [ userInfo, setUserInfo ] = useState(new Object());
+    const [ userInfo, setUserInfo ] = useState(null);
     useEffect(() => {
         getUser().then(user => setUserInfo(user));
     }, [])
@@ -28,14 +28,20 @@ const Home = () => {
         }
     }
 
+    if(userInfo === null){
+        return(
+            <>Bad token</>
+        )
+    }
+
     return(
         <>
-            <User ingameName={userInfo.ingameName} positions={userInfo.positions} />
+            <User ingameName={userInfo.ingameName} positions={userInfo.positions} server={userInfo.server}/>
             <p>Friends: </p>
             {userInfo.friends && userInfo.friends.map((friend)=>{
                 return <div key={friend.id} >   
                             <button onClick={(e) => friendRemove(e, friend.username)}>remove</button>
-                            <User ingameName={friend.ingameName} positions={friend.positions} />
+                            <User ingameName={friend.ingameName} positions={friend.positions} server={friend.server}/>
                        </div>
             })}
         </>

@@ -14,35 +14,19 @@ import FriendAdd from "./containers/FriendAdd";
 import UserPage from "./containers/UserPage";
 import Register from "./containers/Register";
 import AuthGuard from "./components/AuthGuard.js";
+import Navbar from "./components/Navbar.js";
 import { useMemo, useState } from 'react';
 import { UserContext } from "./UserContext";
-import LogoutButton from './components/LogoutButton';
 
 const App = () => {
     const [ user, setUser ] = useState(localStorage.getItem("token"));
     const value = useMemo(() => ({user, setUser}, [user, setUser]));
-
+    
     return (
         <div className="app">
             <BrowserRouter>
                 <UserContext.Provider value={value}>
-                    <nav>
-                        <ul>
-                            {user !== null ?
-                                <>
-                                    <li><NavLink to={"/"}>Home</NavLink></li>
-                                    <li><NavLink to={"/settings"}>Settings</NavLink></li>
-                                    <li><NavLink to={"/addFriend"}>Add to friends</NavLink></li>
-                                    <li><LogoutButton/></li>
-                                </> 
-                            :
-                                <>
-                                    <li><NavLink to={"/login"}>Login</NavLink></li>
-                                    <li><NavLink to={"/register"}>Register</NavLink></li>
-                                </>
-                            }
-                        </ul>
-                    </nav>
+                    <Navbar/>
                     <div className="app-wrapper">
                         <Routes>
                             <Route element={<AuthGuard/>}>

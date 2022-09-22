@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import de.osiem.leaguechat.auth.model.User;
+
+import de.osiem.leaguechat.auth.model.user.User;
 import de.osiem.leaguechat.auth.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -36,23 +37,33 @@ public class UserController {
 	}
 
     @PostMapping("/user/save")
-    public ResponseEntity<User> saveUser(@Valid @RequestBody User user){
-        User newUser = userService.saveUser(user);
-        if(newUser != null){
-            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
-            return ResponseEntity.created(uri).body(newUser);
+    public ResponseEntity<?> saveUser(@Valid @RequestBody User user){
+        try{
+            User newUser = userService.saveUser(user);
+            if(newUser != null){
+                URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
+                return ResponseEntity.created(uri).body(newUser);
+            }else{
+                return ResponseEntity.badRequest().build();
+            }
+        }catch(Exception e){
+            System.out.println(e);
+            return ResponseEntity.badRequest().body(e);
         }
-        return ResponseEntity.badRequest().build();
+       
     }
 
     @PutMapping("/user/username/{username}")
-    public ResponseEntity<User> updateUser(@PathVariable String username, Authentication authentication, @Valid @RequestBody User user){
+    public ResponseEntity<?> updateUser(@PathVariable String username, Authentication authentication, @Valid @RequestBody User user){
         if(authentication.getName().equals(username)){
-            userService.updateUser(user);
-            return ResponseEntity.ok().build();
+            try{
+                userService.updateUser(user);
+                return ResponseEntity.ok().body(user);
+            }catch(Exception e){
+                return ResponseEntity.badRequest().body(e);
+            } 
         }
         return ResponseEntity.badRequest().build();
-      
     }
 
     @DeleteMapping("/user/username/{username}")

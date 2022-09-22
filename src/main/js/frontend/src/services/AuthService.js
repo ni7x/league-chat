@@ -27,22 +27,27 @@ export const logout = () => {
     localStorage.removeItem("token");
 }
 
-export const register = async (username, ingameName,  password) => {
+export const register = async (username, ingameName,  password, server) => {
     const data = {
         "username": username, 
         "ingameName": ingameName,
-        "password": password
+        "password": password,
+        "server": server
     };
     const response = await fetch(URL_PREFIX + "/api/user/save", {
         method:"POST",
         body:JSON.stringify(data),
         headers: {
             'Content-Type': 'application/json'
-    }});
+        }
+    });
     if(response.ok){
         return login(username, password);
     }else{
-        return Promise.reject("XD");
+        let message = "Unknow error";
+        let json = await response.json();
+        message = json.message;
+        return Promise.reject(message);
     }
 }
 
@@ -66,10 +71,10 @@ export const getUser = async (username) => {
               }
         });
         if(response.ok){
-            console.log(response);
             return response.json();
         }else{
-            throw new Error("Couldn't get user");
+            localStorage.setItem("token", null);
+            throw new Error("Bad token");
         }
     }else{
         throw new Error("Couldn't get user (No token provided)");

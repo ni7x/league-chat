@@ -5,15 +5,20 @@ import { getUser } from "../services/AuthService";
 
 const UserPage = () => {
     
-    const [ userInfo, setUserInfo ] = useState(new Object());
+    const [ userInfo, setUserInfo ] = useState(null);
     const params = useParams();
+    
     useEffect(() => {
         getUser(params.username).then(user => setUserInfo(user));
     }, [])
 
+    if(userInfo === null){
+        return <>Bad token</>
+    }
+
     return(
         <>  Page of this user
-            <User ingameName={userInfo.ingameName} positions={userInfo.positions} />
+            <User ingameName={userInfo.ingameName} positions={userInfo.positions} sever={userInfo.server}/>
         </>
     )
 }

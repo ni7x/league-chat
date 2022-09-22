@@ -8,9 +8,10 @@ import javax.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import de.osiem.leaguechat.auth.model.Position;
-import de.osiem.leaguechat.auth.model.Role;
-import de.osiem.leaguechat.auth.model.User;
+import de.osiem.leaguechat.auth.model.user.Position;
+import de.osiem.leaguechat.auth.model.user.Role;
+import de.osiem.leaguechat.auth.model.user.Server;
+import de.osiem.leaguechat.auth.model.user.User;
 import de.osiem.leaguechat.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,40 +35,64 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User saveUser(User user){
+    public User saveUser(User user) throws Exception{
         log.info("Saving user " + user);
-        if(getUser(user.getUsername()) == null){
-            String password = user.getPassword();
-            if(passwordIsValid(password)){    
-                user.setPassword(passwordEncoder.encode(user.getPassword()));
-                user.getRoles().add(Role.USER);
-                userRepository.save(user);
-                return user;
+        if(!userRepository.existsByUsername(user.getUsername())){
+            if(!userRepository.existsByIngameNameAndServer(user.getIngameName(), user.getServer())){
+                String password = user.getPassword();
+                if(passwordIsValid(password)){    
+                    user.setPassword(passwordEncoder.encode(user.getPassword()));
+                    user.getRoles().add(Role.USER);
+                    user.getPositions().add(Position.FILL);
+                    userRepository.save(user);
+                    return user;
+                }else{
+                    log.error("Password doesn't match the pattern");
+                    throw new Exception("PasswordException");
+                }    
             }else{
-                log.error("Password doesn't match the pattern");
-                return null;
-            }    
+                log.error("Given ingame name in given server is already taken");
+                throw new Exception("IngameNameException");
+            }
+            
         }
        log.error("This username is already taken!");
-       return null;
+       throw new Exception("UsernameException");
     }
 
     @Override
-    public User updateUser(User updatedUserData){
+    public User updateUser(User updatedUserData) throws Exception{
         Optional<User> user = userRepository.findById(updatedUserData.getId());
-        System.out.println(updatedUserData);
         if(user.isPresent()){
             User updatedUser = user.get();
-            updatedUser.setIngameName(updatedUserData.getIngameName());
-            updatedUser.setUsername(updatedUserData.getUsername());
-            if(passwordIsValid(updatedUserData.getPassword())){
-                updatedUser.setPassword(passwordEncoder.encode(updatedUserData.getPassword()));
+            if(!updatedUserData.getIngameName().equals(updatedUser.getIngameName()) || !updatedUserData.getServer().equals(updatedUser.getServer())){
+                if(!userRepository.existsByIngameNameAndServer(updatedUserData.getIngameName(), updatedUserData.getServer())){
+                    updatedUser.setIngameName(updatedUserData.getIngameName());
+                }else{
+                    throw new Exception("IngameNameException");
+                }
             }
+            if(!updatedUserData.getUsername().equals(updatedUser.getUsername())){
+                if(!userRepository.existsByUsername(updatedUserData.getUsername())){
+                    updatedUser.setUsername(updatedUserData.getUsername());
+                }else{
+                    throw new Exception("UsernameException");
+                }
+            }
+            if(!updatedUserData.getPassword().isBlank()){
+                if(passwordIsValid(updatedUserData.getPassword())){
+                    updatedUser.setPassword(passwordEncoder.encode(updatedUserData.getPassword()));
+                }else{
+                    throw new Exception("PasswordException");
+                }
+            }
+            
             updatedUser.setPositions(updatedUserData.getPositions());
+            updatedUser.setServer(updatedUserData.getServer());
             userRepository.save(updatedUser);
-
+            return updatedUser;
         }
-       return null;
+      throw new Exception("NoSuchUserException");
     }
 
     @Override
