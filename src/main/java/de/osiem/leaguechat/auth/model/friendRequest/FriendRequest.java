@@ -8,6 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import de.osiem.leaguechat.auth.model.user.User;
 import lombok.*;
 
@@ -17,11 +20,13 @@ public class FriendRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @ManyToOne
+    @JsonIgnoreProperties({"friendRequestsFrom", "friendRequestsTo"})
     private User from;
 
     @ManyToOne
+    @JsonIgnoreProperties({"friendRequestsFrom", "friendRequestsTo"})
     private User to;
 
     @Enumerated(EnumType.STRING)

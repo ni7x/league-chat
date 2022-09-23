@@ -1,7 +1,7 @@
-import { logout, useUser } from "../services/AuthService";
+import { logout, useUserToken } from "../../services/AuthService";
 
 const LogoutButton = () => {
-    const [ user, setUser ] = useUser();
+    const [ user, setUser ] = useUserToken();
 
     const handleClick = () => {
         logout();

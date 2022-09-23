@@ -8,10 +8,12 @@ import javax.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import de.osiem.leaguechat.auth.model.friendRequest.FRStatus;
+import de.osiem.leaguechat.auth.model.friendRequest.FriendRequest;
 import de.osiem.leaguechat.auth.model.user.Position;
 import de.osiem.leaguechat.auth.model.user.Role;
-import de.osiem.leaguechat.auth.model.user.Server;
 import de.osiem.leaguechat.auth.model.user.User;
+import de.osiem.leaguechat.auth.repository.FriendRequestRepository;
 import de.osiem.leaguechat.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
+    private final FriendRequestRepository frRepository;
     private final PasswordEncoder passwordEncoder;
 
     private static final String PASSWORD_PATTERN =
@@ -121,16 +124,47 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User addFriendToUser(String userName, String friendName){
-        User user = userRepository.findByUsername(userName);
-        User friend = userRepository.findByUsername(friendName);
+    public FriendRequest getFriendRequest(Long id){
+        return frRepository.findById(id).get();
+    }
+
+    @Override
+    public User acceptFriendRequest(Long id){
+        FriendRequest request = frRepository.findById(id).get();
+        frRepository.delete(request);
+        return addFriendToUser(request.getFrom(), request.getTo());
+    }
+
+    @Override
+    public User rejectFriendRequest(Long id){
+        FriendRequest request = frRepository.findById(id).get();
+        frRepository.delete(request);
+        return request.getTo();
+    }
+
+    @Override
+    public void sendFriendRequest(String from, String to){
+        FriendRequest friendRequest = new FriendRequest();
+        User userFrom = userRepository.findByUsername(from);
+        User userTo = userRepository.findByUsername(to);
+        if(userFrom != null && userTo != null){
+            friendRequest.setFrom(userFrom);
+            friendRequest.setTo(userTo);
+            friendRequest.setStatus(FRStatus.UNANSWERED);
+            frRepository.save(friendRequest);
+        }
+      
+    }
+
+    @Override
+    public User addFriendToUser(User friend, User user){
         if(friend != null && user != null){
-            log.info("Adding friend {} to friendlist of user {}", friendName, userName);
             user.getFriends().add(friend);
             friend.getFriends().add(user);
             userRepository.save(user);
             return user;
         }
+        log.error("can't add user to frindlst");
         return null;
     }
 
@@ -145,8 +179,7 @@ public class UserServiceImpl implements UserService{
             userRepository.save(user);   
             return user; 
         }
-        return null;
-       
+        return null;  
     }
 
     @Override

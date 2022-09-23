@@ -1,10 +1,10 @@
 import { useRef, useState} from "react";
 import { useNavigate } from "react-router";
-import { login, useUser } from "../services/AuthService";
+import { login, useUserToken } from "../services/AuthService";
 import "../styles/auth.css";
 
 const Login = () => {
-    const [ user, setUser ] = useUser();
+    const [ user, setUser ] = useUserToken();
     const naviagate = useNavigate();
     const [ errorMessage, setErrorMessage ] = useState(""); 
     const formData = useRef();
@@ -30,8 +30,8 @@ const Login = () => {
                 <input type="password" name="password"></input>
                 <p className="auth-error">{errorMessage}</p>
                 <input type="submit" name="submit" placeholder="submit"></input>
+                <p>Or click <a href="/register">here</a> to register</p>
             </form>
-           
         </div>
     )
 }

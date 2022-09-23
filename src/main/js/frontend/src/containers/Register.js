@@ -1,11 +1,11 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import { register, useUser } from "../services/AuthService";
+import { register, useUserToken } from "../services/AuthService";
 import ServerSelect from "../components/ServerSelect";
 import "../styles/auth.css";
 
 const Register = () => {
-    const [ user, setUser ] = useUser();
+    const [ user, setUser ] = useUserToken();
     const navigate = useNavigate();
     let [ errors, setErrors ] = useState(new Map());
     let formData = useRef();
@@ -76,6 +76,7 @@ const Register = () => {
                 <p className="auth-error">{errors.get("password")}</p>
                 <ServerSelect/>
                 <input type="submit" name="submit" placeholder="Submit"></input>
+                <p>Or click <a href="/login">here</a> to login</p>
             </form>
         </div>
     )

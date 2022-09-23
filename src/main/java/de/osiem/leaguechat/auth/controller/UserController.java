@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import de.osiem.leaguechat.auth.model.friendRequest.FriendRequest;
 import de.osiem.leaguechat.auth.model.user.User;
 import de.osiem.leaguechat.auth.service.UserService;
 import lombok.Data;
@@ -82,15 +83,32 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/user/addFriend")
-    public ResponseEntity<User> addFriend(@RequestBody FriendToUser form){
-        User user = userService.addFriendToUser(form.getUsername(), form.getFriendName());
-        if(user!=null){
+    @PostMapping("/friendRequest/")
+    public ResponseEntity<?> sendFriendRequest(@RequestBody FriendRequestDto request){
+        userService.sendFriendRequest(request.getFrom(), request.getTo());
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/friendRequest/id/{id}/accept")
+    public ResponseEntity<?> acceptFriendRequest(@PathVariable Long id, Authentication authentication){
+        if(authentication.getName().equals(userService.getFriendRequest(id).getTo().getUsername()) ){
+            User user = userService.acceptFriendRequest(id);
             return ResponseEntity.ok().body(user);
         }
         return ResponseEntity.badRequest().build();
-        
     }
+
+    @PutMapping("/friendRequest/id/{id}/reject")
+    public ResponseEntity<?> rejectFriendRequest(@PathVariable Long id, Authentication authentication){
+        if(authentication.getName().equals(userService.getFriendRequest(id).getTo().getUsername()) ){
+            User user = userService.rejectFriendRequest(id);
+            return ResponseEntity.ok().body(user);
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    
+
     @PostMapping("/user/removeFriend")
     public ResponseEntity<User> removeFriend(@RequestBody FriendToUser form){
         User user = userService.removeFriendFromUser(form.getUsername(), form.getFriendName());
@@ -136,4 +154,10 @@ class PositionToUser{
 class FriendToUser{
     private String username;
     private String friendName;
+} 
+
+@Data
+class FriendRequestDto{
+    private String from;
+    private String to;
 } 

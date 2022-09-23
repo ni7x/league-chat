@@ -13,7 +13,9 @@ const UserPage = () => {
     }, [])
 
     if(userInfo === null){
-        return <>Bad token</>
+        return(
+            <>Loading</>
+        )
     }
 
     return(

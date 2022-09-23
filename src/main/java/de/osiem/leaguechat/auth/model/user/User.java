@@ -8,6 +8,8 @@ import javax.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import de.osiem.leaguechat.auth.model.friendRequest.FriendRequest;
@@ -26,7 +28,8 @@ public class User implements UserDetails{
     @Size(min=4, max=25)
     @Column(unique = true)
     private String username;
-
+    
+    @JsonIgnore
     private String password;
 
     @ElementCollection
@@ -37,8 +40,13 @@ public class User implements UserDetails{
     @Enumerated(EnumType.STRING)
     private Server server;
 
-    @OneToMany
-    private Set<FriendRequest> friendRequests = new HashSet<>();
+    @OneToMany(mappedBy = "to")
+    @JsonIgnoreProperties({"to"})
+    private Set<FriendRequest> friendRequestsTo = new HashSet<>();
+
+    @OneToMany(mappedBy = "from")
+    @JsonIgnoreProperties("from")
+    private Set<FriendRequest> friendRequestsFrom = new HashSet<>();
 
     @ManyToMany()
     @JsonIgnoreProperties("friends")
@@ -59,21 +67,25 @@ public class User implements UserDetails{
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

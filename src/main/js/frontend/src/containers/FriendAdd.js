@@ -3,10 +3,10 @@ import { getUser } from "../services/AuthService";
 
 const FriendAdd = () => {
     const formData = useRef();
-    const [userData, setUserData] = useState(new Object());
+    const [userDetails, setUserDetails] = useState(null);
 
     useEffect(()=>{
-        getUser().then((userData)=>setUserData(userData));
+        getUser().then((userData)=>setUserDetails(userData));
     }, [])
 
     const handleSubmit = async (e) => {
@@ -14,21 +14,28 @@ const FriendAdd = () => {
         let { friendName } = formData.current;
        
         let data = {
-             "username": userData.username ,
-             "friendName" : friendName.value,
+             "from": userDetails.username ,
+             "to" : friendName.value,
           
         };
-        const response = await fetch("http://127.0.0.1:8080/api/user/addFriend/", {
+        const response = await fetch("http://127.0.0.1:8080/api/friendRequest/", {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
                 "Authorization" : "Bearer " + localStorage.getItem("token"),
                 'Content-Type': 'application/json'
         }});
+        if(response.ok){
+            alert("Request send!")
+        }else{
+            alert("whoops")
+        }
     }
 
-    if(userData === null){
-        return <>Wrong token</>
+    if(userDetails === null){
+        return(
+            <>Loading</>
+        )
     }
 
     return(

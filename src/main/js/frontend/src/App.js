@@ -13,32 +13,31 @@ import UserSettings from "./containers/UserSettings";
 import FriendAdd from "./containers/FriendAdd";
 import UserPage from "./containers/UserPage";
 import Register from "./containers/Register";
-import AuthGuard from "./components/AuthGuard.js";
-import Navbar from "./components/Navbar.js";
+import AuthGuard from "./wrappers/AuthGuard.js";
+import NotFound from './containers/NotFound';
 import { useMemo, useState } from 'react';
 import { UserContext } from "./UserContext";
+import Authenticated from './wrappers/Authenticated';
 
 const App = () => {
-    const [ user, setUser ] = useState(localStorage.getItem("token"));
-    const value = useMemo(() => ({user, setUser}, [user, setUser]));
+    const [ userToken, setUserToken ] = useState(localStorage.getItem("token"));
+    const value = useMemo(() => ({userToken, setUserToken}, [userToken, setUserToken]));
     
     return (
         <div className="app">
             <BrowserRouter>
                 <UserContext.Provider value={value}>
-                    <Navbar/>
-                    <div className="app-wrapper">
-                        <Routes>
-                            <Route element={<AuthGuard/>}>
-                                <Route path="/" element={<Home />} />
-                                <Route path="/settings" element={<UserSettings />} />
-                                <Route path="/user/:username" element={<UserPage />} />
-                                <Route path="/addFriend" element={<FriendAdd />} />
-                            </Route>
-                            <Route path="/login" element={<Login />} />
-                            <Route path="/register" element={<Register />} />
-                        </Routes>
-                    </div>
+                    <Routes>
+                        <Route element={<AuthGuard/>}>
+                            <Route path="/" element={<Authenticated><Home /></Authenticated>} />
+                            <Route path="/settings" element={<Authenticated><UserSettings /></Authenticated>} />
+                            <Route path="/user/:username" element={<Authenticated><UserPage /></Authenticated>} />
+                            <Route path="/addFriend" element={<Authenticated><FriendAdd /></Authenticated>} />
+                        </Route> 
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
                 </UserContext.Provider>
             </BrowserRouter>
         </div>

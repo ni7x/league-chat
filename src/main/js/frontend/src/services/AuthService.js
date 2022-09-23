@@ -3,7 +3,7 @@ import { UserContext } from "../UserContext";
 
 const URL_PREFIX = "http://127.0.0.1:8080";
 
-export const useUser = () =>{
+export const useUserToken = () =>{
     return useContext(UserContext);
 }
 
