@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react"
-import { Navigate } from "react-router";
 import ServerSelect from "../components/ServerSelect";
 import { getUser, logout, useUserToken, login } from "../services/AuthService";
 
@@ -42,6 +41,7 @@ const UserSettings = () => {
             //addd handling for chaning username
         }else{
             let message = "Unknow error";
+            console.log(response);
             let json = await response.json();
             message = json.message;
             alert(message);

@@ -18,11 +18,14 @@ import NotFound from './containers/NotFound';
 import { useMemo, useState } from 'react';
 import { UserContext } from "./UserContext";
 import Authenticated from './wrappers/Authenticated';
+import { useUserDetails } from './services/UserService';
 
 const App = () => {
     const [ userToken, setUserToken ] = useState(localStorage.getItem("token"));
     const value = useMemo(() => ({userToken, setUserToken}, [userToken, setUserToken]));
-    
+    const  userDetails = useUserDetails(userToken);
+
+    console.log(userDetails);
     return (
         <div className="app">
             <BrowserRouter>

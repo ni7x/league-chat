@@ -59,7 +59,7 @@ export const getUser = async (username) => {
     //jakis problem przy edytowaniu usera pewnie token z localsorage zawadza lub cus
     let URL = "";
     if(username === undefined){
-        URL = URL_PREFIX + "/api/user/me";
+        URL = URL_PREFIX + "/api/user/current";
     }else{
         URL = URL_PREFIX + "/api/user/username/" + username;
     }

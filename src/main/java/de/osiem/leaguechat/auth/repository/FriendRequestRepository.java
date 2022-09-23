@@ -6,5 +6,4 @@ import de.osiem.leaguechat.auth.model.friendRequest.FriendRequest;
 
 
 public interface FriendRequestRepository extends JpaRepository<FriendRequest, Long>{
- 
 }

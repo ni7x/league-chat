@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,9 +17,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import de.osiem.leaguechat.auth.model.friendRequest.FriendRequest;
 import de.osiem.leaguechat.auth.model.user.User;
 import de.osiem.leaguechat.auth.service.UserService;
 import lombok.Data;
@@ -31,15 +31,16 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/user/me")
-	public ResponseEntity<User> getMe(Authentication authentication) {
-        System.out.println("AUTH " + authentication);
-	    return ResponseEntity.ok().body(userService.getUser(authentication.getName()));
+    @GetMapping("/user/current")
+	public ResponseEntity<User> getCurrentUser(Authentication authentication) throws ResponseStatusException{
+        User user = userService.getUser(authentication.getName());
+        return ResponseEntity.ok().body(user);
+
 	}
 
     @PostMapping("/user/save")
-    public ResponseEntity<?> saveUser(@Valid @RequestBody User user){
-        try{
+    public ResponseEntity<?> saveUser(@Valid @RequestBody User user) throws ResponseStatusException{
+        
             User newUser = userService.saveUser(user);
             if(newUser != null){
                 URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
@@ -47,24 +48,17 @@ public class UserController {
             }else{
                 return ResponseEntity.badRequest().build();
             }
-        }catch(Exception e){
-            System.out.println(e);
-            return ResponseEntity.badRequest().body(e);
-        }
        
     }
 
     @PutMapping("/user/username/{username}")
-    public ResponseEntity<?> updateUser(@PathVariable String username, Authentication authentication, @Valid @RequestBody User user){
+    public ResponseEntity<User> updateUser(@PathVariable String username, Authentication authentication, @Valid @RequestBody User user) throws ResponseStatusException{
         if(authentication.getName().equals(username)){
-            try{
-                userService.updateUser(user);
-                return ResponseEntity.ok().body(user);
-            }catch(Exception e){
-                return ResponseEntity.badRequest().body(e);
-            } 
+            userService.updateUser(user);
+            return ResponseEntity.ok().body(user);
+        }else{
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
-        return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/user/username/{username}")
@@ -77,11 +71,6 @@ public class UserController {
       
     }
 
-    @PostMapping("/user/addPosition")
-    public ResponseEntity<?> addPosition(@RequestBody PositionToUser form){
-        userService.addPositionToUser(form.getUsername(), form.getPositionName());
-        return ResponseEntity.ok().build();
-    }
 
     @PostMapping("/friendRequest/")
     public ResponseEntity<?> sendFriendRequest(@RequestBody FriendRequestDto request){
@@ -111,7 +100,7 @@ public class UserController {
 
     @PostMapping("/user/removeFriend")
     public ResponseEntity<User> removeFriend(@RequestBody FriendToUser form){
-        User user = userService.removeFriendFromUser(form.getUsername(), form.getFriendName());
+        User user = userService.removeFriend(form.getUsername(), form.getFriendName());
         if(user!=null){
             return ResponseEntity.ok().body(user);
         }

@@ -2,11 +2,11 @@ package de.osiem.leaguechat;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import de.osiem.leaguechat.auth.security.jwt.RsaKeyProperties;
+import de.osiem.leaguechat.auth.security.jwt.RSAKeys;
 
 
 @SpringBootApplication
-@EnableConfigurationProperties(RsaKeyProperties.class)
+@EnableConfigurationProperties(RSAKeys.class)
 public class LeagueChatApplication {
 
 	public static void main(String[] args) {

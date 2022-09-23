@@ -22,8 +22,8 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import de.osiem.leaguechat.auth.security.jwt.CustomJwtAuthenticationConverter;
-import de.osiem.leaguechat.auth.security.jwt.RsaKeyProperties;
+import de.osiem.leaguechat.auth.security.jwt.JWTAuthenticationConverter;
+import de.osiem.leaguechat.auth.security.jwt.RSAKeys;
 import lombok.AllArgsConstructor;
 
 @Configuration
@@ -31,7 +31,7 @@ import lombok.AllArgsConstructor;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final RsaKeyProperties rsaKeys;
+    private final RSAKeys rsaKeys;
 
     private final LeagueChatUserDetailsService userDetailsService;
 
@@ -41,18 +41,17 @@ public class SecurityConfig {
                 .csrf(csfr -> csfr.disable())
                 .cors().configurationSource(request -> {
                     CorsConfiguration corsConfig = new CorsConfiguration();
-                    corsConfig.addAllowedOriginPattern( "*" );
-                    corsConfig.addAllowedMethod( CorsConfiguration.ALL ); 
+                    corsConfig.addAllowedOriginPattern("*");
+                    corsConfig.addAllowedMethod(CorsConfiguration.ALL); 
                     corsConfig.addAllowedHeader("*");
                     return corsConfig;
                 })
                 .and().authorizeRequests(auth->auth
                     .antMatchers("/api/user/save").permitAll()
                     .antMatchers("/api/users").hasAuthority("ADMIN")
-                    .antMatchers("/").hasAuthority("USER")
                     .anyRequest().authenticated())
                 .oauth2ResourceServer(authorize -> authorize
-                    .jwt(jwt -> jwt.jwtAuthenticationConverter(new CustomJwtAuthenticationConverter())))
+                    .jwt(jwt -> jwt.jwtAuthenticationConverter(new JWTAuthenticationConverter())))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider())
                 .httpBasic(Customizer.withDefaults())
@@ -60,12 +59,12 @@ public class SecurityConfig {
     }
 
     @Bean
-	JwtDecoder jwtDecoder() {
+	JwtDecoder JWTDecoder() {
 		return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build();
 	}
 	
 	@Bean
-	JwtEncoder jwtEncoder() {
+	JwtEncoder JWTEncoder() {
 		JWK jwk = new RSAKey.Builder(rsaKeys.publicKey()).privateKey(rsaKeys.privateKey()).build();
 		JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
 		return new NimbusJwtEncoder(jwks);
