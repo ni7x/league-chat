@@ -2,6 +2,8 @@ package de.osiem.leaguechat.auth.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 import javax.transaction.Transactional;
 
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import de.osiem.leaguechat.auth.model.friendRequest.FriendRequest;
 import de.osiem.leaguechat.auth.model.user.Position;
 import de.osiem.leaguechat.auth.model.user.Role;
+import de.osiem.leaguechat.auth.model.user.Server;
 import de.osiem.leaguechat.auth.model.user.User;
 import de.osiem.leaguechat.auth.repository.FriendRequestRepository;
 import de.osiem.leaguechat.auth.repository.UserRepository;
@@ -23,80 +26,103 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor // instead of making autowired constructors and injecting repositores
 @Slf4j
 public class UserServiceImpl implements UserService{
+
     private final UserRepository userRepository;
     private final FriendRequestRepository frRepository;
     private final PasswordEncoder passwordEncoder;
+    private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,20}$";
 
-    private static final String PASSWORD_PATTERN =
-            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,20}$";
+    private static boolean isPasswordValid(String password){
+        return password.matches(PASSWORD_PATTERN);
+    }
 
-    private static boolean passwordIsValid(String password){
-        if(password.matches(PASSWORD_PATTERN)){
-            return true;
-        }
-        return false;
+    private boolean isUsernameUnique(String username){
+        return !userRepository.existsByUsername(username);
+    }
+
+    private boolean isIngameNameUnqiue(String ingameName, Server server){
+        return !userRepository.existsByIngameNameAndServer(ingameName, server);
     }
 
     @Override
     public User saveUser(User user) throws ResponseStatusException{
-        log.info("Saving user " + user);
-        if(!userRepository.existsByUsername(user.getUsername())){
-            if(!userRepository.existsByIngameNameAndServer(user.getIngameName(), user.getServer())){
-                String password = user.getPassword();
-                if(passwordIsValid(password)){    
-                    user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        String username = user.getUsername();
+        String ingameName = user.getIngameName();
+        String password = user.getPassword();
+        Server server = user.getServer();
+
+        if(isUsernameUnique(username)){
+            if(isIngameNameUnqiue(ingameName, server)){
+                if(isPasswordValid(password)){
+                    user.setPassword(passwordEncoder.encode(password));
                     user.getRoles().add(Role.USER);
                     user.getPositions().add(Position.FILL);
                     userRepository.save(user);
                     return user;
                 }else{
-                    log.error("Password doesn't match the pattern");
-                    
-                }    
+                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "This password is not valid");
+                }
             }else{
-                log.error("Given ingame name in given server is already taken");
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "This ingame name on this given sever is already taken");
             }
-            
+        }else{
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "This username is already taken");
         }
-       log.error("This username is already taken!");
-       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Couldn't find user to update");
-
     }
 
     @Override
-    public User updateUser(User updatedUserData) throws ResponseStatusException{
-        Optional<User> user = userRepository.findById(updatedUserData.getId());
-        if(user.isPresent()){
-            User updatedUser = user.get();
-            if(!updatedUserData.getIngameName().equals(updatedUser.getIngameName()) || !updatedUserData.getServer().equals(updatedUser.getServer())){
-                if(!userRepository.existsByIngameNameAndServer(updatedUserData.getIngameName(), updatedUserData.getServer())){
-                    updatedUser.setIngameName(updatedUserData.getIngameName());
-                }else{
-                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "This ingame name on this given sever is already taken");
-                }
-            }
-            if(!updatedUserData.getUsername().equals(updatedUser.getUsername())){
-                if(!userRepository.existsByUsername(updatedUserData.getUsername())){
-                    updatedUser.setUsername(updatedUserData.getUsername());
+    public User updateUser(User updatedUser) throws ResponseStatusException{
+        User user = userRepository.findById(updatedUser.getId()).get();
+        if(user != null){
+            String currentUsername = user.getUsername();
+            String newUsername = updatedUser.getUsername();
+            if(!currentUsername.equals(newUsername)){
+                if(isUsernameUnique(newUsername)){
+                    user.setUsername(newUsername);
                 }else{
                     throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "This username is already taken");
                 }
             }
-            if(!updatedUserData.getPassword().isBlank()){
-                if(passwordIsValid(updatedUserData.getPassword())){
-                    updatedUser.setPassword(passwordEncoder.encode(updatedUserData.getPassword()));
+
+            Server currentServer = user.getServer();
+            Server newServer = updatedUser.getServer();
+            if(!currentServer.equals(newServer)){
+                if(isIngameNameUnqiue(user.getIngameName(), newServer)){
+                    user.setServer(newServer);
                 }else{
-                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "This password didn't meet requirments");
+                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You must change ingame name in order to move to this server");
                 }
             }
-            
-            updatedUser.setPositions(updatedUserData.getPositions());
-            updatedUser.setServer(updatedUserData.getServer());
-            userRepository.save(updatedUser);
-            return updatedUser;
-        }
-    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Couldn't find user to update");
 
+            String currentIngameName = user.getIngameName();
+            String newIngameName = updatedUser.getIngameName();
+            if(!currentIngameName.equals(newIngameName)){
+                if(isIngameNameUnqiue(newIngameName, user.getServer())){
+                    user.setIngameName(newIngameName);
+                }else{
+                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "This ingameName is already taken in this server");
+                }
+            }
+
+            String newPassword = updatedUser.getPassword();
+            if(isPasswordValid(newPassword)){
+                user.setPassword(passwordEncoder.encode(newPassword));
+            }else{
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "This password doesn't meet requirements");
+            }
+
+            Set<Position> newPositions = updatedUser.getPositions();
+            if(!user.getPositions().equals(updatedUser.getPositions())){
+                user.setPositions(newPositions);
+            }
+
+            userRepository.save(user);
+            System.out.println(user);
+            return user;
+            
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Couldn't find user to update");
     }
 
     @Override
@@ -113,16 +139,25 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUser(String username) throws ResponseStatusException{
         User user = userRepository.findByUsername(username);
-        System.out.println(user); // why it doesn't work withotu this print
         if(user != null){
+            System.out.println(user); // why it doesn't work withotu this print
             return user;
         }
        throw new ResponseStatusException(HttpStatus.NOT_FOUND , "User with username: " + username + "was not found.");
     }
 
     @Override
+    public User getUserByIGNandServer(String ingameName, String server) throws ResponseStatusException{
+        User user = userRepository.findByIngameNameAndServer(ingameName, Server.valueOf(server));
+        if(user != null){
+            return user;
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND , "User with ingame name: " + ingameName + "and server " + server + "was not found.");
+
+    }
+
+    @Override
     public List<User> getUsers() {
-        log.info("Getting all users");
         return userRepository.findAll();
     }
 
@@ -132,10 +167,25 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public User sendFriendRequest(User from, User to) throws ResponseStatusException{
+        FriendRequest friendRequest = new FriendRequest();
+        if(from != null && to != null){
+            if(from.getFriends().contains(to) || to.getFriends().contains(from)){
+                throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, "You are already friends with this user");
+            }
+            friendRequest.setFrom(from);
+            friendRequest.setTo(to);
+            frRepository.save(friendRequest);
+            return from;
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This user doesn't exist");
+    }
+
+    @Override
     public User acceptFriendRequest(Long id){
         FriendRequest request = frRepository.findById(id).get();
         frRepository.delete(request);
-        return addFriend(request.getFrom(), request.getTo());
+        return startFriendship(request.getFrom(), request.getTo());
     }
 
     @Override
@@ -144,44 +194,28 @@ public class UserServiceImpl implements UserService{
         frRepository.delete(request);
         return request.getTo();
     }
-
-    @Override
-    public void sendFriendRequest(String from, String to){
-        FriendRequest friendRequest = new FriendRequest();
-        User userFrom = userRepository.findByUsername(from);
-        User userTo = userRepository.findByUsername(to);
-        if(userFrom != null && userTo != null){
-            friendRequest.setFrom(userFrom);
-            friendRequest.setTo(userTo);
-            frRepository.save(friendRequest);
-        }
-      
-    }
-
-    
-    public User addFriend(User friend, User user){
+        
+    private User startFriendship(User friend, User user) throws ResponseStatusException{
         if(friend != null && user != null){
             user.getFriends().add(friend);
             friend.getFriends().add(user);
             userRepository.save(user);
             return user;
         }
-        log.error("can't add user to frindlst");
-        return null;
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     @Override
-    public User removeFriend(String userName, String friendName) {
+    public User endFriendship(String userName, String friendName) throws ResponseStatusException{
         User user = userRepository.findByUsername(userName);
         User friend = userRepository.findByUsername(friendName);
         if(friend != null && user != null){
-            log.info("Removing friend {} from friendlist of user {}", friendName, userName);
             user.getFriends().remove(friend);
             friend.getFriends().remove(user);
             userRepository.save(user);   
             return user; 
         }
-        return null;  
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     @Override
@@ -192,7 +226,6 @@ public class UserServiceImpl implements UserService{
         }else{
             user.getRoles().add((Role) role);
         }
-        log.info("Adding role " + role + "to user: " + username);
     }
 
 }

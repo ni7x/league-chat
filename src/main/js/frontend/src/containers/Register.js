@@ -45,18 +45,15 @@ const Register = () => {
         e.preventDefault();
         //check if  username exist database needs to send error
         let {username, ingameName, password, server} = formData.current;
-        if(isValid(username.value, ingameName.value, password.value)){
+        //isValid(username.value, ingameName.value, password.value
+        if(true){
             try{
                 let user = await register(username.value, ingameName.value, password.value, server.value);
                 setUser(user);
                 navigate("/");
             }catch(err){
-                if(err==="UsernameException"){
-                    addError("username", "Username is already taken!");
-                }
-                else if(err==="IngameNameException"){
-                    addError("ingameName", "IngameName in this server is already taken!");
-                }
+                console.log(err);
+                alert(err)
             }
           
         }   

@@ -31,6 +31,7 @@ const UserSettings = () => {
                 "Authorization" : "Bearer " + userToken,
                 'Content-Type': 'application/json'
         }});
+        console.log(response)
         if(response.ok){
             if(username.value !== userDetails.username){
                 setUserToken(null);

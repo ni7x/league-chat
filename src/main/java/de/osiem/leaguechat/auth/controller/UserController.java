@@ -35,20 +35,13 @@ public class UserController {
 	public ResponseEntity<User> getCurrentUser(Authentication authentication) throws ResponseStatusException{
         User user = userService.getUser(authentication.getName());
         return ResponseEntity.ok().body(user);
-
 	}
 
     @PostMapping("/user/save")
-    public ResponseEntity<?> saveUser(@Valid @RequestBody User user) throws ResponseStatusException{
-        
+    public ResponseEntity<User> saveUser(@Valid @RequestBody User user) throws ResponseStatusException{
             User newUser = userService.saveUser(user);
-            if(newUser != null){
-                URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
-                return ResponseEntity.created(uri).body(newUser);
-            }else{
-                return ResponseEntity.badRequest().build();
-            }
-       
+            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
+            return ResponseEntity.created(uri).body(newUser);
     }
 
     @PutMapping("/user/username/{username}")
@@ -56,55 +49,51 @@ public class UserController {
         if(authentication.getName().equals(username)){
             userService.updateUser(user);
             return ResponseEntity.ok().body(user);
-        }else{
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
 
     @DeleteMapping("/user/username/{username}")
-    public ResponseEntity<?> deleteUser(@PathVariable String username, Authentication authentication){
+    public ResponseEntity<?> deleteUser(@PathVariable String username, Authentication authentication) throws ResponseStatusException{
         if(authentication.getName().equals(username)){
             userService.deleteUser(username);
             return ResponseEntity.ok().build();
         }
-        return ResponseEntity.badRequest().build();
-      
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
 
 
-    @PostMapping("/friendRequest/")
-    public ResponseEntity<?> sendFriendRequest(@RequestBody FriendRequestDto request){
-        userService.sendFriendRequest(request.getFrom(), request.getTo());
-        return ResponseEntity.ok().build();
+    @PostMapping("/friendRequest")
+    public ResponseEntity<User> sendFriendRequest(@RequestBody FriendRequestDto request) throws ResponseStatusException{
+        User from = userService.getUser(request.getFromUsername());
+        User to = userService.getUserByIGNandServer(request.getToIngameName(), request.getToServer());
+        User user = userService.sendFriendRequest(from, to);
+        return ResponseEntity.ok().body(user);
     }
 
-    @PutMapping("/friendRequest/id/{id}/accept")
-    public ResponseEntity<?> acceptFriendRequest(@PathVariable Long id, Authentication authentication){
-        if(authentication.getName().equals(userService.getFriendRequest(id).getTo().getUsername()) ){
+    @DeleteMapping("/friendRequest/id/{id}/accept")
+    public ResponseEntity<User> acceptFriendRequest(@PathVariable Long id, Authentication authentication) throws ResponseStatusException{
+        if(authentication.getName().equals(userService.getFriendRequest(id).getTo().getUsername())){
             User user = userService.acceptFriendRequest(id);
             return ResponseEntity.ok().body(user);
         }
-        return ResponseEntity.badRequest().build();
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
 
-    @PutMapping("/friendRequest/id/{id}/reject")
-    public ResponseEntity<?> rejectFriendRequest(@PathVariable Long id, Authentication authentication){
-        if(authentication.getName().equals(userService.getFriendRequest(id).getTo().getUsername()) ){
+    @DeleteMapping("/friendRequest/id/{id}/reject")
+    public ResponseEntity<User> rejectFriendRequest(@PathVariable Long id, Authentication authentication) throws ResponseStatusException{
+        if(authentication.getName().equals(userService.getFriendRequest(id).getTo().getUsername())){
             User user = userService.rejectFriendRequest(id);
             return ResponseEntity.ok().body(user);
         }
-        return ResponseEntity.badRequest().build();
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
 
-    
+    @PostMapping("/user/endFriendship")
+    public ResponseEntity<User> endFriendship(@RequestBody FriendToUser form) throws ResponseStatusException{
+        User user = userService.endFriendship(form.getUsername(), form.getFriendName());
+        return ResponseEntity.ok().body(user);
 
-    @PostMapping("/user/removeFriend")
-    public ResponseEntity<User> removeFriend(@RequestBody FriendToUser form){
-        User user = userService.removeFriend(form.getUsername(), form.getFriendName());
-        if(user!=null){
-            return ResponseEntity.ok().body(user);
-        }
-        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/users")
@@ -147,6 +136,7 @@ class FriendToUser{
 
 @Data
 class FriendRequestDto{
-    private String from;
-    private String to;
+    private String fromUsername;
+    private String toIngameName;
+    private String toServer;
 } 

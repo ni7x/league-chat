@@ -15,21 +15,38 @@ import UserPage from "./containers/UserPage";
 import Register from "./containers/Register";
 import AuthGuard from "./wrappers/AuthGuard.js";
 import NotFound from './containers/NotFound';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { UserContext } from "./UserContext";
 import Authenticated from './wrappers/Authenticated';
 import { useUserDetails } from './services/UserService';
 
 const App = () => {
     const [ userToken, setUserToken ] = useState(localStorage.getItem("token"));
-    const value = useMemo(() => ({userToken, setUserToken}, [userToken, setUserToken]));
-    const  userDetails = useUserDetails(userToken);
+    const token = useMemo(() => ({userToken, setUserToken}, [userToken, setUserToken]));
+    const [ user, setUser ] = useState({});
 
-    console.log(userDetails);
+    useEffect(()=>{
+        if(token === null){
+            setUser({});
+        }else{
+            const fetchUser = async () => {
+                const data = await fetch("http://127.0.0.1:8080/api/user/current", {
+                    method: "GET",
+                    headers: {
+                        "Authorization" : "Bearer " + userToken
+                      }
+                }) 
+                const json = await data.json();
+                setUser(json);      
+            }
+            fetchUser().catch((e)=>console.log(e))
+        }
+    }, [userToken])
+
     return (
         <div className="app">
             <BrowserRouter>
-                <UserContext.Provider value={value}>
+                <UserContext.Provider value={token}>
                     <Routes>
                         <Route element={<AuthGuard/>}>
                             <Route path="/" element={<Authenticated><Home /></Authenticated>} />

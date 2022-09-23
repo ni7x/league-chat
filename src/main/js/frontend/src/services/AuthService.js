@@ -73,7 +73,7 @@ export const getUser = async (username) => {
         if(response.ok){
             return response.json();
         }else{
-            localStorage.setItem("token", null);
+            localStorage.removeItem("token");
             throw new Error("Bad token");
         }
     }else{

@@ -7,7 +7,7 @@ const FriendRequest = (props) => {
         e.preventDefault();
       
         const response = await fetch("http://127.0.0.1:8080/api/friendRequest/id/" + props.id + "/" + action, {
-            method: "PUT",
+            method: "DELETE",
             headers: {
                 "Authorization" : "Bearer " + user,
                 'Content-Type': 'application/json'
