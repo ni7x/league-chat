@@ -4,9 +4,11 @@ import { UserContext } from "../UserContext";
 const URL_PREFIX = "http://127.0.0.1:8080";
 
 export const useUserToken = () =>{
-    return useContext(UserContext);
+    return useContext(UserContext)?.token;
 }
-
+export const useUserDetails = () =>{
+    return useContext(UserContext)?.user;
+}
 export const login = async (username, password) => {
         const response = await fetch(URL_PREFIX + "/token", {
             method: "POST",
