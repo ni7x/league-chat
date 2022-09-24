@@ -100,10 +100,11 @@ public class UserController {
     }
 
     @PostMapping("/user/endFriendship")
-    public ResponseEntity<User> endFriendship(@RequestBody FriendToUser form) throws ResponseStatusException{
-        User user = userService.endFriendship(form.getUsername(), form.getFriendName());
+    public ResponseEntity<User> endFriendship(@RequestBody FriendRequestDto request) throws ResponseStatusException{
+        User from = userService.getUser(request.getFromUsername());
+        User to = userService.getUserByIGNandServer(request.getToIngameName(), request.getToServer());
+        User user = userService.endFriendship(from, to);
         return ResponseEntity.ok().body(user);
-
     }
 
     @GetMapping("/users")

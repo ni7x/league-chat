@@ -1,9 +1,5 @@
 package de.osiem.leaguechat.auth.controller;
 
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.osiem.leaguechat.auth.security.jwt.TokenService;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 
 @RestController

@@ -16,7 +16,7 @@ public interface UserService {
     User updateUser(User user) throws ResponseStatusException;
 
     //friends
-    User endFriendship(String username, String friendName) throws ResponseStatusException;
+    User endFriendship(User user, User friend) throws ResponseStatusException;
     User sendFriendRequest(User from, User to) throws ResponseStatusException;
     FriendRequest getFriendRequest(Long id) throws ResponseStatusException;
     User acceptFriendRequest(Long id) throws ResponseStatusException;

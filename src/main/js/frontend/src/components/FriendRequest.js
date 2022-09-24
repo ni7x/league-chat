@@ -1,36 +1,24 @@
-import { useUserToken } from "../services/UserService";
+import { answerFriendRequest, useUserDetails, useUserToken } from "../services/UserService";
 
 const FriendRequest = (props) => {
-    const [user, setUser] = useUserToken();
+    const [, setUserDetails] = useUserDetails();
+    const [userToken, ] = useUserToken();
 
-    const requestAction = async (e, action) => {
-        e.preventDefault();
-      
-        const response = await fetch("http://127.0.0.1:8080/api/friendRequest/id/" + props.id + "/" + action, {
-            method: "DELETE",
-            headers: {
-                "Authorization" : "Bearer " + user,
-                'Content-Type': 'application/json'
-        }});
-        if(response.ok){
-            alert("ok")
+    const handleAnswer = async (action) => {
+        const data = await answerFriendRequest(props.id, action, userToken);
+        if(data.ok){
+            let updatedUser = await data.json();
+            setUserDetails(updatedUser);
         }else{
-           alert("n ok");
+            console.log(data);
         }
-    }
-
-  
-    const reject = (e) => {
-        requestAction(e, "reject");
-    }
-    const accept = (e) => {
-        requestAction(e, "accept");
-    }
+    } 
     
     return(
-        <>  <b>FRIEND REQUEST</b>
+        <>  
+            <b>FRIEND REQUEST</b>
             <p>from: {props.from.ingameName} </p>
-            <button onClick={reject}>Reject</button><button onClick={accept}>Accept</button>
+            <button onClick={()=>handleAnswer("reject")}>Reject</button><button onClick={()=>handleAnswer("accept")}>Accept</button>
         </>
     )
 }

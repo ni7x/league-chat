@@ -98,8 +98,7 @@ export const sendFriendRequest = async(fromUsername, toIngameName, server, token
         "fromUsername": fromUsername ,
         "toIngameName" : toIngameName,
         "toServer": server 
-   };
-
+    };
     const response = await fetch(URL_PREFIX + "/api/friendRequest", {
         method: "POST",
         body: JSON.stringify(data),
@@ -108,6 +107,45 @@ export const sendFriendRequest = async(fromUsername, toIngameName, server, token
             "Content-Type": "application/json"
         }
     });
+    if(response.ok){
+        return response;
+    }else{
+        let json = await response.json();
+        let message = json.message;
+        return Promise.reject(message);
+    }
+}
+
+export const endFriendship = async(fromUsername, toIngameName, server, token) => {
+    let data = {
+        "fromUsername": fromUsername ,
+        "toIngameName" : toIngameName,
+        "toServer": server 
+    };
+    const response = await fetch(URL_PREFIX + "/api/user/endFriendship", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Authorization" : "Bearer " + token,
+            "Content-Type": "application/json"
+        }
+    });
+    if(response.ok){
+        return response;
+    }else{
+        let json = await response.json();
+        let message = json.message;
+        return Promise.reject(message);
+    }
+}
+
+export const answerFriendRequest = async (id, answer, token) => {
+    const response = await fetch(URL_PREFIX + "/api/friendRequest/id/" + id + "/" + answer, {
+        method: "DELETE",
+        headers: {
+            "Authorization" : "Bearer " + token,
+            'Content-Type': 'application/json'
+    }});
     if(response.ok){
         return response;
     }else{

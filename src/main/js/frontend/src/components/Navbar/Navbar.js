@@ -3,9 +3,9 @@ import { NavLink } from 'react-router-dom';
 import { useUserToken } from "../../services/UserService";
 
 const Navbar = () => {
-    const [ user, setUser ] = useUserToken();
+    const [ userToken, setUserToken ] = useUserToken();
 
-    if(user !== null){
+    if(userToken !== null){
         return (
             <nav className="navbar">
                 <ul>

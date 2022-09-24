@@ -1,13 +1,8 @@
 package de.osiem.leaguechat.auth.service;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
-
 import javax.transaction.Transactional;
 
 import org.springframework.http.HttpStatus;
@@ -188,8 +183,11 @@ public class UserServiceImpl implements UserService{
     public User sendFriendRequest(User from, User to) throws ResponseStatusException{
         FriendRequest friendRequest = new FriendRequest();
         if(from != null && to != null){
-            if(from.getFriends().contains(to) || to.getFriends().contains(from)){
+            if(from.getFriends().contains(to)){
                 throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, "You are already friends with this user");
+            }
+            if(from.getFriendRequestsFrom().stream().anyMatch(request->request.getTo().equals(to))){
+                throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, "You have already send friend request to this user");
             }
             friendRequest.setFrom(from);
             friendRequest.setTo(to);
@@ -224,9 +222,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User endFriendship(String userName, String friendName) throws ResponseStatusException{
-        User user = userRepository.findByUsername(userName);
-        User friend = userRepository.findByUsername(friendName);
+    public User endFriendship(User user, User friend) throws ResponseStatusException{
         if(friend != null && user != null){
             user.getFriends().remove(friend);
             friend.getFriends().remove(user);

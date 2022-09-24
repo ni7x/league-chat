@@ -1,31 +1,25 @@
-const Friend = (props) => {
-    const friendRemove = async (e, friendName) => {
-        e.preventDefault();
-     
-        let data = {
-             "username": props.for,
-             "friendName" : friendName,
-        };
+import { endFriendship, useUserDetails, useUserToken } from "../../services/UserService";
 
-        const response = await fetch("http://127.0.0.1:8080/api/user/endFriendship", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-                "Authorization" : "Bearer " + localStorage.getItem("token"),
-                'Content-Type': 'application/json'
-        }});
-        if(response.ok){
-            alert("ok");
+const Friend = (props) => {
+    const [ userDetails, setUserDetails ] = useUserDetails();
+    const [ userToken, ] = useUserToken();
+    const friendRemove = async (e) => {
+        e.preventDefault();
+    
+        let data = await endFriendship(userDetails.username, props.ingameName, props.server, userToken);
+        if(data.ok){
+            let updatedUser = await data.json();
+            setUserDetails(updatedUser);
+        }else{
+            console.log(data);
         }
     }
     return (
-        <>
-            <div>
-                <button onClick={(e) => friendRemove(e, props.username)}>remove</button>
-                <p><a href={"user/" + props.username}>{props.ingameName}</a></p>
-                <i>{props.server}</i>
-            </div>
-        </>
+        <div>
+            <button onClick={friendRemove}>remove</button>
+            <p><a href={"user/" + props.server + "/" + props.ingameName}>{props.ingameName}</a></p>
+            <i>{props.server}</i>
+        </div>
     )
 }
 

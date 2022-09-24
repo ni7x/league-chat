@@ -25,7 +25,7 @@ let Authenticated = ( props ) => {
             </div>
             <div className="authenticated-right-panel">
                 <div className="authenticated-friends">
-                    <FriendList friends={userDetails.friends} for={userDetails.user}></FriendList>
+                    <FriendList></FriendList>
                 </div>  
             </div>
             <div className="authenticated-main">
