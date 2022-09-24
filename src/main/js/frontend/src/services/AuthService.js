@@ -1,28 +1,19 @@
-import { useContext } from "react";
-import { UserContext } from "../UserContext";
-
 const URL_PREFIX = "http://127.0.0.1:8080";
 
-export const useUserToken = () =>{
-    return useContext(UserContext)?.token;
-}
-export const useUserDetails = () =>{
-    return useContext(UserContext)?.user;
-}
 export const login = async (username, password) => {
-        const response = await fetch(URL_PREFIX + "/token", {
-            method: "POST",
-            headers: {
-                'Authorization': 'Basic ' + btoa(username + ":" + password)
-            }
-        });
-        if(response.ok){
-            let user = await response.text();
-            localStorage.setItem("token", user);
-            return user;
-        }else{
-            return Promise.reject("XD");
-        }   
+    const response = await fetch(URL_PREFIX + "/token", {
+        method: "POST",
+        headers: {
+            "Authorization": "Basic " + btoa(username + ":" + password)
+        }
+    });
+    if(response.ok){
+        let token = await response.text();
+        localStorage.setItem("token", token);
+        return token;
+    }else{
+        return Promise.reject("Couldn't authorize");
+    }   
 }
 
 export const logout = () => {
@@ -37,50 +28,17 @@ export const register = async (username, ingameName,  password, server) => {
         "server": server
     };
     const response = await fetch(URL_PREFIX + "/api/user/save", {
-        method:"POST",
-        body:JSON.stringify(data),
+        method: "POST",
+        body: JSON.stringify(data),
         headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json"
         }
     });
     if(response.ok){
         return login(username, password);
     }else{
-        let message = "Unknow error";
         let json = await response.json();
-        message = json.message;
+        let message = json.message;
         return Promise.reject(message);
     }
 }
-
-export const getToken = () => {
-    return localStorage.getItem("token");
-}
-
-export const getUser = async (username) => {
-    //jakis problem przy edytowaniu usera pewnie token z localsorage zawadza lub cus
-    let URL = "";
-    if(username === undefined){
-        URL = URL_PREFIX + "/api/user/current";
-    }else{
-        URL = URL_PREFIX + "/api/user/username/" + username;
-    }
-    if(localStorage.getItem("token") !== null){
-        const response = await fetch(URL, {
-            method: "GET",
-            headers: {
-                "Authorization" : "Bearer " + localStorage.getItem("token")
-              }
-        });
-        if(response.ok){
-            return response.json();
-        }else{
-            localStorage.removeItem("token");
-            throw new Error("Bad token");
-        }
-    }else{
-        throw new Error("Couldn't get user (No token provided)");
-    }
-}
-
-

@@ -53,6 +53,16 @@ public class UserController {
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
 
+    @PutMapping("/user/id/{id}")
+    public ResponseEntity<User> updateUserById(@PathVariable Long id, Authentication authentication, @Valid @RequestBody User user) throws ResponseStatusException{
+        if(authentication.getName().equals(userService.getUserById(id).getUsername())){
+            User updated = userService.updateUser(user);
+            return ResponseEntity.ok().body(updated);
+        }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    }
+
+
     @DeleteMapping("/user/username/{username}")
     public ResponseEntity<?> deleteUser(@PathVariable String username, Authentication authentication) throws ResponseStatusException{
         if(authentication.getName().equals(username)){
@@ -102,8 +112,13 @@ public class UserController {
     }
 
     @GetMapping("/user/username/{username}")
-    public ResponseEntity<User> getUserByUsername(@PathVariable String username){
+    public ResponseEntity<User> getByUsername(@PathVariable String username) throws ResponseStatusException{
         return ResponseEntity.ok().body(userService.getUser(username));
+    }
+    
+    @GetMapping("/user/name/{ingameName}/server/{server}")
+    public ResponseEntity<User> getByIngameNameAndServer(@PathVariable String ingameName, @PathVariable String server) throws ResponseStatusException{
+        return ResponseEntity.ok().body(userService.getUserByIGNandServer(ingameName, server));
     }
 
     @PostMapping("/user/addRole")
@@ -113,8 +128,6 @@ public class UserController {
     }
 	
 }
-
-
 
 @Data
 class RoleToUser{

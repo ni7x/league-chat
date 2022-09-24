@@ -1,6 +1,6 @@
 import LogoutButton from './LogoutButton';
 import { NavLink } from 'react-router-dom';
-import { useUserToken } from '../../services/AuthService.js';
+import { useUserToken } from "../../services/UserService";
 
 const Navbar = () => {
     const [ user, setUser ] = useUserToken();

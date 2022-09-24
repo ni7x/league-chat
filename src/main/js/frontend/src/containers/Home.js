@@ -1,26 +1,15 @@
-import { useEffect, useState } from "react";
 import FriendList from "../components/FriendList/FriendList";
 import User from "../components/User";
-import { getUser } from "../services/AuthService";
+import { useUserDetails } from "../services/UserService";
 
 const Home = () => {
-    const [ userInfo, setUserInfo ] = useState(null);
-    
-    useEffect(() => {
-        getUser().then(user => setUserInfo(user));
-    }, [])
-
-    if(userInfo === null){
-        return(
-            <>Loading</>
-        )
-    }
+    const [ userDetails, ] = useUserDetails();
 
     return(
         <>  
-            <User ingameName={userInfo.ingameName} positions={userInfo.positions} server={userInfo.server} friendRequests={userInfo.friendRequestsTo}/>
+            <User ingameName={userDetails.ingameName} positions={userDetails.positions} server={userDetails.server} friendRequests={userDetails.friendRequestsTo}/>
             <p>Friends: </p>
-            <FriendList for={userInfo.username} friends={userInfo.friends}/>
+            <FriendList for={userDetails.username} friends={userDetails.friends}/>
         </>
     )
 }

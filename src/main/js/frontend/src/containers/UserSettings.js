@@ -1,96 +1,65 @@
-import { useEffect, useRef, useState } from "react"
-import ServerSelect from "../components/ServerSelect";
-import { getUser, logout, useUserToken, login } from "../services/AuthService";
+import { useRef } from "react"
+import FormInput from "../components/Form/FormInput";
+import PositionSelect from "../components/Form/PositionSelect";
+import ServerSelect from "../components/Form/ServerSelect";
+import { logout } from "../services/AuthService";
+import { deleteUser, isUserValid, updateUser, useUserToken } from "../services/UserService";
+import { useUserDetails } from "../services/UserService";
 
 const UserSettings = () => {
     const [ userToken, setUserToken ] = useUserToken(); 
-    const [ userDetails, setUserDetails ] = useState(null);
+    const [ userDetails, setUserDetails ] = useUserDetails();
     const formData = useRef();
 
-    const handleSubmit = async (e) => {
+    const handleUpdate = async (e) => {
         e.preventDefault();
-        let {username, ingameName, password, positions, server} = formData.current;
-        let positionsArray = [];
-        Array.from(positions.options).forEach(option => {
-            if(option.selected){
-                positionsArray.push(option.value)
+
+        let {username, ingamename, password, positions, server} = formData.current;
+        let positionsArray = Array.from(positions.options).filter(option=>option.selected).map(option=>option.value);
+        try{
+            if(isUserValid(username.value, ingamename.value, password.value)){
+                const data = await updateUser(userDetails.id, username.value, ingamename.value, password.value, positionsArray, server.value, userToken);
+                if(data.ok){
+                    let updatedUser = await data.json();
+                    if(updatedUser.username !== userDetails.username){
+                        logout();
+                        setUserToken(null);
+                    }
+                    setUserDetails(updatedUser);
+                }
+                else{
+                    console.log(data);
+                    //error handling
+                }
             }
-        });
-        let data = {
-             "id" : userDetails.id,
-             "username" : username.value,
-             "ingameName" : ingameName.value,
-             "password" :  password.value,
-             "positions" :  positionsArray,
-             "server": server.value
-        };
-        const response = await fetch("http://127.0.0.1:8080/api/user/username/" + userDetails.username, {
-            method: "PUT",
-            body: JSON.stringify(data),
-            headers: {
-                "Authorization" : "Bearer " + userToken,
-                'Content-Type': 'application/json'
-        }});
-        console.log(response)
-        if(response.ok){
-            if(username.value !== userDetails.username){
-                setUserToken(null);
-                logout();
-            }
-            setUserDetails(await response.json());
-            
-            //addd handling for chaning username
-        }else{
-            let message = "Unknow error";
-            console.log(response);
-            let json = await response.json();
-            message = json.message;
-            alert(message);
+        }catch(err){
+            console.log(err.message);
         }
+
     }
 
-    const deleteUser = async () => {
-        const response = await fetch("http://127.0.0.1:8080/api/user/username/" + userDetails.username, {
-            method: "DELETE",
-            headers: {
-                "Authorization" : "Bearer " + userToken,
-        }});
-        if(response.ok){
+    const handleDelete = async () => {
+        const data = await deleteUser(userDetails.username, userToken);
+        if(data.ok){
             logout();
-            window.location.href = "/login";
+            setUserToken(null);
+        }else{
+            console.log(data);
+            //error handling
         }
-    }
-
-    useEffect(()=>{
-        getUser().then((userData)=>setUserDetails(userData));
-    }, [])
-
-    if(userDetails === null){
-        return(
-            <>Loading</>
-        )
     }
 
     return(
         <>
-            <form ref={formData} onSubmit={handleSubmit}>
-                <label htmlFor="username">Edit Username: </label>
-                <input type="text" name="username" defaultValue={userDetails.username}></input>
-                <label htmlFor="ingameName">Edit Ingame Name: </label>
-                <input type="text" name="ingameName" defaultValue={userDetails.ingameName}></input>
-                <label htmlFor="password">Edit Password: </label>
-                <input type="password" name="password" ></input>
-                <select name="positions" multiple={true}>
-                    <option name="TOPLANE" value="TOPLANE">TOP</option>
-                    <option name="JUNGLE" value="JUNGLE">JG</option>
-                    <option name="MIDLANE" value="MIDLANE">MID</option>
-                    <option name="BOTTOM" value="BOTTOM">ADC</option>
-                    <option name="SUPPORT" value="SUPPORT">SUPP</option>
-                </select>
-                <ServerSelect/>
+            <form ref={formData} onSubmit={handleUpdate}>
+                <FormInput type="text" name="Username" defaultValue={userDetails.username}/>
+                <FormInput type="text" name="Ingame Name" defaultValue={userDetails.ingameName}/>
+                <FormInput type="password" name="Password" defaultValue={""}/>
+                <PositionSelect current={userDetails.positions}/>
+                <ServerSelect current={userDetails.server}/>
                 <input type="submit" name="submit" placeholder="Submit"></input>
             </form>
-            <button onClick={deleteUser}>Delete account</button>
+            <button onClick={handleDelete}>Delete account</button>
         </>
     )
 }

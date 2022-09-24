@@ -1,10 +1,10 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useUserToken } from '../services/AuthService';
+import { useUserToken } from "../services/UserService";
 
 
 const AuthGuard = () => {
     const [userToken, setUserToken] = useUserToken();
-  
+    
     let hasJWT = () => {
         return userToken === null ? false : true;
     }

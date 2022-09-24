@@ -1,4 +1,4 @@
-import { useUserToken } from "../services/AuthService";
+import { useUserToken } from "../services/UserService";
 
 const FriendRequest = (props) => {
     const [user, setUser] = useUserToken();

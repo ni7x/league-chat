@@ -1,6 +1,10 @@
 package de.osiem.leaguechat.auth.service;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -61,13 +65,13 @@ public class UserServiceImpl implements UserService{
                     userRepository.save(user);
                     return user;
                 }else{
-                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "This password is not valid");
+                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Password is not valid");
                 }
             }else{
-                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "This ingame name on this given sever is already taken");
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Ingame name is not unique on this server");
             }
         }else{
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "This username is already taken");
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Username is not unique");
         }
     }
 
@@ -80,8 +84,8 @@ public class UserServiceImpl implements UserService{
             if(!currentUsername.equals(newUsername)){
                 if(isUsernameUnique(newUsername)){
                     user.setUsername(newUsername);
-                }else{
-                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "This username is already taken");
+                }else{                    
+                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Username is not unique");
                 }
             }
 
@@ -91,7 +95,7 @@ public class UserServiceImpl implements UserService{
                 if(isIngameNameUnqiue(user.getIngameName(), newServer)){
                     user.setServer(newServer);
                 }else{
-                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You must change ingame name in order to move to this server");
+                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Ingame name is not unique on this server");
                 }
             }
 
@@ -101,24 +105,25 @@ public class UserServiceImpl implements UserService{
                 if(isIngameNameUnqiue(newIngameName, user.getServer())){
                     user.setIngameName(newIngameName);
                 }else{
-                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "This ingameName is already taken in this server");
+                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Ingame name is not unique on this server");
                 }
             }
 
             String newPassword = updatedUser.getPassword();
-            if(isPasswordValid(newPassword)){
-                user.setPassword(passwordEncoder.encode(newPassword));
-            }else{
-                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "This password doesn't meet requirements");
+            if(!newPassword.isBlank()){
+                if(isPasswordValid(newPassword)){
+                    user.setPassword(passwordEncoder.encode(newPassword));
+                }else{
+                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Password doesn't meet requirements");
+                }
             }
-
+            
             Set<Position> newPositions = updatedUser.getPositions();
             if(!user.getPositions().equals(updatedUser.getPositions())){
                 user.setPositions(newPositions);
             }
 
             userRepository.save(user);
-            System.out.println(user);
             return user;
             
         }
@@ -147,8 +152,21 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public User getUserById(Long id) throws ResponseStatusException{
+        User user = userRepository.findById(id).get();
+        if(user != null){
+            return user;
+        }
+       throw new ResponseStatusException(HttpStatus.NOT_FOUND , "User with id: " + id + "was not found.");
+    }
+
+    @Override
     public User getUserByIGNandServer(String ingameName, String server) throws ResponseStatusException{
-        User user = userRepository.findByIngameNameAndServer(ingameName, Server.valueOf(server));
+        String upcServer = server.toUpperCase();
+        if(!Arrays.stream(Server.values()).anyMatch(s->s.toString().equals(upcServer))){
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE , "This server doesn't exist");
+        }
+        User user = userRepository.findByIngameNameAndServer(ingameName, Server.valueOf(upcServer));
         if(user != null){
             return user;
         }

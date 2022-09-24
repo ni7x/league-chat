@@ -22,12 +22,12 @@ import Authenticated from './wrappers/Authenticated';
 const App = () => {
     const [ userToken, setUserToken ] = useState(localStorage.getItem("token"));
     const token = useMemo(() => ({userToken, setUserToken}, [userToken, setUserToken]));
-    const [ userDetails, setUserDetails ] = useState({});
+    const [ userDetails, setUserDetails ] = useState(null);
     const user = useMemo(() => ({userDetails, setUserDetails}, [userDetails, setUserDetails]));
 
     useEffect(()=>{
         if(userToken === null){
-            setUserDetails({});
+            setUserDetails(null);
         }else{
             const fetchUser = async () => {
                 const data = await fetch("http://127.0.0.1:8080/api/user/current", {
@@ -36,8 +36,13 @@ const App = () => {
                         "Authorization" : "Bearer " + userToken
                       }
                 }) 
-                const json = await data.json();
-                setUserDetails(json);      
+                if(data.ok){
+                    const json = await data.json();
+                    setUserDetails(json);   
+                }else{
+                    setUserDetails(null);  
+                }
+                   
             }
             fetchUser().catch((e)=>console.log(e))
         }
@@ -51,7 +56,7 @@ const App = () => {
                         <Route element={<AuthGuard/>}>
                             <Route path="/" element={<Authenticated><Home /></Authenticated>} />
                             <Route path="/settings" element={<Authenticated><UserSettings /></Authenticated>} />
-                            <Route path="/user/:username" element={<Authenticated><UserPage /></Authenticated>} />
+                            <Route path="/user/:server/:name" element={<Authenticated><UserPage /></Authenticated>} />
                             <Route path="/addFriend" element={<Authenticated><FriendAdd /></Authenticated>} />
                         </Route> 
                         <Route path="/login" element={<Login />} />

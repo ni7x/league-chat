@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.web.server.ResponseStatusException;
 
 import de.osiem.leaguechat.auth.model.friendRequest.FriendRequest;
-import de.osiem.leaguechat.auth.model.user.Server;
 import de.osiem.leaguechat.auth.model.user.User;
 
 public interface UserService {
@@ -26,5 +25,6 @@ public interface UserService {
     //admin
     List<User> getUsers();
     void addRoleToUser(String username, Object role);
+    User getUserById(Long id);
 
 }

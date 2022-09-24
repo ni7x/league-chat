@@ -1,40 +1,24 @@
-import { useRef, useState, useEffect } from "react";
-import { getUser } from "../services/AuthService";
-import ServerSelect from "../components/ServerSelect";
+import { useRef } from "react";
+import { sendFriendRequest, useUserDetails, useUserToken } from "../services/UserService";
+import ServerSelect from "../components/Form/ServerSelect";
 
 const FriendAdd = () => {
     const formData = useRef();
-    const [userDetails, setUserDetails] = useState(null);
-
-    useEffect(()=>{
-        getUser().then((userData)=>setUserDetails(userData));
-    }, [])
+    const [ userDetails, setUserDetails ] = useUserDetails();
+    const [ userToken, setUserToken ] = useUserToken();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         let { friendName, server } = formData.current;
        
-        let data = {
-             "fromUsername": userDetails.username ,
-             "toIngameName" : friendName.value,
-             "toServer": server.value 
-          
-        };
-
-        const response = await fetch("http://127.0.0.1:8080/api/friendRequest/", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-                "Authorization" : "Bearer " + localStorage.getItem("token"),
-                'Content-Type': 'application/json'
-        }});
-        if(response.ok){
-            alert("Request send!")
-        }else{
-            let message = "Unknow error";
-            let json = await response.json();
-            message = json.message;
-            alert(message);
+        const data = await sendFriendRequest(userDetails.username, friendName.value, server.value, userToken);
+        if(data.ok){
+            let updatedUser = await data.json();
+            setUserDetails(updatedUser);
+        }
+        else{
+            console.log(data);
+            //error handling
         }
     }
 

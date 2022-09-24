@@ -1,20 +1,19 @@
 import FriendList from "../components/FriendList/FriendList";
-import { useUserToken } from "../services/AuthService"
+import { useUserDetails, useUserToken } from "../services/UserService";
 import { getUser } from "../services/AuthService";
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar/Navbar";
-import { Navigate } from "react-router";
 
 let Authenticated = ( props ) => {
     const [ userToken, setUserToken ] = useUserToken();
-    const [ userDetails, setUserDetails ] = useState(null);
-    
-    useEffect(() => {
-        getUser().then(user => setUserDetails(user));
-    }, [userToken]);
+    const [ userDetails, setUserDetails ] = useUserDetails();
 
-    if(userDetails === null || userToken === null){
+
+    if(userToken === null){
         return <a href="/login"></a>
+    }
+    if(userDetails === null){
+        return <>Loading</>
     }
 
     return(

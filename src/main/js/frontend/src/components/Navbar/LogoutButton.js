@@ -1,4 +1,5 @@
-import { logout, useUserToken } from "../../services/AuthService";
+import { logout } from "../../services/AuthService";
+import { useUserToken } from "../../services/UserService";
 
 const LogoutButton = () => {
     const [ user, setUser ] = useUserToken();

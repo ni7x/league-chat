@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import User from "../components/User";
-import { getUser } from "../services/AuthService";
+import { getUserByIGNandServer, useUserToken } from "../services/UserService";
 
 const UserPage = () => {
     
     const [ userInfo, setUserInfo ] = useState(null);
+    const [ userToken, ] = useUserToken();
     const params = useParams();
     
     useEffect(() => {
-        getUser(params.username).then(user => setUserInfo(user));
+        const fetchUser = async () => {
+            return await getUserByIGNandServer(params.name, params.server, userToken); 
+        }
+        fetchUser().then((user) => setUserInfo(user));
     }, [])
-
+    
     if(userInfo === null){
         return(
-            <>Loading</>
+            <>User was not found</>
         )
     }
 
