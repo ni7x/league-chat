@@ -1,6 +1,6 @@
-import { answerFriendRequest, useUserDetails, useUserToken } from "../services/UserService";
+import { useUserToken, useUserDetails, answerFriendRequest } from "../../../services/UserService";
 
-const FriendRequest = (props) => {
+const RecievedRequest = (props) => {
     const [, setUserDetails] = useUserDetails();
     const [userToken, ] = useUserToken();
 
@@ -16,11 +16,11 @@ const FriendRequest = (props) => {
     
     return(
         <>  
-            <b>FRIEND REQUEST</b>
-            <p>from: {props.from.ingameName} </p>
+            
+            <p>{props.from.ingameName} wants to be friend</p>
             <button onClick={()=>handleAnswer("reject")}>Reject</button><button onClick={()=>handleAnswer("accept")}>Accept</button>
         </>
     )
 }
 
-export default FriendRequest;
+export default RecievedRequest;

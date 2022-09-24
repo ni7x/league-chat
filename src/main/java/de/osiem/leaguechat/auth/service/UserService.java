@@ -14,6 +14,7 @@ public interface UserService {
     User getUserByIGNandServer(String ingameName, String string) throws ResponseStatusException;
     void deleteUser(String name) throws ResponseStatusException;
     User updateUser(User user) throws ResponseStatusException;
+    User getUserById(Long id);
 
     //friends
     User endFriendship(User user, User friend) throws ResponseStatusException;
@@ -21,10 +22,11 @@ public interface UserService {
     FriendRequest getFriendRequest(Long id) throws ResponseStatusException;
     User acceptFriendRequest(Long id) throws ResponseStatusException;
     User rejectFriendRequest(Long id) throws ResponseStatusException;
+    User cancelFriendRequest(Long id);
 
     //admin
     List<User> getUsers();
     void addRoleToUser(String username, Object role);
-    User getUserById(Long id);
+
 
 }

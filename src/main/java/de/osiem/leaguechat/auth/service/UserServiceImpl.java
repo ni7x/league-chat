@@ -183,6 +183,9 @@ public class UserServiceImpl implements UserService{
     public User sendFriendRequest(User from, User to) throws ResponseStatusException{
         FriendRequest friendRequest = new FriendRequest();
         if(from != null && to != null){
+            if(from.equals(to)){
+                throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, "You can't send friend request to yourself");
+            }
             if(from.getFriends().contains(to)){
                 throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, "You are already friends with this user");
             }
@@ -209,6 +212,13 @@ public class UserServiceImpl implements UserService{
         FriendRequest request = frRepository.findById(id).get();
         frRepository.delete(request);
         return request.getTo();
+    }
+
+    @Override
+    public User cancelFriendRequest(Long id){
+        FriendRequest request = frRepository.findById(id).get();
+        frRepository.delete(request);
+        return request.getFrom();
     }
         
     private User startFriendship(User friend, User user) throws ResponseStatusException{

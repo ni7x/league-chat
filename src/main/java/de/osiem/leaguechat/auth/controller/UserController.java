@@ -99,6 +99,15 @@ public class UserController {
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
 
+    @DeleteMapping("/friendRequest/id/{id}/cancel")
+    public ResponseEntity<User> cancelFriendRequest(@PathVariable Long id, Authentication authentication) throws ResponseStatusException{
+        if(authentication.getName().equals(userService.getFriendRequest(id).getFrom().getUsername())){
+            User user = userService.cancelFriendRequest(id);
+            return ResponseEntity.ok().body(user);
+        }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    }
+
     @PostMapping("/user/endFriendship")
     public ResponseEntity<User> endFriendship(@RequestBody FriendRequestDto request) throws ResponseStatusException{
         User from = userService.getUser(request.getFromUsername());
