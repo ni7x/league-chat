@@ -17,7 +17,8 @@ const RecievedRequest = (props) => {
     return(
         <>  
             
-            <p>{props.from.ingameName} wants to be friend</p>
+            <p><a href={"/user/" + props.from.server + "/" + props.from.ingameName}>{props.from.ingameName}</a> wants to be friend</p>
+            <i>S: {props.from.server} </i>
             <button onClick={()=>handleAnswer("reject")}>Reject</button><button onClick={()=>handleAnswer("accept")}>Accept</button>
         </>
     )

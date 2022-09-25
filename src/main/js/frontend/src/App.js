@@ -41,6 +41,7 @@ const App = () => {
                     setUserDetails(json);   
                 }else{
                     setUserDetails(null);  
+                    setUserToken(null);
                 }
                    
             }
@@ -57,7 +58,6 @@ const App = () => {
                             <Route path="/" element={<Authenticated><Home /></Authenticated>} />
                             <Route path="/settings" element={<Authenticated><UserSettings /></Authenticated>} />
                             <Route path="/user/:server/:name" element={<Authenticated><UserPage /></Authenticated>} />
-                            <Route path="/addFriend" element={<Authenticated><FriendAdd /></Authenticated>} />
                         </Route> 
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />

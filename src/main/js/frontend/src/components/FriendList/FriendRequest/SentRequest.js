@@ -1,6 +1,6 @@
 import { useUserToken, useUserDetails, answerFriendRequest } from "../../../services/UserService";
 
-const SendRequest = (props) => {
+const SentRequest = (props) => {
     const [, setUserDetails] = useUserDetails();
     const [userToken, ] = useUserToken();
 
@@ -17,10 +17,11 @@ const SendRequest = (props) => {
     return(
         <>  
             
-            <p>Request to: {props.to.ingameName}</p>
+            <p>Request to: <a href={"/user/" + props.to.server + "/" + props.to.ingameName}>{props.to.ingameName}</a></p>
+            <i>S: {props.to.server} </i>
             <button onClick={()=>handleAnswer("cancel")}>Cancel</button>
         </>
     )
 }
 
-export default SendRequest;
+export default SentRequest;

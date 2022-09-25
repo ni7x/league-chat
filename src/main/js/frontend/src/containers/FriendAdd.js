@@ -29,7 +29,8 @@ const FriendAdd = () => {
     }
 
     return(
-        <>
+        <>  
+            <p>Add to friends</p>
             <form onSubmit={handleSubmit} ref={formData}>
                 <input type="text" name="friendName"></input>
                 <ServerSelect/>

@@ -1,9 +1,10 @@
 import { useUserDetails } from "../../../services/UserService"
 import RecievedRequest from "./RecievedRequest";
-import SendRequest from "./SendRequest";
+import SentRequest from "./SentRequest";
 
 const FriendRequestList = () => {
     const [ userDetails,  ] = useUserDetails();
+    console.log(userDetails)
     return(
         <>
             Recieved request:
@@ -12,7 +13,7 @@ const FriendRequestList = () => {
             })}
             Sent request:
             {userDetails.friendRequestsFrom.map((friendRequest)=>{
-                return <SendRequest key={friendRequest.id} to={friendRequest.to} id={friendRequest.id} />
+                return <SentRequest key={friendRequest.id} to={friendRequest.to} id={friendRequest.id} />
             })}
         </>
     )

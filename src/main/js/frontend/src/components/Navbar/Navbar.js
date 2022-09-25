@@ -11,7 +11,6 @@ const Navbar = () => {
                 <ul>
                     <li><NavLink to={"/"}>Home</NavLink></li>
                     <li><NavLink to={"/settings"}>Settings</NavLink></li>
-                    <li><NavLink to={"/addFriend"}>Add to friends</NavLink></li>
                     <li><LogoutButton /></li>
                 </ul>
             </nav>

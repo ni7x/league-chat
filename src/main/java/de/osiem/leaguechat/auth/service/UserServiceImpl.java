@@ -195,6 +195,7 @@ public class UserServiceImpl implements UserService{
             friendRequest.setFrom(from);
             friendRequest.setTo(to);
             frRepository.save(friendRequest);
+            from.getFriendRequestsFrom().add(friendRequest);
             return from;
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This user doesn't exist");
