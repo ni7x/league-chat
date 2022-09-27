@@ -16,9 +16,8 @@ const Friend = (props) => {
     }
     return (
         <div>
-            <button onClick={friendRemove}>remove</button>
-            <p><a href={"user/" + props.server + "/" + props.ingameName}>{props.ingameName}</a></p>
-            <i>{props.server}</i>
+            <button onClick={friendRemove}><i class="fa-solid fa-xmark"></i></button>
+            <p><a href={"/user/" + props.server + "/" + props.ingameName}>{props.ingameName} #{props.server}</a></p>
         </div>
     )
 }

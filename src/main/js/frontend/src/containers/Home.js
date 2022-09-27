@@ -1,13 +1,18 @@
-import User from "../components/User";
 import { useUserDetails } from "../services/UserService";
 
 const Home = () => {
     const [ userDetails, ] = useUserDetails();
-
+    
     return(
         <>  
-            <User ingameName={userDetails.ingameName} positions={userDetails.positions} server={userDetails.server} friendRequests={userDetails.friendRequestsTo}/>
-            
+            <p>Hello, {userDetails.username} </p>
+            <p>There are your account details: </p>
+            <p>IGN: {userDetails.ingameName} #{userDetails.server}</p>
+            <p>Your positions: 
+            {userDetails.positions&& userDetails.positions.map((position)=>{
+                return <> {position} </>
+            })}
+            </p>
         </>
     )
 }

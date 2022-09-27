@@ -1,6 +1,6 @@
 import { useRef, useState} from "react";
 import { useNavigate } from "react-router";
-import FormInput from "../components/Form/FormInput";
+import Input from "../components/Form/Input";
 import { login } from "../services/AuthService";
 import { useUserToken } from "../services/UserService";
 import "../styles/auth.css";
@@ -26,8 +26,8 @@ const Login = () => {
     return(
         <div className="auth">
             <form onSubmit={handleSubmit} ref={formData}>
-                <FormInput type="text" name="Username"/>
-                <FormInput type="password" name="Password"/>
+                <Input type="text" name="Username"/>
+                <Input type="password" name="Password"/>
                 <p className="auth-error">{errorMessage}</p>
                 <input type="submit" name="submit" placeholder="submit"></input>
                 <p>Or click <a href="/register">here</a> to register</p>

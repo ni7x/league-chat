@@ -4,7 +4,7 @@ import { register } from "../services/AuthService";
 import { getTypeFromErrorMessage, useUserToken } from "../services/UserService";
 import { isUserValid } from "../services/UserService";
 import "../styles/auth.css";
-import FormInput from "../components/Form/FormInput";
+import Input from "../components/Form/Input";
 import ServerSelect from "../components/Form/ServerSelect";
 
 
@@ -40,9 +40,9 @@ const Register = () => {
     return(
         <div className="auth">
             <form onSubmit={handleSubmit} ref={formData}>
-                <FormInput type="text" name="Username" errors={errors.get("USERNAME_ERROR")}/>
-                <FormInput type="text" name="Ingame Name" errors={errors.get("INGAME_NAME_ERROR")}/>
-                <FormInput type="password" name="Password" errors={errors.get("PASSWORD_ERROR")}/>
+                <Input type="text" name="Username" errors={errors.get("USERNAME_ERROR")}/>
+                <Input type="text" name="Ingame Name" errors={errors.get("INGAME_NAME_ERROR")}/>
+                <Input type="password" name="Password" errors={errors.get("PASSWORD_ERROR")}/>
                 <ServerSelect/>
                 <input type="submit" name="submit" placeholder="Submit"></input>
                 <p>Or click <a href="/login">here</a> to login</p>

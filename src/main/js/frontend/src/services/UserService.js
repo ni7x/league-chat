@@ -34,12 +34,14 @@ export const  isUserValid = (username, ingameName, password) =>{
     if(ingameName.length < 2 || ingameName.length > 16){
         throw new Error("Ingame Name has to be longer than 2 and shorter than 16 characters")
     }
-    if(password.length < 8 || password.length > 20){
-        throw new Error("Password has to be longer than 8 and shorter than 20 characters")
-    }
-    if(!new RegExp(PASSWORD_PATTERN).test(password)){
-        throw new Error("Password doesn't match the pattern")
-
+    if(password.length > 0){
+        if(password.length < 8 || password.length > 20){
+            throw new Error("Password has to be longer than 8 and shorter than 20 characters")
+        }
+        if(!new RegExp(PASSWORD_PATTERN).test(password)){
+            throw new Error("Password doesn't match the pattern")
+    
+        }
     }
     return true;
 }

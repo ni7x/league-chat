@@ -9,9 +9,8 @@ import {
 
 import Home from "./containers/Home.js";
 import Login from "./containers/Login.js";
-import UserSettings from "./containers/UserSettings";
-import FriendAdd from "./containers/FriendAdd";
-import UserPage from "./containers/UserPage";
+import Settings from "./containers/Settings";
+import User from "./containers/User";
 import Register from "./containers/Register";
 import AuthGuard from "./wrappers/AuthGuard.js";
 import NotFound from './containers/NotFound';
@@ -56,8 +55,8 @@ const App = () => {
                     <Routes>
                         <Route element={<AuthGuard/>}>
                             <Route path="/" element={<Authenticated><Home /></Authenticated>} />
-                            <Route path="/settings" element={<Authenticated><UserSettings /></Authenticated>} />
-                            <Route path="/user/:server/:name" element={<Authenticated><UserPage /></Authenticated>} />
+                            <Route path="/settings" element={<Authenticated><Settings /></Authenticated>} />
+                            <Route path="/user/:server/:name" element={<Authenticated><User /></Authenticated>} />
                         </Route> 
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />

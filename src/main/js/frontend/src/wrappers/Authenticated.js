@@ -1,13 +1,17 @@
-import FriendList from "../components/FriendList/FriendList";
 import { useUserDetails, useUserToken } from "../services/UserService";
-import { getUser } from "../services/AuthService";
-import { useState, useEffect } from "react";
+import { useState,  } from "react";
 import Navbar from "../components/Navbar/Navbar";
+import Sidebar from "../components/Sidebar/Sidebar";
+import FriendRequests from "../components/FriendRequest/FriendRequests";
 
 let Authenticated = ( props ) => {
     const [ userToken, setUserToken ] = useUserToken();
     const [ userDetails, setUserDetails ] = useUserDetails();
+    const [ isModalActive, setIsModalActive ] = useState(false);
 
+    const toggleModalActivity = () => {
+        setIsModalActive(!isModalActive);
+    }
 
     if(userToken === null){
         return <a href="/login"></a>
@@ -18,19 +22,24 @@ let Authenticated = ( props ) => {
 
     return(
         <div className="authenticated-wrapper">
-            <Navbar/>
+            <Navbar />
             
             <div className="authenticated-user-profile">
                 <a href="/">{userDetails.ingameName}</a>
             </div>
-            <div className="authenticated-right-panel">
-                <div className="authenticated-friends">
-                    <FriendList></FriendList>
-                </div>  
-            </div>
+
+            <div className="authenticated-sidebar">
+                <Sidebar toggleActive={toggleModalActivity} />
+            </div>  
+            
             <div className="authenticated-main">
+                <div className={`friend-request-modal${isModalActive ? " active" : ""}`}>
+                    <FriendRequests toggleActive={toggleModalActivity} />
+                </div>
+                
                 {props.children}
             </div>
+
         </div>
     )
 

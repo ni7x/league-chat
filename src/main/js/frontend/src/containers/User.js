@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import RecievedRequest from "../components/FriendList/FriendRequest/RecievedRequest";
-import SentRequest from "../components/FriendList/FriendRequest/SentRequest";
+import RecievedRequest from "../components/FriendRequest/RecievedRequest";
+import SentRequest from "../components/FriendRequest/SentRequest";
 import { endFriendship, getUserByIGNandServer, sendFriendRequest, useUserDetails, useUserToken } from "../services/UserService";
 
 const UserPage = () => {

@@ -38,9 +38,9 @@ nav ul li .active{
 .authenticated-wrapper{
     display: grid;
     grid-template-areas: "navbar user-profile"
-                         "main user-friends";                
-    grid-template-columns: 1fr 18rem;
-    grid-template-rows: 5rem auto;
+                         "main sidebar";                
+    grid-template-columns: 1fr 22rem;
+    grid-template-rows: 5rem calc(100% - 5rem);
     height: 100vh;
 }
 
@@ -54,12 +54,147 @@ nav ul li .active{
     height: auto;
 }
 
-.authenticated-friends{
-    height: auto;
+
+.authenticated-sidebar{
+    grid-area: sidebar;
+    background-color: var(--light-black);
+    position: relative;
+    width: 22rem;
+    height: 100%;
 }
 
-.authenticated-right-panel{
-    grid-area: user-friends;
+.friend-request-modal{
+    display: none;
+    background: rgba(1, 1, 1, 0.85);
+    position: absolute;
+    height: calc(100% - 5rem);
+    width: calc(100% - 22rem);
+    justify-content: center;
+    align-items: center;
+}
+
+.friend-request-modal .error{
+    text-align: center;
+    color: var(--red);
+}
+
+.friend-request-modal.active{
+    display: flex;
+}
+
+.friend-request-modal div{
+    display: block;
+}
+
+.friend-requests-wrapper{
+    background-color: var(--dark-black);
+    padding: 2rem 1.5rem;
+    height: 55rem;
+    width: 70rem;
+    border: 0.15rem solid var(--watermelon);
+    border-radius: 0.1rem;
+}
+
+.friend-requests-wrapper select, .friend-requests-wrapper input{
+    display:inline-block;
+    vertical-align:middle;
+    outline: none;
+    border: none;
+    color: var(--dirty-white);
+    background-color: var(--gray);
+    border: 0.2rem solid var(--gray);
+    margin: 0 0.2rem;
+    border-radius: 0.3rem;
+}
+
+.friend-requests-wrapper .close-button{
+    width: 10rem;
+    position: relative;
+    height: 4rem;
+    left: calc(50% - 5rem);
+    bottom: -2.5rem;
+    background-color: var(--watermelon);
+    border: none;
+    color: var(--white);
+    font-weight: 500;
+    border-radius: 0.3rem;
+}
+
+.friend-requests-wrapper ::placeholder{
+    color: #ced6e0;
+}
+
+.friend-requests-wrapper input[type="text"]{
+    width: 47rem;
+    padding: 0.9rem;
+}
+
+.friend-requests-wrapper input[type="submit"]{
+    width: 12rem;
+    padding: 0.9rem;
+    background-color: #2f3542;
+    border: 0.2rem solid var(--watermelon);
+    color: var(--watermelon);
+    font-weight: 500;
+}
+
+.friend-requests-wrapper select{
+    width: 7rem;
+    padding: 0.7rem 0;
+    font-weight: 500;
+}
+
+.friend-requests-wrapper .label{
+    text-align: center;
+    color: var(--white)
+}
+
+.friend-requests-wrapper .friend-requests{
+    height: 16rem;
     overflow: auto;
-    background-color: var(--light-black);
+    width: 95%;
+    margin: 0 auto;
+}
+
+.friend-requests-wrapper .friend-requests .friend-request{
+    float: left;
+    width: 17rem;
+    height: 7.5rem; 
+}
+
+.friend-requests-wrapper .friend-requests .friend-request p{
+    margin-top: 0;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+}
+
+.friend-requests-wrapper .friend-requests .friend-request p a{
+    color: var(--white);
+}
+
+.friend-requests-wrapper .friend-requests .friend-request p span{
+    color: var(--gray);
+}
+
+.friend-requests-wrapper .friend-requests .friend-request button{
+    background: none;
+    border: none;
+    color: var(--orange);
+    cursor: pointer;
+}
+
+.friend-requests-wrapper .friend-requests .friend-request i{
+    font-size: 1.3rem;
+    color: var(--orange);
+}
+
+.friend-requests-wrapper .friend-requests .friend-request button i{
+    font-size: 1.8rem;
+    margin-left: -0.5rem;
+    margin-right: 0.5rem;
+}
+
+.friend-requests-wrapper .error{
+    min-height: 3rem;
+   color: var(--orange);
 }

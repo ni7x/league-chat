@@ -1,8 +1,12 @@
 :root {
-    --dark-black: #212529;
-    --light-black: #343a40;
-    --white: #f8f9fa;
+    --dark-black: #2f3542;
+    --light-black: #353b48;
+    --gray: #747d8c;
+    --white: #ffffff;
+    --dirty-white: #ced6e0;
+    --watermelon: #ff4757;
     --yellow: #ffd60a;
+    --orange: #ffa502;
     --turquoise: #2ec4b6;
     --red: #ef233c;
     --body-color: var(--white);
@@ -31,3 +35,6 @@ code {
     monospace;
 }
 
+input[type="submit"]{
+    cursor: pointer;
+}
