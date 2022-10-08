@@ -38,3 +38,7 @@ code {
 input[type="submit"]{
     cursor: pointer;
 }
+
+::placeholder{
+    color: var(--gray);
+}

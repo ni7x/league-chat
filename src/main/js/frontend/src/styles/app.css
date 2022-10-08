@@ -4,25 +4,30 @@ nav{
     justify-content: flex-start;
     align-items: center;
     grid-area: navbar;
+    border-bottom: 0.1rem solid var(--gray);
+    position: fixed;
+    top: 0;
+    width: calc(100% - 22rem);
+    height: 6rem;
 }
 
 nav ul{
     list-style: none;
-    margin: 0 5rem;
+    margin-left: -1rem;
 }
 
 nav ul li{
     display: inline;
-    margin: 0 1rem;
-    padding: 1rem 2rem;
+    margin-right: 3rem;
 }
 
-nav ul li a,  .logout-button{
+nav ul li a, .logout-button{
     text-decoration: none;
     color: var(--white);
     font-size: 1.5rem;
     font-weight: 500;
     cursor: pointer;
+    padding: 0;
 }
 
 nav ul li .active{
@@ -40,13 +45,18 @@ nav ul li .active{
     grid-template-areas: "navbar user-profile"
                          "main sidebar";                
     grid-template-columns: 1fr 22rem;
-    grid-template-rows: 5rem calc(100% - 5rem);
+    grid-template-rows: 6rem calc(100% - 6rem);
     height: 100vh;
 }
 
 .authenticated-user-profile{
     grid-area: user-profile;
     color: var(--yellow);
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 22rem;
+    height: 6rem;
 }
 
 .authenticated-main{
@@ -58,15 +68,31 @@ nav ul li .active{
 .authenticated-sidebar{
     grid-area: sidebar;
     background-color: var(--light-black);
-    position: relative;
+    position: fixed;
     width: 22rem;
-    height: 100%;
+    height: calc(100vh - 5rem);
+    top: 6.1rem;
+    right: 0;
 }
+
+@media only screen and (max-width: 600px) {
+    .authenticated-sidebar {
+     width: 6rem;
+    }
+
+    .authenticated-user-profile {
+        width: 6rem;
+    }
+    nav{
+        width: calc(100% - 6rem);
+    }
+  }
 
 .friend-request-modal{
     display: none;
     background: rgba(1, 1, 1, 0.85);
     position: absolute;
+
     height: calc(100% - 5rem);
     width: calc(100% - 22rem);
     justify-content: center;
@@ -89,7 +115,7 @@ nav ul li .active{
 .friend-requests-wrapper{
     background-color: var(--dark-black);
     padding: 2rem 1.5rem;
-    height: 55rem;
+    height: 37rem;
     width: 70rem;
     border: 0.15rem solid var(--watermelon);
     border-radius: 0.1rem;
@@ -112,7 +138,6 @@ nav ul li .active{
     position: relative;
     height: 4rem;
     left: calc(50% - 5rem);
-    bottom: -2.5rem;
     background-color: var(--watermelon);
     border: none;
     color: var(--white);
@@ -146,15 +171,39 @@ nav ul li .active{
 
 .friend-requests-wrapper .label{
     text-align: center;
-    color: var(--white)
+    color: var(--white);
+    padding-bottom: 2rem;
+}
+
+.friend-requests-wrapper .label button{
+    background: none;
+    border: none;
+    margin: 0 1rem;
+}
+
+.friend-requests-wrapper .label .active{
+    color: var(--white);
+}
+
+.friend-requests-wrapper .label .hidden{
+    color: var(--gray);
 }
 
 .friend-requests-wrapper .friend-requests{
-    height: 16rem;
+    height: 20.5rem;
     overflow: auto;
     width: 95%;
     margin: 0 auto;
 }
+
+.friend-requests-wrapper .friend-requests.hidden{
+    display: none;
+}
+
+.friend-requests-wrapper .friend-requests.active{
+    display: block;
+}
+
 
 .friend-requests-wrapper .friend-requests .friend-request{
     float: left;
@@ -197,4 +246,67 @@ nav ul li .active{
 .friend-requests-wrapper .error{
     min-height: 3rem;
    color: var(--orange);
+}
+
+.authenticated-user-profile{ 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--light-black);
+    border-left: 0.1rem solid var(--gray);
+    border-bottom: 0.1rem solid var(--gray);
+}
+
+.authenticated-user-profile a{ 
+    text-decoration: none;
+    color: var(--turquoise);
+    font-weight: 500;
+}
+
+.friend-list{
+    margin-top: 2rem;
+    padding: 0 2rem;
+}
+
+.friend-list div{
+    height: 7rem;
+}
+
+.friend-list div a{
+    text-decoration: none;
+    color: var(--orange);
+    font-weight: 500;
+}
+
+.friend-list div button{
+    background: none;
+    border: none;
+    color: var(--red);
+    position: relative;
+    top: -1.5rem;
+}
+
+.authenticated-sidebar .modal-toggle{
+    padding: 0.5rem;
+}
+
+.authenticated-sidebar .sidebar-top-panel{
+    background-color: var(--light-black);
+}
+
+.authenticated-sidebar .sidebar-top-panel button{
+    background-color: var(--watermelon);
+    border: 0.2rem solid var(--watermelon);
+    color: var(--white);
+}
+
+.authenticated-sidebar .sidebar-top-panel input{
+    background-color: var(--light-black);
+    width: 15.5rem;
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    border: none;
+    outline: none;
+    border-bottom: 0.1rem solid var(--gray);
+    color: var(--gray);
 }

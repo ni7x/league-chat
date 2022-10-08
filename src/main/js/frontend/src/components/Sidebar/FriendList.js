@@ -4,20 +4,12 @@ import Friend from "./Friend";
 const FriendList = () => {
     const [ userDetails, ] = useUserDetails();
 
-    if(userDetails.friends.length === 0){
-        return(
-            <>
-                You have no friends..
-            </>
-        )
-    }
-
     return(
-        <> 
+        <div className="friend-list"> 
             {userDetails.friends.map(friend => {
                 return <Friend key={friend.id} id={friend.id} ingameName={friend.ingameName} username={friend.username} server={friend.server}/>
             })}
-        </>
+        </div>
     )  
 }
 export default FriendList;

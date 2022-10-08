@@ -3,7 +3,9 @@ import FriendList from "./FriendList";
 const Sidebar = (props) => {
     return(
             <> 
-                <button onClick={props.toggleActive}><i className="fa-solid fa-user-plus"></i></button>
+                <div className="sidebar-top-panel">
+                    <button onClick={props.toggleActive} className="modal-toggle"><i className="fa-solid fa-user-plus"></i></button>
+                </div>
                 <FriendList/>   
             </>
     )  

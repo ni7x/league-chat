@@ -192,6 +192,9 @@ public class UserServiceImpl implements UserService{
             if(from.getFriendRequestsFrom().stream().anyMatch(request->request.getTo().equals(to))){
                 throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, "You have already send friend request to this user");
             }
+            if(from.getFriendRequestsTo().stream().anyMatch(request->request.getFrom().equals(to))){
+                throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, "Check your friend requests");
+            }
             friendRequest.setFrom(from);
             friendRequest.setTo(to);
             frRepository.save(friendRequest);
