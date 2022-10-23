@@ -16,7 +16,8 @@ const Friend = (props) => {
     }
     return (
         <div>
-            <div>
+            <a href={"/user/" + props.server + "/" + props.ingameName}><img src={process.env.PUBLIC_URL + "/profile-image.jpg"} alt="Profile image"></img></a>
+            <div className="hidden-mobile">
                 <p><a href={"/user/" + props.server + "/" + props.ingameName}>{props.ingameName}</a> #{props.server}</p>
                 <button onClick={friendRemove}><i class="fa-solid fa-xmark"></i></button>
             </div>

@@ -8,7 +8,7 @@ import "../styles/auth.css";
 const Login = () => {
     const [, setUserToken ] = useUserToken();
     const naviagate = useNavigate();
-    const [ errorMessage, setErrorMessage ] = useState(""); 
+    const [ errorMessage, setErrorMessage ] = useState(false); 
     const formData = useRef();
     
     const handleSubmit = async (e) => {
@@ -19,18 +19,18 @@ const Login = () => {
             setUserToken(token);
             naviagate("/");
         }catch(err){
-           setErrorMessage(err);
+           setErrorMessage(true);
         }
     }
 
     return(
-        <div className="auth">
+        <div className="auth login">
+            <p className={errorMessage? "error active" : "error"}> Could not authorize.</p>
             <form onSubmit={handleSubmit} ref={formData}>
                 <Input type="text" name="Username"/>
                 <Input type="password" name="Password"/>
-                <p className="auth-error">{errorMessage}</p>
                 <input type="submit" name="submit" placeholder="submit"></input>
-                <p>Or click <a href="/register">here</a> to register</p>
+                <p className="redirect">Or click <a href="/register">here</a> to register</p>
             </form>
         </div>
     )

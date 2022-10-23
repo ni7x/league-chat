@@ -24,19 +24,22 @@ let Authenticated = ( props ) => {
         <div className="authenticated-wrapper">
             <Navbar />
             
-            <div className="authenticated-user-profile">
+            <div className="authenticated-sidebar-myAccount">
                 <a href="/">{userDetails.ingameName}</a>
             </div>
 
             <div className="authenticated-sidebar">
                 <Sidebar toggleActive={toggleModalActivity} />
             </div>  
+
+            <div className="authenticated-secondary">
+                <p>My last interlocutors</p>
+            </div>
             
             <div className="authenticated-main">
-                <div className={`friend-request-modal${isModalActive ? " active" : ""}`}>
+               {/*<div className={`friend-request-modal${isModalActive ? " active" : ""}`}>
                     <FriendRequests toggleActive={toggleModalActivity} />
-                </div>
-                
+                </div>*/}  
                 {props.children}
             </div>
 

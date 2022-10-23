@@ -4,38 +4,94 @@
     align-items: center;
     margin: 0;
     grid-area: main;
+    flex-direction: column;
     height: 100vh;
 }
 
 .auth form{
-    background-color: var(--light-black);
+    background-color: var(--gray);
     width: 25rem;
-    padding: 1.5rem;
+    padding: 2.5rem 3rem;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
 }
 
+:-webkit-autofill,
+:-webkit-autofill:hover, 
+:-webkit-autofill:focus {
+    
+}
 .auth form input{
     width: 100%;
     -moz-box-sizing:border-box;
     -webkit-box-sizing:border-box;
     box-sizing:border-box;
-    margin: 1rem 0;
-    padding: 0.75rem 1rem;
-    border-radius: 0.2rem;
+    margin: 0.2rem 0;
+    padding: 0rem 2rem;
+    border-radius: 0.5rem;
+    height: 4.5rem;
     border: none;
+    background: var(--light-gray);
+    outline: none;
+    color: var(--dark-white);
 }
 
 .auth form input[type="submit"]{
-    background-color: var(--turquoise);
-    border: none;
-    padding: 0.75rem 0;
-    color: var(--white)
+    background-color: var(--gray);
+    color: var(--spring-green);
+    border: 0.2rem solid var(--spring-green);
+    font-weight: 600;
+    margin-top: 1.5rem;
 }
 
 .auth form input[type="submit"]:hover{
-    cursor: pointer;
+    background-color: var(--spring-green);
+    color: var(--white);
+    transition-duration: 0.5s;
 }
 
-.auth-error{
-    color: var(--red);
+.auth.login .error{
+    color: var(--white);
     text-align: center;
+    width: 25rem;
+    height: 2rem;
+    background-color: var(--red);
+    padding: 1.5rem 3rem;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+    display: none;
+}
+
+.auth.login .error.active{
+    display: block;
+}
+
+.auth.register .error{
+   color: var(--red);
+}
+
+.auth label, p{
+    color: var(--dark-white);
+    font-weight: 500;
+    font-size: 1.4rem;
+}
+
+.auth p{
+    text-align: center;
+ 
+}
+.auth a{
+    color: var(--spring-green);
+}
+
+.auth .redirect{
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+}
+
+.auth select{
+    padding: 0.7rem;
+    background-color: var(--light-gray);
+    color: var(--dark-white);
+    outline: none;
+    border: none;
+    border-radius: 0.5rem;
 }

@@ -4,7 +4,7 @@ const FormInput = (props) => {
         <>
                 <label htmlFor={labelName}>{props.name}: </label>
                 <input type={props.type} name={labelName} defaultValue={props.defaultValue}></input>
-                <p className="auth-error">{props.errors}</p>
+                <p className="error">{props.errors}</p>
         </>
     )
 }

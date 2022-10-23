@@ -38,14 +38,15 @@ const Register = () => {
     }
 
     return(
-        <div className="auth">
+        <div className="auth register">
             <form onSubmit={handleSubmit} ref={formData}>
                 <Input type="text" name="Username" errors={errors.get("USERNAME_ERROR")}/>
                 <Input type="text" name="Ingame Name" errors={errors.get("INGAME_NAME_ERROR")}/>
                 <Input type="password" name="Password" errors={errors.get("PASSWORD_ERROR")}/>
+                
                 <ServerSelect/>
                 <input type="submit" name="submit" placeholder="Submit"></input>
-                <p>Or click <a href="/login">here</a> to login</p>
+                <p className="redirect">Or click <a href="/login">here</a> to login</p>
             </form>
         </div>
     )
