@@ -1,1 +1,10 @@
 @import "sidebar.css";
+
+.authenticated{
+    display: grid; 
+    grid-template-columns: 0.20fr 1fr 0.3fr; 
+   
+    gap: 0px 0px; 
+    grid-template-areas: 
+        ". . ."; 
+}

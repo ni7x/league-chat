@@ -5,8 +5,8 @@ import Sidebar from "../components/Sidebar/Sidebar";
 import FriendRequests from "../components/FriendRequest/FriendRequests";
 
 let Authenticated = ( props ) => {
-    const [ userToken, setUserToken ] = useUserToken();
-    const [ userDetails, setUserDetails ] = useUserDetails();
+    const [ userToken, ] = useUserToken();
+    const [ userDetails, ] = useUserDetails();
     const [ isModalActive, setIsModalActive ] = useState(false);
 
     const toggleModalActivity = () => {
@@ -21,27 +21,16 @@ let Authenticated = ( props ) => {
     }
 
     return(
-        <div className="authenticated-wrapper">
+        <div className="authenticated">
             <Navbar />
-            
-            <div className="authenticated-sidebar-myAccount">
-                <a href="/">{userDetails.ingameName}</a>
-            </div>
-
-            <div className="authenticated-sidebar">
-                <Sidebar toggleActive={toggleModalActivity} />
-            </div>  
-
-            <div className="authenticated-secondary">
-                <p>My last interlocutors</p>
-            </div>
-            
-            <div className="authenticated-main">
+            <div className="main">
                {/*<div className={`friend-request-modal${isModalActive ? " active" : ""}`}>
                     <FriendRequests toggleActive={toggleModalActivity} />
                 </div>*/}  
                 {props.children}
             </div>
+            <Sidebar toggleActive={toggleModalActivity} />
+            
 
         </div>
     )

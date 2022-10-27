@@ -1,3 +1,7 @@
-.authenticated-sidebar{
+.authenticated .sidebar{
     background-color: red;
+}
+
+.authenticated .sidebar img{
+    width: 4rem;
 }

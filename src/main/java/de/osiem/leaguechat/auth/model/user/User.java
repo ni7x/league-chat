@@ -2,6 +2,7 @@ package de.osiem.leaguechat.auth.model.user;
 
 import java.util.*;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -30,6 +31,9 @@ public class User implements UserDetails{
     private String username;
     
     private String password;
+
+    @Email(regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
+    private String email;
 
     @ElementCollection
     @Enumerated(EnumType.STRING)
