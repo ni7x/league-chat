@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final FriendRequestRepository frRepository;
     private final PasswordEncoder passwordEncoder;
-    private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,20}$";
+    private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
 
     private static boolean isPasswordValid(String password){
         return password.matches(PASSWORD_PATTERN);

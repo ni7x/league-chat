@@ -9,7 +9,6 @@ const Login = () => {
     const naviagate = useNavigate();
     const [ errorMessage, setErrorMessage ] = useState(false); 
     const [ isCapsOn, setIsCapsOn ] =  useState(false);
-    const [isDialShown, setIsDialShown ] = useState(false);
     const [ isPasswordShown, setIsPasswordShown ] =  useState(false);
     
     const detectCapsLock = (e) => {
@@ -23,11 +22,6 @@ const Login = () => {
     const passwordToggle = (e) => {
         e.preventDefault();
         setIsPasswordShown(!isPasswordShown);
-    }
-
-    const showPasswordRules = (e) => {
-        e.preventDefault();
-        setIsDialShown(!isDialShown);
     }
 
     const formData = useRef();
@@ -47,14 +41,6 @@ const Login = () => {
     return(
         <div className="auth login">
             <p className={errorMessage? "error active" : "error"}> Could not authorize.</p>
-            <div className="dial" style={isDialShown? {"display" : "block"} : {"display" : "none"}}>
-                <h4>Password consists of: </h4>
-                <p>8-20 characters</p>
-                <p>one lowercase character</p>
-                <p>one uppercase character</p>
-                <p>one digit</p> 
-                <p>one special character</p>
-            </div>
             <form onSubmit={handleSubmit} ref={formData}>
 
                 <label htmlFor="username">Username: </label>
@@ -62,7 +48,6 @@ const Login = () => {
 
                 <label htmlFor="password">
                     Password: 
-                    <button onClick={showPasswordRules}><i class="fa-regular fa-circle-question"></i></button> 
                     <span className="caps-warrning" style={isCapsOn? {"display" : "block"} : {"display" : "none"}}>Caps Lock is on!</span>
                 </label>
                 <div className="password-box">

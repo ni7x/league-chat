@@ -48,7 +48,7 @@ input:-webkit-autofill:active  {
     margin-top: 1.5rem;
 }
 
-.auth.login form input[name="password"]{
+.auth.login form input[name="password"], .auth.register form input[name="password"]{
     padding: 0;
     border-radius: 0;
     height: auto;
@@ -83,7 +83,7 @@ input:-webkit-autofill:active  {
    color: var(--red);
 }
 
-.auth label, p{
+.auth label, .redirect, .caps-warrning{
     color: var(--dark-white);
     font-weight: 500;
     font-size: 1.4rem;
@@ -176,4 +176,30 @@ input:-webkit-autofill:active  {
     color: var(--light-black);
     font-weight: 500;
     font-size: 1.5rem;
+}
+
+.auth.register .tips{
+    font-size: 1.3rem;
+    text-align: left;
+    color: #787878;
+   
+    font-weight: 400;
+    padding: 1.1rem 0;
+}
+.auth.register .tips .valid{
+    color: var(--spring-green);
+}
+
+.auth.register .tips .invalid{
+    color: var(--red);
+}
+
+.auth.register .tips p{
+   
+    font-size: 1.3rem;
+    text-align: left;
+    font-weight: 400;
+    margin-top: -0.5rem;
+    margin-bottom: -0.5rem;
+
 }
