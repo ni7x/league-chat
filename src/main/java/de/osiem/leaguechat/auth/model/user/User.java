@@ -32,7 +32,7 @@ public class User implements UserDetails{
     
     private String password;
 
-    @Email(regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
+    @Email(regexp = "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$")
     @Column(unique = true)
     private String email;
 

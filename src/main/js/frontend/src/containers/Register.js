@@ -11,6 +11,8 @@ const Register = () => {
 
     const [ isUsernameValid, setIsUsernameValid ] = useState(false);
     const [ isUsernameUnqiue, setIsUsernameUnique ] = useState(true);
+    const [ isEmailValid, setIsEmailValid ] = useState(false);
+    const [ isEmailUnqiue, setIsEmailUnqiue ] = useState(true);
     const [ isIngameNameValid, setIsIngameNameValid ] = useState(false);
     const [ isIngameNameUnqiue, setIsIngameNameUnique ] = useState(true);
     const [ isPasswordLengthValid, setIsPasswordLengthValid ] = useState(false);
@@ -44,6 +46,14 @@ const Register = () => {
             setIsUsernameValid(true);
         }else{
             setIsUsernameValid(false);
+        }
+    }
+
+    let emailValidation = (e) => {
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(e.target.value)){
+            setIsEmailValid(true);
+        }else{
+            setIsEmailValid(false)
         }
     }
 
@@ -93,6 +103,9 @@ const Register = () => {
         if(!isUsernameValid){
             return false;
         }
+        if(!isEmailValid){
+            return false;
+        }
         if(!isIngameNameValid){
             return false;
         }
@@ -122,6 +135,10 @@ const Register = () => {
                 }else if(err.startsWith("Ingame")){
                     setIsIngameNameUnique(false);
                     setIsUsernameUnique(true);
+                    setIsEmailUnqiue(true);
+                }else if(err.startsWith("Email")){
+                    setIsEmailUnqiue(false);
+                    setIsUsernameUnique(true);
                 }else{
                     alert(err);
                 }
@@ -140,8 +157,12 @@ const Register = () => {
                 </div>
 
                 <label htmlFor="email" autoFocus={true}>Email: </label>
-                <input type="email" name="email" onKeyUp={null}></input>
-              
+                <input type="email" name="email" onKeyUp={emailValidation}></input>
+                <div className="tips">
+                <p>
+                    <span className={isEmailValid ? "valid": null}>Email needs to be valid</span></p>
+                    <p><span className="invalid" style={isEmailUnqiue ? {display: "none"} : {display: "block"}}>This e-email is already taken</span></p>
+                </div>
 
                 <label htmlFor="ingamename" autoFocus={true}>Ingame Name: </label>
                 <input type="text" name="ingamename" onKeyUp={ingameNameValidation}></input>

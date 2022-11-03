@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService{
         String email = user.getEmail();
 
         if(isUsernameUnique(username)){
-            if(isUsernameUnique(username)){
+            if(isEmailUnqiue(email)){
                 if(isIngameNameUnqiue(ingameName, server)){
                     if(isPasswordValid(password)){
                         user.setPassword(passwordEncoder.encode(password));
