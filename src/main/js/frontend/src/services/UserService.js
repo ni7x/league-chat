@@ -61,10 +61,11 @@ export const getTypeFromErrorMessage = (message) => {
 }
 
 
-export const updateUser = async (id, username, ingamename, password, positions, server, token) => {
+export const updateUser = async (id, username, email, ingamename, password, positions, server, token) => {
     let data = {
         "id" : id,
         "username" : username,
+        "email": email,
         "ingameName" : ingamename,
         "password" :  password,
         "positions" :  positions,

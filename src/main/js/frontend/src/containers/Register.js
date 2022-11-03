@@ -110,10 +110,10 @@ const Register = () => {
 
     let handleSubmit = async (e) => {
         e.preventDefault();
-        let {username, ingamename, password, server} = formData.current;
+        let {username, email, ingamename, password, server} = formData.current;
         if(isUserValid()){
             try{
-                let user = await register(username.value, ingamename.value, password.value, server.value);
+                let user = await register(username.value, email.value, ingamename.value, password.value, server.value);
                 setUserToken(user);
                 navigate("/");
             }catch(err){
@@ -138,6 +138,10 @@ const Register = () => {
                     <p><span className={isUsernameValid ? "valid": null}>4-20 characters long</span></p>
                     <p><span className="invalid" style={isUsernameUnqiue ? {display: "none"} : {display: "block"}}>This username is already taken</span></p>
                 </div>
+
+                <label htmlFor="email" autoFocus={true}>Email: </label>
+                <input type="email" name="email" onKeyUp={null}></input>
+              
 
                 <label htmlFor="ingamename" autoFocus={true}>Ingame Name: </label>
                 <input type="text" name="ingamename" onKeyUp={ingameNameValidation}></input>
@@ -165,7 +169,7 @@ const Register = () => {
 
                 <ServerSelect/>
 
-                <input type="submit" name="submit" placeholder="Submit"></input>
+                <input type="submit" name="submit" value="Register"></input>
                 <p className="redirect">Or click <a href="/login">here</a> to login</p>
             </form>
         </div>

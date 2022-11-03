@@ -33,6 +33,7 @@ public class User implements UserDetails{
     private String password;
 
     @Email(regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
+    @Column(unique = true)
     private String email;
 
     @ElementCollection
@@ -101,18 +102,18 @@ public class User implements UserDetails{
             return false;
         }
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(ingameName, user.ingameName) && Objects.equals(username, user.username) && Objects.equals(roles, user.roles) && Objects.equals(friends, user.friends) && Objects.equals(positions, user.positions) && Objects.equals(server, user.server);
+        return Objects.equals(username, user.username);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, ingameName, username, password, roles, positions, server);
+        return Objects.hash(id, ingameName, username, server, email);
     }
 
     @Override
     public String toString() {
         return "User [id=" + id + ", ingameName=" + ingameName + ", password=" + password + ", positions=" + positions
-                + ", roles=" + roles + ", username=" + username + "]" + ", server=" + server + "]";
+                + ", roles=" + roles + ", username=" + username + "]" + ", server=" + server + "]" + ", email=" + email + "]";
     }
     
 }

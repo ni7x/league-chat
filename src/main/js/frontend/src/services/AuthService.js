@@ -20,9 +20,10 @@ export const logout = () => {
     localStorage.removeItem("token");
 }
 
-export const register = async (username, ingameName,  password, server) => {
+export const register = async (username, email, ingameName, password, server) => {
     const data = {
         "username": username, 
+        "email": email,
         "ingameName": ingameName,
         "password": password,
         "server": server

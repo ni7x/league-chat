@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final FriendRequestRepository frRepository;
     private final PasswordEncoder passwordEncoder;
-    private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
+    private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#%&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
 
     private static boolean isPasswordValid(String password){
         return password.matches(PASSWORD_PATTERN);
@@ -37,6 +37,10 @@ public class UserServiceImpl implements UserService{
 
     private boolean isUsernameUnique(String username){
         return !userRepository.existsByUsername(username);
+    }
+
+    private boolean isEmailUnqiue(String email){
+        return !userRepository.existsByEmail(email);
     }
 
     private boolean isIngameNameUnqiue(String ingameName, Server server){
@@ -50,20 +54,25 @@ public class UserServiceImpl implements UserService{
         String ingameName = user.getIngameName();
         String password = user.getPassword();
         Server server = user.getServer();
+        String email = user.getEmail();
 
         if(isUsernameUnique(username)){
-            if(isIngameNameUnqiue(ingameName, server)){
-                if(isPasswordValid(password)){
-                    user.setPassword(passwordEncoder.encode(password));
-                    user.getRoles().add(Role.USER);
-                    user.getPositions().add(Position.FILL);
-                    userRepository.save(user);
-                    return user;
+            if(isUsernameUnique(username)){
+                if(isIngameNameUnqiue(ingameName, server)){
+                    if(isPasswordValid(password)){
+                        user.setPassword(passwordEncoder.encode(password));
+                        user.getRoles().add(Role.USER);
+                        user.getPositions().add(Position.FILL);
+                        userRepository.save(user);
+                        return user;
+                    }else{
+                        throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Password is not valid");
+                    }
                 }else{
-                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Password is not valid");
+                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Ingame name is not unique on this server");
                 }
             }else{
-                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Ingame name is not unique on this server");
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Email is not unique");
             }
         }else{
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Username is not unique");
@@ -83,6 +92,17 @@ public class UserServiceImpl implements UserService{
                     throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Username is not unique");
                 }
             }
+
+            String currentEmail = user.getEmail();
+            String newEmail = updatedUser.getEmail();
+            if(!currentEmail.equals(newEmail)){
+                if(isEmailUnqiue(newEmail)){
+                    user.setEmail(newEmail);
+                }else{                    
+                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Email is not unqiue");
+                }
+            }
+
 
             Server currentServer = user.getServer();
             Server newServer = updatedUser.getServer();

@@ -55,7 +55,7 @@ const Login = () => {
                     <button onClick={passwordToggle}><i className={isPasswordShown? "fa-solid fa-eye":"fa-sharp fa-solid fa-eye-slash"}></i></button>
                 </div>
 
-                <input type="submit" name="submit" placeholder="submit"></input>
+                <input type="submit" name="submit" value="Login"></input>
                 <p className="redirect">Or click <a href="/register">here</a> to register</p>
             </form>
         </div>
