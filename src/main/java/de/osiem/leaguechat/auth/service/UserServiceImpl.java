@@ -70,27 +70,27 @@ public class UserServiceImpl implements UserService{
         Server server = user.getServer();
         String email = user.getEmail();
 
-        if(isUsernameUnique(username)){
-            if(isEmailUnqiue(email)){
-                if(isIngameNameUnqiue(ingameName, server)){
-                    if(isPasswordValid(password)){
-                        user.setPassword(passwordEncoder.encode(password));
-                        user.getRoles().add(Role.USER);
-                        user.getPositions().add(Position.FILL);
-                        userRepository.save(user);
-                        return user;
-                    }else{
-                        throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Password is not valid");
-                    }
-                }else{
-                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Ingame name is not unique on this server");
-                }
-            }else{
-                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Email is not unique");
-            }
-        }else{
+        if(!isUsernameUnique(username)){
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Username is not unique");
+        } 
+        if(!isEmailUnqiue(email)){
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Email is not unique");
         }
+        if(ingameName == null){
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Ingame name is null");
+        }
+        if(!isIngameNameUnqiue(ingameName, server)){
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Ingame name is not unique on this server");
+        }
+        if(!isPasswordValid(password)){
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Password is not valid");
+        }
+
+        user.setPassword(passwordEncoder.encode(password));
+        user.getRoles().add(Role.USER);
+        user.getPositions().add(Position.FILL);
+        userRepository.save(user);
+        return user;
     }
 
     @Override

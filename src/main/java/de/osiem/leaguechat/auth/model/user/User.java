@@ -24,7 +24,6 @@ public class User implements UserDetails{
     private Long id;
 
     @Size(min=2, max=16)
-    @NotNull
     private String ingameName;
 
     @Size(min=4, max=25)
