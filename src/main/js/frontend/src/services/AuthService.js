@@ -58,3 +58,24 @@ export const forgotPassword = async ( email ) => {
         console.log(response);
     }   
 }
+
+export const changePassword = async (password, token) => {
+    const data = {   
+        "password": password,
+        "token": token
+    };
+    const response = await fetch(URL_PREFIX + "/api/user/changePassword", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    if(response.ok){
+        console.log(response);
+    }else{
+        let json = await response.json();
+        let message = json.message;
+        return Promise.reject(message);
+    }
+}

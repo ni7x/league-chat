@@ -17,6 +17,7 @@ public interface UserService {
     User updateUser(User user) throws ResponseStatusException;
     User getUserById(Long id) throws ResponseStatusException;
     User getUserByEmail(String email) throws ResponseStatusException;
+    void updatePassword(User user, String password) throws ResponseStatusException;
 
     //reset token
     ResetPasswordToken createResetPasswordToken(User user, String token);
@@ -32,6 +33,7 @@ public interface UserService {
     //admin
     List<User> getUsers();
     void addRoleToUser(String username, Object role);
+    ResetPasswordToken getByToken(String token);
 
 
 }

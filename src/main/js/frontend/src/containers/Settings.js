@@ -1,5 +1,4 @@
 import { useRef, useState } from "react"
-import Input from "../components/Form/Input";
 import PositionSelect from "../components/Form/PositionSelect";
 import ServerSelect from "../components/Form/ServerSelect";
 import { logout } from "../services/AuthService";
@@ -56,9 +55,6 @@ const Settings = () => {
     return(
         <>
             <form ref={formData} onSubmit={handleUpdate}>
-                <Input type="text" name="Username" defaultValue={userDetails.username} errors={errors.get("USERNAME_ERROR")}/>
-                <Input type="text" name="Ingame Name" defaultValue={userDetails.ingameName} errors={errors.get("INGAME_NAME_ERROR")}/>
-                <Input type="password" name="Password" defaultValue={""} errors={errors.get("PASSWORD_ERROR")}/>
                 <PositionSelect current={userDetails.positions}/>
                 <ServerSelect current={userDetails.server}/>
                 <input type="submit" name="submit" placeholder="Submit"></input>

@@ -49,6 +49,7 @@ public class SecurityConfig {
                 .and().authorizeRequests(auth->auth
                     .antMatchers("/api/user/save").permitAll()
                     .antMatchers("/api/user/forgotPassword").permitAll()
+                    .antMatchers("/api/user/changePassword").permitAll()
                     .antMatchers("/api/users").hasAuthority("ADMIN")
                     .anyRequest().authenticated())
                 .oauth2ResourceServer(authorize -> authorize

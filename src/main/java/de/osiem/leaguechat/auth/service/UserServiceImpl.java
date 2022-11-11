@@ -50,6 +50,16 @@ public class UserServiceImpl implements UserService{
     private boolean isIngameNameUnqiue(String ingameName, Server server){
         return !userRepository.existsByIngameNameAndServer(ingameName, server);
     }
+
+    public void updatePassword(User user, String newPassword){
+        if(!newPassword.isBlank()){
+            if(isPasswordValid(newPassword)){
+                user.setPassword(passwordEncoder.encode(newPassword));
+            }else{
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Password doesn't meet requirements");
+            }
+        }
+    }
     
     @Override
     public User saveUser(User user) throws ResponseStatusException{
@@ -129,13 +139,7 @@ public class UserServiceImpl implements UserService{
             }
 
             String newPassword = updatedUser.getPassword();
-            if(!newPassword.isBlank()){
-                if(isPasswordValid(newPassword)){
-                    user.setPassword(passwordEncoder.encode(newPassword));
-                }else{
-                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Password doesn't meet requirements");
-                }
-            }
+            updatePassword(user, newPassword);
             
             Set<Position> newPositions = updatedUser.getPositions();
             if(!user.getPositions().equals(updatedUser.getPositions())){
@@ -296,6 +300,11 @@ public class UserServiceImpl implements UserService{
         rptToken.setToken(token);
         rptRepository.save(rptToken);
         return rptToken;
+    }
+
+    @Override
+    public ResetPasswordToken getByToken(String token) {
+        return rptRepository.findByToken(token);
     }
 
 }

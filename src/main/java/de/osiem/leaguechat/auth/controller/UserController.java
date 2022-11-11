@@ -20,9 +20,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import de.osiem.leaguechat.auth.model.resetPasswordToken.ResetPasswordToken;
 import de.osiem.leaguechat.auth.model.user.User;
 import de.osiem.leaguechat.auth.service.MailService;
 import de.osiem.leaguechat.auth.service.UserService;
@@ -145,17 +148,29 @@ public class UserController {
 
     @PostMapping("/user/forgotPassword")
     public ResponseEntity<String> forgotPassword(@RequestBody String userEmail){
-        System.out.println(userEmail);
         User user = userService.getUserByEmail(userEmail);
         String token = UUID.randomUUID().toString();
         userService.createResetPasswordToken(user, token);
-       
         mailService.sendMail(userEmail, "Reset Password", "http://localhost:3000" + "/forgotPassword?token=" + token);
-       
-        return ResponseEntity.ok().body("Sprawdz email");
+        return ResponseEntity.ok().body("Email sent");
+    }
+
+    @PostMapping("/user/changePassword")
+    public ResponseEntity<User> changePassword(@RequestBody PasswordToken passwordToken){
+        System.out.println(passwordToken.getToken());
+        System.out.println(passwordToken.getPassword());
+        ResetPasswordToken rpt = userService.getByToken(passwordToken.getToken());
+        if(rpt != null){
+            User user = rpt.getUser();
+            userService.updatePassword(user, passwordToken.getPassword());
+            return ResponseEntity.ok().body(user);
+        }else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
+
 
 @Data
 class RoleToUser{
@@ -180,4 +195,10 @@ class FriendRequestDto{
     private String fromUsername;
     private String toIngameName;
     private String toServer;
+} 
+
+@Data
+class PasswordToken{
+    private String password;
+    private String token;
 } 
