@@ -10,16 +10,12 @@ const PasswordValidation = (props) => {
     const [ isPasswordShown, setIsPasswordShown ] =  useState(false);
     
     useEffect(()=>{
-        if(!isPasswordLengthValid){
+        if(isPasswordLengthValid && containsDigit && containsSpecialCharacter && containsLowercase && containsUpperCase){
+            props.setIsPasswordValid(true);
+        }else{
             props.setIsPasswordValid(false);
         }
-        if(!containsDigit || !containsSpecialCharacter){
-            props.setIsPasswordValid(false);
-        }
-        if(!containsLowercase || !containsUpperCase){
-            props.setIsPasswordValid(false);
-        }
-        props.setIsPasswordValid(true);
+        
     })
 
     const detectCapsLock = (e) => {
@@ -70,7 +66,7 @@ const PasswordValidation = (props) => {
     }
 
     return(
-        <>
+        <> 
             <label htmlFor="password">
                 Password: 
                 <span className="caps-warrning" style={isCapsOn? {"display" : "block"} : {"display" : "none"}}>Caps Lock is on!</span>

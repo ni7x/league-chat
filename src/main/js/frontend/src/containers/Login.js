@@ -8,20 +8,30 @@ const Login = () => {
     const [, setUserToken ] = useUserToken();
     const naviagate = useNavigate();
     const [ errorMessage, setErrorMessage ] = useState(false); 
+    const [ emailMessage, setEmailMessage ] = useState(false);
+    const [ loadingMessage, setLoadingMessage ] = useState(false);
+    const [ successMessage, setSuccessMessage ] = useState(false);
+
     const [ isCapsOn, setIsCapsOn ] =  useState(false);
     const [ isPasswordShown, setIsPasswordShown ] =  useState(false);
     const [ isPasswordRecoveryShown, setIsPasswordRecoveryShown ] = useState(false);
 
     const forgotData = useRef();
-    const handleForgotPassword = (e) => {
-        e.preventDefault();
+    const handleForgotPassword = async (e) => {
+        e.preventDefault(); //not the proudest code sorry was mad
         const { email } = forgotData.current;
         try{
-            forgotPassword(email.value);
+            setSuccessMessage(false);
+            setEmailMessage(false);
+            setLoadingMessage(true);
+            await forgotPassword(email.value);
+            setLoadingMessage(false);
+            setSuccessMessage(true);
         }catch(err){
-            console.log(err);
-        }
-        
+            setLoadingMessage(false);
+            setSuccessMessage(false);
+            setEmailMessage(true);
+        }  
     }
     
     const detectCapsLock = (e) => {
@@ -40,6 +50,7 @@ const Login = () => {
     const passwordRecoveryToggle = (e) => {
         e.preventDefault();
         setIsPasswordRecoveryShown(!isPasswordRecoveryShown);
+        setErrorMessage(false);
     }
 
     const formData = useRef();
@@ -59,12 +70,15 @@ const Login = () => {
     return(
         <div className="auth login">
             <div className="forgot-password-dial" style={isPasswordRecoveryShown ? {"display" : "block"} : {"display" : "none"}}>
-                <button onClick={passwordRecoveryToggle} className="go-back"><i class="fa-solid fa-arrow-left-long"></i></button>
+                <p className={emailMessage? "error active" : "error"}> This email does not exist</p>
+                <p className={loadingMessage? "loading active" : "loading"}>Email is being sent..</p>
+                <p className={successMessage? "success active" : "success"}>Check your inbox</p>
+
                 <form onSubmit={handleForgotPassword} ref={forgotData}>
-                    <p> Send e-mail with password recovery </p>
+                    <button onClick={passwordRecoveryToggle} className="go-back"><i class="fa-solid fa-arrow-left-long"></i></button>
                     <label htmlFor="email">Email: </label>
                     <input type="email" name="email"></input>
-                    <input type="submit" name="submit" value="Send e-mail"></input>
+                    <input type="submit" name="submit" value="Request password reset"></input>
                 </form>
             </div>
 
@@ -82,9 +96,10 @@ const Login = () => {
                     <input type={isPasswordShown ? "text":"password"} name="password" onKeyUp={detectCapsLock}></input>
                     <button onClick={passwordToggle}><i className={isPasswordShown? "fa-solid fa-eye":"fa-sharp fa-solid fa-eye-slash"}></i></button>
                 </div>
+                <button onClick={passwordRecoveryToggle} className="forgot-password-button">Forgot password?</button>
+
 
                 <input type="submit" name="submit" value="Login"></input>
-                <button onClick={passwordRecoveryToggle}>Forgot password?</button>
                 <p className="redirect">Or click <a href="/register">here</a> to register</p>
             </form>
         </div>

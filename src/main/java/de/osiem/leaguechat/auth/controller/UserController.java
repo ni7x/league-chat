@@ -1,6 +1,7 @@
 package de.osiem.leaguechat.auth.controller;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
@@ -157,13 +158,17 @@ public class UserController {
 
     @PostMapping("/user/changePassword")
     public ResponseEntity<User> changePassword(@RequestBody PasswordToken passwordToken){
-        System.out.println(passwordToken.getToken());
-        System.out.println(passwordToken.getPassword());
         ResetPasswordToken rpt = userService.getByToken(passwordToken.getToken());
+        System.out.println(rpt);
         if(rpt != null){
-            User user = rpt.getUser();
-            userService.updatePassword(user, passwordToken.getPassword());
-            return ResponseEntity.ok().body(user);
+            if(LocalDateTime.now().isBefore(rpt.getExpirationTime())){
+                User user = rpt.getUser();
+                userService.updatePassword(user, passwordToken.getPassword());
+                return ResponseEntity.ok().body(user);
+            }else{
+                throw new ResponseStatusException(HttpStatus.GONE);
+            }
+           
         }else{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }

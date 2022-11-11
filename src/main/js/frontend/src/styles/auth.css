@@ -55,7 +55,7 @@ input:-webkit-autofill:active  {
     margin-top: 1.5rem;
 }
 
-.auth.login form input[name="password"], .auth.register form input[name="password"]{
+.auth form input[name="password"], .auth form input[name="password"]{
     padding: 0;
     border-radius: 0;
     height: auto;
@@ -71,7 +71,7 @@ input:-webkit-autofill:active  {
     transition-duration: 0.5s;
 }
 
-.auth.login .error{
+.auth.login .error, .auth.forgot .error, .auth.login .loading, .auth.login .success{
     color: var(--white);
     text-align: center;
     width: 25rem;
@@ -80,9 +80,16 @@ input:-webkit-autofill:active  {
     padding: 1.5rem 3rem;
     box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
     display: none;
+    font-weight: 500;
 }
 
-.auth.login .error.active{
+.auth.login .loading{
+    background-color: var(--electric-blue);
+}
+.auth.login .success{
+    background-color: var(--spring-green);
+}
+.auth.login .error.active, .auth.forgot .error.active, .auth.login .loading.active, .auth.login .success.active{
     display: block;
 }
 
@@ -187,22 +194,22 @@ input:-webkit-autofill:active  {
     font-size: 1.5rem;
 }
 
-.auth.register .tips{
+.auth.register .tips, .auth.forgot .tips{
     font-size: 1.3rem;
     text-align: left;
     color: #787878;
     font-weight: 400;
     padding: 1.1rem 0;
 }
-.auth.register .tips .valid{
+.auth.register .tips .valid, .auth.forgot .tips .valid{
     color: var(--spring-green);
 }
 
-.auth.register .tips .invalid{
+.auth.register .tips .invalid, .auth.forgot .tips .invalid{
     color: var(--red);
 }
 
-.auth.register .tips p{
+.auth.register .tips p, .auth.forgot .tips p{
     font-size: 1.3rem;
     text-align: left;
     font-weight: 400;
@@ -210,12 +217,24 @@ input:-webkit-autofill:active  {
     margin-bottom: -0.5rem;
 }
 
-.auth.register .go-back{
+.go-back{
     display: block;
-   position: relative;
-    top: -1.5rem;
-    left: -1.5rem;
+    position: relative;
     font-size: 2rem;
     font-weight: 300;
     color: var(--spring-green);
+    top: -1.5rem;
+    left: -1.5rem;
+}
+
+
+
+.auth.login .forgot-password-button{
+    float: right;
+    width: 100%;
+    text-align: right;
+    padding-top: 1rem;
+    font-size: 1.5rem;
+    color: var(--orange);
+    text-decoration: underline;
 }

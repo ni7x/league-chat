@@ -53,9 +53,11 @@ export const forgotPassword = async ( email ) => {
         }
     });
     if(response.ok){
-      console.log(response);
+      return response;
     }else{
-        console.log(response);
+        let json = await response.json();
+        let message = json.message;
+        return Promise.reject(message);
     }   
 }
 
@@ -72,7 +74,8 @@ export const changePassword = async (password, token) => {
         }
     });
     if(response.ok){
-        console.log(response);
+        let json = await response.json();
+        return login(json.username, password);
     }else{
         let json = await response.json();
         let message = json.message;

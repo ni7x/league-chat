@@ -1,5 +1,8 @@
 package de.osiem.leaguechat.auth.model.resetPasswordToken;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,4 +30,6 @@ public class ResetPasswordToken {
     private User user;
 
     private String token;
+
+    LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(EXPIRATION);
 }
