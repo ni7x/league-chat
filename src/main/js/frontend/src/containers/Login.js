@@ -75,7 +75,7 @@ const Login = () => {
                 <p className={successMessage? "success active" : "success"}>Check your inbox</p>
 
                 <form onSubmit={handleForgotPassword} ref={forgotData}>
-                    <button onClick={passwordRecoveryToggle} className="go-back"><i class="fa-solid fa-arrow-left-long"></i></button>
+                    <button onClick={passwordRecoveryToggle} className="go-back"><i className="fa-solid fa-arrow-left-long"></i></button>
                     <label htmlFor="email">Email: </label>
                     <input type="email" name="email"></input>
                     <input type="submit" name="submit" value="Request password reset"></input>

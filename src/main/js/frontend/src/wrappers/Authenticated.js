@@ -30,8 +30,6 @@ let Authenticated = ( props ) => {
                 {props.children}
             </div>
             <Sidebar toggleActive={toggleModalActivity} />
-            
-
         </div>
     )
 

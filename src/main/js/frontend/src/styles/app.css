@@ -2,9 +2,48 @@
 
 .authenticated{
     display: grid; 
-    grid-template-columns: 0.20fr 1fr 0.3fr; 
-   
+    grid-template-columns: 5% 75% 20%; 
     gap: 0px 0px; 
     grid-template-areas: 
-        ". . ."; 
+        "navbar . ."; 
+}
+
+.authenticated .navbar{
+    height: 100vh;
+    background-color: var(--black);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    grid-area: navbar;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.authenticated .navbar ul {
+    list-style: none;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0.5rem 0;
+}
+
+
+.authenticated .navbar ul li{
+    padding: 0.75rem 0;
+  
+}
+
+.authenticated .navbar img{
+    width: 70%;
+    margin: 0 15%;
+    
+}
+
+.authenticated .navbar ul li a{
+    color: var(--dark-white);
+}
+
+.authenticated .navbar .logout-button{
+    color: var(--red);
 }

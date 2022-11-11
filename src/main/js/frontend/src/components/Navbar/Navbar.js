@@ -10,9 +10,11 @@ const Navbar = () => {
         return (
             <nav className="navbar">
                 <ul>
-                    <li>This is {userDetails.username}</li>
-                    <li><NavLink to={"/"}>Home</NavLink></li>
-                    <li><NavLink to={"/settings"}>Settings</NavLink></li>
+                    <li><img src={process.env.PUBLIC_URL + "/profile-image.jpg"} alt="Profile image"></img></li>
+                </ul>
+                <ul>
+                    <li><NavLink to={"/"}> <i className="fa-solid fa-house"></i></NavLink></li>
+                    <li><NavLink to={"/settings"}><i className="fa-sharp fa-solid fa-gear"></i></NavLink></li>
                     <li><LogoutButton /></li>
                 </ul>
             </nav>
