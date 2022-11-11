@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.server.ResponseStatusException;
 
 import de.osiem.leaguechat.auth.model.friendRequest.FriendRequest;
+import de.osiem.leaguechat.auth.model.resetPasswordToken.ResetPasswordToken;
 import de.osiem.leaguechat.auth.model.user.User;
 
 public interface UserService {
@@ -14,7 +15,11 @@ public interface UserService {
     User getUserByIGNandServer(String ingameName, String string) throws ResponseStatusException;
     void deleteUser(String name) throws ResponseStatusException;
     User updateUser(User user) throws ResponseStatusException;
-    User getUserById(Long id);
+    User getUserById(Long id) throws ResponseStatusException;
+    User getUserByEmail(String email) throws ResponseStatusException;
+
+    //reset token
+    ResetPasswordToken createResetPasswordToken(User user, String token);
 
     //friends
     User endFriendship(User user, User friend) throws ResponseStatusException;

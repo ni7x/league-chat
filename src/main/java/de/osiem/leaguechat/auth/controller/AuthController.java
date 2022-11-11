@@ -22,4 +22,5 @@ public class AuthController {
 		String token = tokenService.generateToken(authentication);
 		return ResponseEntity.ok().body(token);
 	}
+
 }

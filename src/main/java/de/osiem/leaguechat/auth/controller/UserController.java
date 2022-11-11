@@ -2,11 +2,15 @@ package de.osiem.leaguechat.auth.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Properties;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import de.osiem.leaguechat.auth.model.user.User;
+import de.osiem.leaguechat.auth.service.MailService;
 import de.osiem.leaguechat.auth.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api")
 public class UserController {
     private final UserService userService;
+    private final MailService mailService;
 
     @GetMapping("/user/current")
 	public ResponseEntity<User> getCurrentUser(Authentication authentication) throws ResponseStatusException{
@@ -136,7 +142,19 @@ public class UserController {
         userService.addRoleToUser(form.getUsername(), form.getRoleName());
         return ResponseEntity.ok().build();
     }
-	
+
+    @PostMapping("/user/forgotPassword")
+    public ResponseEntity<String> forgotPassword(@RequestBody String userEmail){
+        System.out.println(userEmail);
+        User user = userService.getUserByEmail(userEmail);
+        String token = UUID.randomUUID().toString();
+        userService.createResetPasswordToken(user, token);
+       
+        mailService.sendMail(userEmail, "Reset Password", "http://localhost:3000" + "/forgotPassword?token=" + token);
+       
+        return ResponseEntity.ok().body("Sprawdz email");
+    }
+
 }
 
 @Data

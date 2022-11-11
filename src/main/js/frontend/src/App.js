@@ -14,6 +14,7 @@ import User from "./containers/User";
 import Register from "./containers/Register";
 import AuthGuard from "./wrappers/AuthGuard.js";
 import NotFound from './containers/NotFound';
+import ForgotPassword from "./containers/ForgotPassword";
 import { useEffect, useMemo, useState } from 'react';
 import { UserContext } from "./UserContext";
 import Authenticated from './wrappers/Authenticated';
@@ -58,6 +59,7 @@ const App = () => {
                             <Route path="/settings" element={<Authenticated><Settings /></Authenticated>} />
                             <Route path="/user/:server/:name" element={<Authenticated><User /></Authenticated>} />
                         </Route> 
+                        <Route path="/forgotPassword/" element={<ForgotPassword />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="*" element={<NotFound />} />

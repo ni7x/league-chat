@@ -34,12 +34,19 @@ input:-webkit-autofill:active  {
     padding: 0rem 2rem;
     border-radius: 0.5rem;
     height: 4.5rem;
-    border: none;
     background: var(--light-gray);
     outline: none;
     color: var(--dark-white);
+    border: 1px solid var(--light-gray);
 }
 
+.auth form input:focus{
+    border: 1px solid var(--dark-white);
+}
+
+.auth form .password-box:focus-within  {
+    border: 1px solid var(--dark-white)!important;
+}
 .auth form input[type="submit"]{
     background-color: var(--gray);
     color: var(--spring-green);
@@ -114,6 +121,7 @@ input:-webkit-autofill:active  {
     outline: none;
     border: none;
     border-radius: 0.5rem;
+    display: block;
 }
 
 .auth .caps-warrning{
@@ -128,6 +136,7 @@ input:-webkit-autofill:active  {
     border-radius: 0.5rem;
     height: 4.5rem;
     width: max-content;
+    border: 1px solid var(--light-gray);
     background-color: var(--light-gray);
 
 }
@@ -182,7 +191,6 @@ input:-webkit-autofill:active  {
     font-size: 1.3rem;
     text-align: left;
     color: #787878;
-   
     font-weight: 400;
     padding: 1.1rem 0;
 }
@@ -195,11 +203,19 @@ input:-webkit-autofill:active  {
 }
 
 .auth.register .tips p{
-   
     font-size: 1.3rem;
     text-align: left;
     font-weight: 400;
     margin-top: -0.5rem;
     margin-bottom: -0.5rem;
+}
 
+.auth.register .go-back{
+    display: block;
+   position: relative;
+    top: -1.5rem;
+    left: -1.5rem;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--spring-green);
 }

@@ -11,11 +11,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import de.osiem.leaguechat.auth.model.friendRequest.FriendRequest;
+import de.osiem.leaguechat.auth.model.resetPasswordToken.ResetPasswordToken;
 import de.osiem.leaguechat.auth.model.user.Position;
 import de.osiem.leaguechat.auth.model.user.Role;
 import de.osiem.leaguechat.auth.model.user.Server;
 import de.osiem.leaguechat.auth.model.user.User;
 import de.osiem.leaguechat.auth.repository.FriendRequestRepository;
+import de.osiem.leaguechat.auth.repository.ResetPasswordTokenRepository;
 import de.osiem.leaguechat.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,8 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final FriendRequestRepository frRepository;
+    private final ResetPasswordTokenRepository rptRepository;
+
     private final PasswordEncoder passwordEncoder;
     private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#%&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
 
@@ -46,7 +50,7 @@ public class UserServiceImpl implements UserService{
     private boolean isIngameNameUnqiue(String ingameName, Server server){
         return !userRepository.existsByIngameNameAndServer(ingameName, server);
     }
-
+    
     @Override
     public User saveUser(User user) throws ResponseStatusException{
 
@@ -190,6 +194,15 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public User getUserByEmail(String email){
+        User user = userRepository.findByEmail(email);
+        if(user != null){
+            return user;
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND , "User with email: " + email + "was not found.");
+    }
+
+    @Override
     public List<User> getUsers() {
         return userRepository.findAll();
     }
@@ -274,6 +287,15 @@ public class UserServiceImpl implements UserService{
         }else{
             user.getRoles().add((Role) role);
         }
+    }
+
+    @Override
+    public ResetPasswordToken createResetPasswordToken(User user, String token) {
+        ResetPasswordToken rptToken = new ResetPasswordToken();
+        rptToken.setUser(user);
+        rptToken.setToken(token);
+        rptRepository.save(rptToken);
+        return rptToken;
     }
 
 }

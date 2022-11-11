@@ -43,3 +43,18 @@ export const register = async (username, email, ingameName, password, server) =>
         return Promise.reject(message);
     }
 }
+
+export const forgotPassword = async ( email ) => { 
+    const response = await fetch(URL_PREFIX + "/api/user/forgotPassword", {
+        method: "POST",
+        body: email,
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    if(response.ok){
+      console.log(response);
+    }else{
+        console.log(response);
+    }   
+}
