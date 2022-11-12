@@ -5,11 +5,11 @@ const FriendList = () => {
     const [ userDetails, ] = useUserDetails();
 
     return(
-        <div className="friend-list"> 
+        <ul> 
             {userDetails.friends.map(friend => {
                 return <Friend key={friend.id} id={friend.id} ingameName={friend.ingameName} username={friend.username} server={friend.server}/>
             })}
-        </div>
+        </ul>
     )  
 }
 export default FriendList;

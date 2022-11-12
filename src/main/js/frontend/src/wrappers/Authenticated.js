@@ -24,9 +24,9 @@ let Authenticated = ( props ) => {
         <div className="authenticated">
             <Navbar />
             <div className="main">
-               {/*<div className={`friend-request-modal${isModalActive ? " active" : ""}`}>
+               {<div className={`friend-request-modal${isModalActive ? " active" : ""}`}>
                     <FriendRequests toggleActive={toggleModalActivity} />
-                </div>*/}  
+                </div>}  
                 {props.children}
             </div>
             <Sidebar toggleActive={toggleModalActivity} />

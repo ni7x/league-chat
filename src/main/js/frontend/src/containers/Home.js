@@ -10,7 +10,7 @@ const Home = () => {
             <p>IGN: {userDetails.ingameName} #{userDetails.server}</p>
             <p>Your positions: 
             {userDetails.positions&& userDetails.positions.map((position)=>{
-                return <> {position} </>
+                return <span key={position}> {position} </span>
             })}
             </p>
         </>

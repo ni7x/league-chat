@@ -10,8 +10,6 @@ const FriendRequest = (props) => {
 
     return(
         <div className="friend-requests-wrapper">
-            <CreateFriendRequest/>
-
             <p className="label">
                 <button onClick={() => setRequestToggle(true)} className={requestToggle?" active":" hidden"}>Recieved requests</button>
                 <button onClick={() => setRequestToggle(false)} className={!requestToggle?" active":" hidden"}>Send requests</button>
