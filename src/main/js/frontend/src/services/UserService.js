@@ -142,3 +142,16 @@ export const answerFriendRequest = async (id, answer, token) => {
         return Promise.reject(message);
     }
 }
+
+export const checkUsernameUniqueness = async (username) => {
+    const response = await fetch(URL_PREFIX + "/api/user/validation/username",{
+        method: "POST",
+        body: username,
+    });
+    if(response.ok){
+        let json = await response.json();
+        return await json;
+    }else{
+        return 0;
+    }
+}

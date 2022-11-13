@@ -167,11 +167,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUser(String username) throws ResponseStatusException{
         User user = userRepository.findByUsername(username);
-        if(user != null){
-            System.out.println(user); // why it doesn't work withotu this print
-            return user;
-        }
-       throw new ResponseStatusException(HttpStatus.NOT_FOUND , "This user does't exist");
+        System.out.println(user);//delet
+        return user;
+        
+      // throw new ResponseStatusException(HttpStatus.NOT_FOUND , "This user does't exist");
     }
 
     @Override

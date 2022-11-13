@@ -175,6 +175,14 @@ public class UserController {
         return userService.getIngameNameSuggestions(autoSuggestion.getSuggested_ign(), autoSuggestion.getServer(), autoSuggestion.getCurrent_user_ign());
     }
 
+    @PostMapping("/user/validation/username")
+    public Boolean isUsernameUnique(@RequestBody String username){
+        System.out.println(username);
+        return userService.getUser(username) == null;
+    }
+
+    
+
 }
 
 

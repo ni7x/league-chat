@@ -5,6 +5,7 @@ import { getTypeFromErrorMessage, useUserToken } from "../services/UserService";
 import "../styles/auth.css";
 import ServerSelect from "../components/Form/ServerSelect";
 import PasswordValidation from "../components/Form/PasswordValidation";
+import UsernameValidation from "../components/Form/UsernameValidation";
 
 
 const Register = () => {
@@ -12,7 +13,6 @@ const Register = () => {
 
     //forgive me please
     const [ isUsernameValid, setIsUsernameValid ] = useState(false);
-    const [ isUsernameUnqiue, setIsUsernameUnique ] = useState(true);
     const [ isEmailValid, setIsEmailValid ] = useState(false);
     const [ isEmailUnqiue, setIsEmailUnqiue ] = useState(true);
     const [ isIngameNameValid, setIsIngameNameValid ] = useState(false);
@@ -25,14 +25,7 @@ const Register = () => {
     const navigate = useNavigate();
     let formData = useRef();
 
-    let usernameValidation = (e) => {
-        if(e.target.value.length >= 4 && e.target.value.length <= 25){
-            setIsUsernameValid(true);
-        }else{
-            setIsUsernameValid(false);
-        }
-    }
-
+   
     let emailValidation = (e) => {
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(e.target.value)){
             setIsEmailValid(true);
@@ -79,7 +72,6 @@ const Register = () => {
             }catch(err){
                 if(err.startsWith("Ingame")){
                     setIsIngameNameUnique(false);
-                    setIsUsernameUnique(true);
                     setIsEmailUnqiue(true);
                 }
             }
@@ -95,13 +87,10 @@ const Register = () => {
                 if(!err.startsWith("User") && !err.startsWith("Email")){
                     setIsFirstPhase(false);
                     setIsEmailUnqiue(true);
-                    setIsUsernameUnique(true);
                 }
                 else if(err.startsWith("User")){
-                    setIsUsernameUnique(false);
                 }else if(err.startsWith("Email")){
                     setIsEmailUnqiue(false);
-                    setIsUsernameUnique(true);
                 }
             }
 
@@ -113,12 +102,7 @@ const Register = () => {
             <form onSubmit={handleSubmit} ref={formData}>
                 
                 <div className="first-phase" style={isFirstPhase?{display:"block"} : {display: "none"}}>
-                    <label htmlFor="username">Username: </label>
-                    <input type="text" name="username" onKeyUp={usernameValidation} autoFocus={true}></input>
-                    <div className="tips">
-                        <p><span className={isUsernameValid ? "valid": null}>4-20 characters long</span></p>
-                        <p><span className="invalid" style={isUsernameUnqiue ? {display: "none"} : {display: "block"}}>This username is already taken</span></p>
-                    </div>
+                   <UsernameValidation setIsUsernameValid={setIsUsernameValid}/>
 
                     <label htmlFor="email">Email: </label>
                     <input type="email" name="email" onKeyUp={emailValidation}></input>

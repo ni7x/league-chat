@@ -1,4 +1,5 @@
 import { useRef, useState } from "react"
+import PasswordValidation from "../components/Form/PasswordValidation";
 import PositionSelect from "../components/Form/PositionSelect";
 import ServerSelect from "../components/Form/ServerSelect";
 import { logout } from "../services/AuthService";
@@ -8,6 +9,8 @@ import { useUserDetails } from "../services/UserService";
 const Settings = () => {
     const [ userToken, setUserToken ] = useUserToken(); 
     const [ userDetails, setUserDetails ] = useUserDetails();
+    const [ isPasswordValid, setIsPasswordValid] = useState(false);
+
     let [ errors, setErrors ] = useState(new Map());
     const formData = useRef();
 
@@ -53,14 +56,16 @@ const Settings = () => {
     }
 
     return(
-        <>
+        <div  className="auth register">
             <form ref={formData} onSubmit={handleUpdate}>
                 <PositionSelect current={userDetails.positions}/>
                 <ServerSelect current={userDetails.server}/>
+                <PasswordValidation setIsPasswordValid={setIsPasswordValid}/>
                 <input type="submit" name="submit" placeholder="Submit"></input>
+                <button onClick={handleDelete}>Delete account</button>
             </form>
-            <button onClick={handleDelete}>Delete account</button>
-        </>
+            
+        </div>
     )
 }
 export default Settings;
