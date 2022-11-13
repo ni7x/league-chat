@@ -7,6 +7,25 @@ const CreateFriendRequest = (props) => {
     const [ userDetails, setUserDetails ] = useUserDetails();
     const [ userToken, ] = useUserToken();
     const [ errorMessage, setErrorMessage ] = useState(""); 
+    const [ suggestions, setSuggestions ] = useState([]);
+
+    let showIngameNames = async (e) => {
+        const URL = "http://127.0.0.1:8080/api/user/autoSuggestion";
+        let { friendName, server } = formData.current;
+        let data = {"ingameName": friendName.value, "server":server.value};
+        const response = await fetch(URL, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        if(response.ok){
+            setSuggestions(await response.json());
+        }else{
+            console.log(response);
+        }
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -26,7 +45,7 @@ const CreateFriendRequest = (props) => {
             <>Loading</>
         )
     }
-
+    
     return(
         <div className="friend-search-wrapper"> 
             <div>
@@ -34,11 +53,13 @@ const CreateFriendRequest = (props) => {
                     <form onSubmit={handleSubmit} ref={formData}>
                         <ServerSelect/>
                         <input  type="submit" value="Invite"></input>
-                        <input type="text" name="friendName" defaultValue="Type name..."></input>
+                        <input type="text" name="friendName" defaultValue="Type name..." onKeyUp={showIngameNames}></input>
                     </form>
                 </div>            
                 <div className="auto-suggestions">
-                    
+                    {suggestions.map(suggestion => {
+                        return <p key={suggestion}>{suggestion}</p>
+                    })}
                 </div>
             </div>
             

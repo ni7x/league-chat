@@ -314,8 +314,7 @@ public class UserServiceImpl implements UserService{
         if(!Arrays.stream(Server.values()).anyMatch(s->s.toString().equals(upcServer))){
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE , "This server doesn't exist");
         }
-        
-        return userRepository.findIngameNameSuggestions(ingameName, Server.valueOf(upcServer));
+        return userRepository.findFirst5Suggestions(ingameName, Server.valueOf(upcServer));
     }
 
 }

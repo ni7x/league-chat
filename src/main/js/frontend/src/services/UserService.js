@@ -46,21 +46,6 @@ export const  isUserValid = (username, ingameName, password) =>{
     return true;
 }
 
-export const getTypeFromErrorMessage = (message) => {
-    message = message.toLowerCase();
-    if(message.startsWith("password")){
-        return "PASSWORD_ERROR";
-    }
-    if(message.startsWith("username")){
-        return "USERNAME_ERROR";
-    }
-    if(message.startsWith("ingame name")){
-        return "INGAME_NAME_ERROR";
-    }
-    return "UNKNOWN_ERROR";
-}
-
-
 export const updateUser = async (id, username, email, ingamename, password, positions, server, token) => {
     let data = {
         "id" : id,

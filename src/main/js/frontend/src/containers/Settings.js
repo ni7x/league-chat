@@ -2,7 +2,7 @@ import { useRef, useState } from "react"
 import PositionSelect from "../components/Form/PositionSelect";
 import ServerSelect from "../components/Form/ServerSelect";
 import { logout } from "../services/AuthService";
-import { deleteUser, isUserValid, updateUser, useUserToken, getTypeFromErrorMessage } from "../services/UserService";
+import { deleteUser, isUserValid, updateUser, useUserToken } from "../services/UserService";
 import { useUserDetails } from "../services/UserService";
 
 const Settings = () => {
@@ -12,7 +12,7 @@ const Settings = () => {
     const formData = useRef();
 
     const setError = (message) => {
-        setErrors(new Map([[getTypeFromErrorMessage(message), message]]));
+        
     }
 
     const handleUpdate = async (e) => {

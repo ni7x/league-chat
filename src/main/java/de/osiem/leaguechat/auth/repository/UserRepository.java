@@ -2,6 +2,8 @@ package de.osiem.leaguechat.auth.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,6 +18,11 @@ public interface UserRepository extends JpaRepository<User, Long>{
     User findByIngameNameAndServer(String ingameName, Server server);
     boolean existsByIngameNameAndServer(String ingameName, Server server);
     boolean existsByEmail(String email);
+
     @Query("SELECT u.ingameName FROM User u WHERE u.ingameName LIKE :ingameName% AND u.server = :server")
-    List<String> findIngameNameSuggestions(@Param("ingameName") String ingameName, @Param("server") Server server);
+    List<String> findIngameNameSuggestions(@Param("ingameName") String ingameName, @Param("server") Server server, Pageable pageable);
+    
+    default List<String> findFirst5Suggestions(String ingameName, Server server) {
+        return findIngameNameSuggestions(ingameName, server, PageRequest.of(0,5));
+     }
 }

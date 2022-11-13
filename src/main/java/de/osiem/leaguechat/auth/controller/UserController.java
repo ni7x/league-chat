@@ -170,7 +170,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user/autoSuggestion")
+    @PostMapping("/user/autoSuggestion")
     public List<String> getIngameNameSuggestions(@RequestBody IngameNameAndServer ignAndServer){
         return userService.getIngameNameSuggestions(ignAndServer.getIngameName(), ignAndServer.getServer());
     }
