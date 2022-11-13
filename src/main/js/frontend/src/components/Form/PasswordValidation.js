@@ -66,7 +66,7 @@ const PasswordValidation = (props) => {
     }
 
     return(
-        <> 
+        <div className="setting"> 
             <label htmlFor="password">
                 Password: 
                 <span className="caps-warrning" style={isCapsOn? {"display" : "block"} : {"display" : "none"}}>Caps Lock is on!</span>
@@ -82,7 +82,7 @@ const PasswordValidation = (props) => {
                 <p><span className={containsDigit ? "valid": null}>at least 1 digit</span></p>
                 <p><span className={containsSpecialCharacter ? "valid": null}>at least 1 special character</span></p>
             </div>
-        </>
+        </div>
     )
 
 }

@@ -95,15 +95,18 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User updateUser(User updatedUser) throws ResponseStatusException{
+        System.out.println("xd  ");
         User user = userRepository.findById(updatedUser.getId()).get();
         if(user != null){
             String currentUsername = user.getUsername();
             String newUsername = updatedUser.getUsername();
             if(!currentUsername.equals(newUsername)){
-                if(isUsernameUnique(newUsername)){
-                    user.setUsername(newUsername);
-                }else{                    
-                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Username is not unique");
+                if(!newUsername.isBlank()){
+                    if(isUsernameUnique(newUsername)){
+                        user.setUsername(newUsername);
+                    }else{                    
+                        throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Username is not unique");
+                    }
                 }
             }
 

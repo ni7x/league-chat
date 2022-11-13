@@ -5,7 +5,6 @@ const IngameNameValidation = (props) => {
 
     const [ isIngameNameLengthValid, setIsIngameNameLengthValid ] = useState(false);
     const [ isIngameNameUnqiue, setIsIngameNameUnique ] = useState(true);
-    const [ server, setServer ] = useState("BR");
    
 
     useEffect(()=>{
@@ -21,7 +20,7 @@ const IngameNameValidation = (props) => {
         
         if(e.target.value.length >= 2 && e.target.value.length <= 16){
             setIsIngameNameLengthValid(true);
-            checkIngameNameUniqueness(e.target.value, server).then(result=>setIsIngameNameUnique(result)); 
+            checkIngameNameUniqueness(e.target.value, props.server).then(result=>setIsIngameNameUnique(result)); 
         }else{
             setIsIngameNameLengthValid(false);
             setIsIngameNameUnique(true);
@@ -29,16 +28,14 @@ const IngameNameValidation = (props) => {
     }
 
     return(
-        <> 
+        <div className="setting"> 
             <label htmlFor="ingamename">Ingame Name: </label>
-            <input type="text" name="ingamename" onKeyUp={ingameNameValidation} autoFocus={true}></input>
+            <input type="text" name="ingamename" onKeyUp={ingameNameValidation} autoFocus={true} defaultValue={props.currentValue}></input>
             <div className="tips">
                 <p><span className={isIngameNameLengthValid ? "valid": null}>2-16 characters long</span></p>
                 <p><span className="invalid" style={isIngameNameUnqiue ? {display: "none"} : {display: "block"}}>This ign is already taken on this server</span></p>
             </div>
-            <label htmlFor="server">Server: </label>
-            <ServerSelect setServer={setServer}/>
-        </>
+        </div>
     )
 
 }

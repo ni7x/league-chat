@@ -27,14 +27,14 @@ const UsernameValidation = (props) => {
     }
 
     return(
-        <> 
+        <div className="setting"> 
            <label htmlFor="username">Username: </label>
-            <input type="text" name="username" onKeyUp={usernameValidation} autoFocus={true}></input>
+            <input type="text" name="username" onKeyUp={usernameValidation} autoFocus={true} defaultValue={props.currentValue}></input>
             <div className="tips">
                 <p><span className={isUsernameLengthValid ? "valid": null}>4-20 characters long</span></p>
                 <p><span className="invalid" style={isUsernameUnqiue ? {display: "none"} : {display: "block"}}>This username is already taken</span></p>
             </div>
-        </>
+        </div>
     )
 
 }

@@ -47,6 +47,7 @@ export const  isUserValid = (username, ingameName, password) =>{
 }
 
 export const updateUser = async (id, username, email, ingamename, password, positions, server, token) => {
+    
     let data = {
         "id" : id,
         "username" : username,

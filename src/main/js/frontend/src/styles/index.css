@@ -50,3 +50,9 @@ button{
     padding: 0;
     cursor: pointer;
 }
+
+@media (max-width: 800px) {
+    body{
+        font-size: 1.45rem;
+    }
+}

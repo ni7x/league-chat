@@ -8,6 +8,12 @@
         "navbar main sidebar"; 
 }
 
+.authenticated .main{
+    grid-area: main;
+    height: 100vh;
+    overflow-y: auto;
+}
+
 .authenticated .navbar{
     height: 100vh;
     background-color: var(--black);

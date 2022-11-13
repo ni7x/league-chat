@@ -1,9 +1,8 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { register } from "../services/AuthService";
-import { getTypeFromErrorMessage, useUserToken } from "../services/UserService";
+import { useUserToken } from "../services/UserService";
 import "../styles/auth.css";
-import ServerSelect from "../components/Form/ServerSelect";
 import PasswordValidation from "../components/Form/PasswordValidation";
 import UsernameValidation from "../components/Form/UsernameValidation";
 import IngameNameValidation from "../components/Form/IngameNameValidation";
@@ -22,10 +21,6 @@ const Register = () => {
 
     const navigate = useNavigate();
     let formData = useRef();
-
-   
-
-   
 
     let isUserValid = () => {
         if(!isUsernameValid){

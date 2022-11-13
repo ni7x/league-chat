@@ -27,9 +27,9 @@ const EmailValidation = (props) => {
     }
 
     return(
-        <> 
+        <div className="setting"> 
             <label htmlFor="email">Email: </label>
-            <input type="email" name="email" onKeyUp={emailValidation}></input>
+            <input type="email" name="email" onKeyUp={emailValidation} defaultValue={props.currentValue}></input>
             <div className="tips">
                 <p>
                     <span className={isEmailRegexValid ? "valid": null}>Email needs to be valid</span>
@@ -38,7 +38,7 @@ const EmailValidation = (props) => {
                     <span className="invalid" style={isEmailUnqiue ? {display: "none"} : {display: "block"}}>This e-email is already taken</span>
                 </p>
             </div>
-        </>
+        </div>
     )
 
 }
