@@ -19,6 +19,9 @@ public interface UserService {
     User getUserByEmail(String email) throws ResponseStatusException;
     void updatePassword(User user, String password) throws ResponseStatusException;
 
+    List<String> getIngameNameSuggestions(String ingameName, String server);
+
+
     //reset token
     ResetPasswordToken createResetPasswordToken(User user, String token);
 

@@ -6,15 +6,13 @@ const Sidebar = (props) => {
     return(
             <div className="sidebar">
                 <div className="sidebar-top-panel">
-                    <button onClick={props.toggleActive} className="modal-toggle"><i className="fa-solid fa-user-plus"></i></button>
+                    <button  className="modal-toggle" onClick={props.toggleFriendSearch}><i className="fa-solid fa-user-plus"></i></button>
                 </div>
-                {userDetails.friendRequestsTo.length > 0 ?
-                 <div className="friend-requests-alert">
-                   <span className="block-hidden-on-mobile"> Friend requests: </span> <span className="count">{userDetails.friendRequestsTo.length}</span>
-                 </div>
-                :
-                null
-                }
+                
+                <div className="friend-requests-alert" onClick={props.toggleFriendRequests}>
+                    <span className="block-hidden-on-mobile"> Friend requests: </span> <span className="count">{userDetails.friendRequestsTo.length}</span>
+                </div>
+                
                 <FriendList/>   
             </div>
     )  

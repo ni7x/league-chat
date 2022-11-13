@@ -3,14 +3,20 @@ import { useState,  } from "react";
 import Navbar from "../components/Navbar/Navbar";
 import Sidebar from "../components/Sidebar/Sidebar";
 import FriendRequests from "../components/FriendRequest/FriendRequests";
+import CreateFriendRequest from "../components/FriendRequest/CreateFriendRequest";
 
 let Authenticated = ( props ) => {
     const [ userToken, ] = useUserToken();
     const [ userDetails, ] = useUserDetails();
-    const [ isModalActive, setIsModalActive ] = useState(false);
+    const [ areFriendRequestsShown, setAreFriendRequestsShown ] = useState(false);
+    const [ isFriendSearchShown, setIsFriendSearchShown ] = useState(false);
 
-    const toggleModalActivity = () => {
-        setIsModalActive(!isModalActive);
+    const toggleFriendRequests = () => {
+        setAreFriendRequestsShown(!areFriendRequestsShown);
+    }
+
+    const toggleFriendSearch = () => {
+        setIsFriendSearchShown(!isFriendSearchShown);
     }
 
     if(userToken === null){
@@ -24,12 +30,15 @@ let Authenticated = ( props ) => {
         <div className="authenticated">
             <Navbar />
             <div className="main">
-               {<div className={`friend-request-modal${isModalActive ? " active" : ""}`}>
-                    <FriendRequests toggleActive={toggleModalActivity} />
-                </div>}  
+                <div className={`friend-request-modal${areFriendRequestsShown ? " active" : ""}`}>
+                    <FriendRequests toggleActive={toggleFriendRequests} />
+                </div>
+                <div className={`friend-request-modal${isFriendSearchShown ? " active" : ""}`}>
+                    <CreateFriendRequest toggleActive={toggleFriendSearch}/>
+                </div>
                 {props.children}
             </div>
-            <Sidebar toggleActive={toggleModalActivity} />
+            <Sidebar toggleFriendRequests={toggleFriendRequests} toggleFriendSearch={toggleFriendSearch} />
         </div>
     )
 

@@ -19,7 +19,6 @@ const FriendRequest = (props) => {
                     return <RecievedRequest key={friendRequest.id} from={friendRequest.from} id={friendRequest.id} />
                 })}
             </div>
-
             <div className={"friend-requests" + (!requestToggle?" active":" hidden")}>
                 {userDetails.friendRequestsFrom.map((friendRequest)=>{
                     return <SentRequest key={friendRequest.id} to={friendRequest.to} id={friendRequest.id} />

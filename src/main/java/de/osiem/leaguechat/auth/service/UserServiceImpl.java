@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService{
             return user;
             
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Couldn't find user to update");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This user does't exist");
     }
 
     @Override
@@ -171,7 +171,7 @@ public class UserServiceImpl implements UserService{
             System.out.println(user); // why it doesn't work withotu this print
             return user;
         }
-       throw new ResponseStatusException(HttpStatus.NOT_FOUND , "User with username: " + username + "was not found.");
+       throw new ResponseStatusException(HttpStatus.NOT_FOUND , "This user does't exist");
     }
 
     @Override
@@ -180,7 +180,7 @@ public class UserServiceImpl implements UserService{
         if(user != null){
             return user;
         }
-       throw new ResponseStatusException(HttpStatus.NOT_FOUND , "User with id: " + id + "was not found.");
+       throw new ResponseStatusException(HttpStatus.NOT_FOUND , "This user does't exist");
     }
 
     @Override
@@ -193,9 +193,10 @@ public class UserServiceImpl implements UserService{
         if(user != null){
             return user;
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND , "User with ingame name: " + ingameName + "and server " + server + "was not found.");
-
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND , "This user does't exist");
     }
+
+    
 
     @Override
     public User getUserByEmail(String email){
@@ -203,7 +204,7 @@ public class UserServiceImpl implements UserService{
         if(user != null){
             return user;
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND , "User with email: " + email + "was not found.");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND , "This user does't exist");
     }
 
     @Override
@@ -227,7 +228,7 @@ public class UserServiceImpl implements UserService{
                 throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, "You are already friends with this user");
             }
             if(from.getFriendRequestsFrom().stream().anyMatch(request->request.getTo().equals(to))){
-                throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, "You have already send friend request to this user");
+                throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, "You have already invited this user");
             }
             if(from.getFriendRequestsTo().stream().anyMatch(request->request.getFrom().equals(to))){
                 throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, "Check your friend requests");
@@ -305,6 +306,16 @@ public class UserServiceImpl implements UserService{
     @Override
     public ResetPasswordToken getByToken(String token) {
         return rptRepository.findByToken(token);
+    }
+
+    @Override
+    public List<String> getIngameNameSuggestions(String ingameName, String server) {
+        String upcServer = server.toUpperCase();
+        if(!Arrays.stream(Server.values()).anyMatch(s->s.toString().equals(upcServer))){
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE , "This server doesn't exist");
+        }
+        
+        return userRepository.findIngameNameSuggestions(ingameName, Server.valueOf(upcServer));
     }
 
 }

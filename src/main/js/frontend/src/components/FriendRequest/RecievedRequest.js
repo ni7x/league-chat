@@ -15,18 +15,22 @@ const RecievedRequest = (props) => {
     } 
     
     return(
-        <div className="friend-request">    
-            <i>Friend request</i>  
-            <p>
-                <a href={"/user/" + props.from.server + "/" + props.from.ingameName}>{props.from.ingameName}</a>
-                <span> #{props.from.server}</span>
-            </p>   
-            <button onClick={()=>handleAnswer("reject")} className="decline">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <button onClick={()=>handleAnswer("accept")} className="accept">
-                <i class="fa-solid fa-check"></i>
-            </button>
+        <div className="friend-request">   
+            <img src={process.env.PUBLIC_URL + "/profile-image.jpg"} alt="Profile image"></img>
+            <div className="text">
+                <p>
+                    <a href={"/user/" + props.from.server + "/" + props.from.ingameName}>{props.from.ingameName}</a>
+                    <span> #{props.from.server}</span>
+                </p>
+                <div>
+                    <button onClick={()=>handleAnswer("reject")} className="decline">
+                        Reject
+                    </button>
+                    <button onClick={()=>handleAnswer("accept")} className="accept">
+                        Accept
+                    </button>
+                </div>
+            </div> 
         </div>
     )
 }

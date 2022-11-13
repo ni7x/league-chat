@@ -3,15 +3,12 @@ package de.osiem.leaguechat.auth.controller;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Properties;
 import java.util.UUID;
 
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -174,6 +170,11 @@ public class UserController {
         }
     }
 
+    @GetMapping("/user/autoSuggestion")
+    public List<String> getIngameNameSuggestions(@RequestBody IngameNameAndServer ignAndServer){
+        return userService.getIngameNameSuggestions(ignAndServer.getIngameName(), ignAndServer.getServer());
+    }
+
 }
 
 
@@ -206,4 +207,10 @@ class FriendRequestDto{
 class PasswordToken{
     private String password;
     private String token;
+} 
+
+@Data
+class IngameNameAndServer{
+    private String ingameName;
+    private String server;
 } 

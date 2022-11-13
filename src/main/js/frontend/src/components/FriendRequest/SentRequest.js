@@ -15,15 +15,17 @@ const SentRequest = (props) => {
     } 
     
     return(
-        <div className="friend-request"> 
-            <i>Your request</i>    
-            <p>
-                <a href={"/user/" + props.to.server + "/" + props.to.ingameName}>{props.to.ingameName}</a>
-                <span> #{props.to.server}</span>
-            </p>
-            <button onClick={()=>handleAnswer("cancel")} className="decline">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+        <div className="friend-request">  
+            <img src={process.env.PUBLIC_URL + "/profile-image.jpg"} alt="Profile image"></img>
+            <div className="text">
+                <p>
+                    <a href={"/user/" + props.to.server + "/" + props.to.ingameName}>{props.to.ingameName}</a>
+                    <span> #{props.to.server}</span>
+                </p>
+                <button onClick={()=>handleAnswer("cancel")} className="decline">
+                    Cancel Request
+                </button>
+            </div>
         </div>
     )
 }

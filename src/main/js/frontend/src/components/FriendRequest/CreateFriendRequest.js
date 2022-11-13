@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { sendFriendRequest, useUserDetails, useUserToken } from "../../services/UserService";
 import ServerSelect from "../Form/ServerSelect";
 
-const CreateFriendRequest = () => {
+const CreateFriendRequest = (props) => {
     const formData = useRef();
     const [ userDetails, setUserDetails ] = useUserDetails();
     const [ userToken, ] = useUserToken();
@@ -28,13 +28,24 @@ const CreateFriendRequest = () => {
     }
 
     return(
-        <div> 
-            <form onSubmit={handleSubmit} ref={formData}>
-                <input type="text" name="friendName" placeholder="Type name.."></input>
-                <ServerSelect/>
-                <input  type="submit" value="Invite"></input>
-            </form>
-            <p className="error">{errorMessage}</p>
+        <div className="friend-search-wrapper"> 
+            <div>
+                <div className="friend-search">
+                    <form onSubmit={handleSubmit} ref={formData}>
+                        <ServerSelect/>
+                        <input  type="submit" value="Invite"></input>
+                        <input type="text" name="friendName" defaultValue="Type name..."></input>
+                    </form>
+                </div>            
+                <div className="auto-suggestions">
+                    
+                </div>
+            </div>
+            
+            <div>            
+                <p className={errorMessage === "Request send" ? "success": "error"}>{errorMessage}</p>
+                <button onClick={props.toggleActive} className="close-button">Close</button>
+            </div>
         </div>
     )
 }
