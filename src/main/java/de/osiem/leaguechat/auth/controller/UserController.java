@@ -181,6 +181,16 @@ public class UserController {
         return userService.getUser(username) == null;
     }
 
+    @PostMapping("/user/validation/ingamename")
+    public Boolean isIngameNameUnique(@RequestBody ServerIngameName serverIgn){
+        return userService.getUserByIGNandServer(serverIgn.getIngameName(), serverIgn.getServer()) == null;
+    }
+
+    @PostMapping("/user/validation/email")
+    public Boolean isEmailUnique(@RequestBody String email){
+        return userService.getUserByEmail(email) == null;
+    }
+
     
 
 }
@@ -222,4 +232,10 @@ class AutoSuggestion{
     private String current_user_ign;
     private String suggested_ign;
     private String server;
+} 
+
+@Data
+class ServerIngameName{
+    private String server;
+    private String ingameName;
 } 

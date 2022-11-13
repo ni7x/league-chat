@@ -169,7 +169,6 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findByUsername(username);
         System.out.println(user);//delet
         return user;
-        
       // throw new ResponseStatusException(HttpStatus.NOT_FOUND , "This user does't exist");
     }
 
@@ -186,13 +185,11 @@ public class UserServiceImpl implements UserService{
     public User getUserByIGNandServer(String ingameName, String server) throws ResponseStatusException{
         String upcServer = server.toUpperCase();
         if(!Arrays.stream(Server.values()).anyMatch(s->s.toString().equals(upcServer))){
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE , "This server doesn't exist");
+            return null;//throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE , "This server doesn't exist");
         }
         User user = userRepository.findByIngameNameAndServer(ingameName, Server.valueOf(upcServer));
-        if(user != null){
-            return user;
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND , "This user does't exist");
+        return user;
+        //throw new ResponseStatusException(HttpStatus.NOT_FOUND , "This user does't exist");
     }
 
     
@@ -200,10 +197,8 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUserByEmail(String email){
         User user = userRepository.findByEmail(email);
-        if(user != null){
-            return user;
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND , "This user does't exist");
+        return user;
+        //throw new ResponseStatusException(HttpStatus.NOT_FOUND , "This user does't exist");
     }
 
     @Override

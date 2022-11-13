@@ -155,3 +155,33 @@ export const checkUsernameUniqueness = async (username) => {
         return 0;
     }
 }
+
+export const checkEmailUniqueness = async (email) => {
+    const response = await fetch(URL_PREFIX + "/api/user/validation/email",{
+        method: "POST",
+        body: email,
+    });
+    if(response.ok){
+        let json = await response.json();
+        return await json;
+    }else{
+        return 0;
+    }
+}
+
+
+export const checkIngameNameUniqueness = async (ingameName, server) => {
+    const response = await fetch(URL_PREFIX + "/api/user/validation/ingamename",{
+        method: "POST",
+        body: JSON.stringify({"ingameName" : ingameName, "server": server}),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    if(response.ok){
+        let json = await response.json();
+        return await json;
+    }else{
+        return 0;
+    }
+}
