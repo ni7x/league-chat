@@ -309,12 +309,12 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<String> getIngameNameSuggestions(String ingameName, String server) {
+    public List<String> getIngameNameSuggestions(String ingameName_suggestion, String server, String user_ingameName) {
         String upcServer = server.toUpperCase();
         if(!Arrays.stream(Server.values()).anyMatch(s->s.toString().equals(upcServer))){
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE , "This server doesn't exist");
         }
-        return userRepository.findFirst5Suggestions(ingameName, Server.valueOf(upcServer));
+        return userRepository.findFirst5Suggestions(ingameName_suggestion, Server.valueOf(upcServer), user_ingameName);
     }
 
 }

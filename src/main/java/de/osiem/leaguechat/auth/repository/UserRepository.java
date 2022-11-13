@@ -18,11 +18,12 @@ public interface UserRepository extends JpaRepository<User, Long>{
     User findByIngameNameAndServer(String ingameName, Server server);
     boolean existsByIngameNameAndServer(String ingameName, Server server);
     boolean existsByEmail(String email);
+    //need to exlcude user and his friends lord forgive me
 
-    @Query("SELECT u.ingameName FROM User u WHERE u.ingameName LIKE :ingameName% AND u.server = :server")
-    List<String> findIngameNameSuggestions(@Param("ingameName") String ingameName, @Param("server") Server server, Pageable pageable);
+    @Query("SELECT u.ingameName FROM User u WHERE u.ingameName LIKE :suggested_ign% AND u.server = :server AND u.ingameName != :current_user_ign  AND :current_user_ign NOT IN (SELECT f.ingameName FROM u.friends f) AND :current_user_ign NOT IN (SELECT b.from.ingameName FROM u.friendRequestsTo b)")
+    List<String> findIngameNameSuggestions(@Param("suggested_ign") String suggested_ign, @Param("server") Server server, @Param("current_user_ign") String current_user_ign, Pageable pageable);
     
-    default List<String> findFirst5Suggestions(String ingameName, Server server) {
-        return findIngameNameSuggestions(ingameName, server, PageRequest.of(0,5));
+    default List<String> findFirst5Suggestions(String suggested_ign, Server server, String current_user_ign) {
+        return findIngameNameSuggestions(suggested_ign, server, current_user_ign, PageRequest.of(0,5));
      }
 }

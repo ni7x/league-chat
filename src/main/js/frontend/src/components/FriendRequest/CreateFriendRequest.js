@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { sendFriendRequest, useUserDetails, useUserToken } from "../../services/UserService";
 import ServerSelect from "../Form/ServerSelect";
 
@@ -8,24 +8,34 @@ const CreateFriendRequest = (props) => {
     const [ userToken, ] = useUserToken();
     const [ errorMessage, setErrorMessage ] = useState(""); 
     const [ suggestions, setSuggestions ] = useState([]);
+    const [ ingameName, setIngameName ] = useState(""); 
 
-    let showIngameNames = async (e) => {
-        const URL = "http://127.0.0.1:8080/api/user/autoSuggestion";
-        let { friendName, server } = formData.current;
-        let data = {"ingameName": friendName.value, "server":server.value};
-        const response = await fetch(URL, {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        if(response.ok){
-            setSuggestions(await response.json());
-        }else{
-            console.log(response);
-        }
+    let changeInputText = (e) => {
+        setIngameName(e.target.innerText);
     }
+
+    useEffect(()=>{
+        async function fetchData() {
+            const URL = "http://127.0.0.1:8080/api/user/autoSuggestion";
+            let { friendName, server } = formData.current;
+            let data = {"suggested_ign": friendName.value, "server":server.value, "current_user_ign": userDetails.ingameName};
+            const response =  await fetch(URL, {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            if(response.ok){
+                setSuggestions(await response.json());
+            }else{
+                console.log(response);
+            }
+        }
+        fetchData();
+
+    }, [ingameName])
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -35,6 +45,7 @@ const CreateFriendRequest = (props) => {
             let updatedUser = await data.json();
             setErrorMessage("Request send");
             setUserDetails(updatedUser);
+            setIngameName("");
         }catch(err){
             setErrorMessage(err);
         }
@@ -53,12 +64,12 @@ const CreateFriendRequest = (props) => {
                     <form onSubmit={handleSubmit} ref={formData}>
                         <ServerSelect/>
                         <input  type="submit" value="Invite"></input>
-                        <input type="text" name="friendName" defaultValue="Type name..." onKeyUp={showIngameNames}></input>
+                        <input type="text" name="friendName" value={ingameName}  onChange={e=>setIngameName(e.target.value)}></input>
                     </form>
                 </div>            
                 <div className="auto-suggestions">
                     {suggestions.map(suggestion => {
-                        return <p key={suggestion}>{suggestion}</p>
+                        return <p key={suggestion} onClick={changeInputText}><span>{suggestion}</span></p>
                     })}
                 </div>
             </div>

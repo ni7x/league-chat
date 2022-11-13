@@ -19,7 +19,7 @@ public interface UserService {
     User getUserByEmail(String email) throws ResponseStatusException;
     void updatePassword(User user, String password) throws ResponseStatusException;
 
-    List<String> getIngameNameSuggestions(String ingameName, String server);
+    List<String> getIngameNameSuggestions(String suggested_ign, String server, String current_user_ign);
 
 
     //reset token

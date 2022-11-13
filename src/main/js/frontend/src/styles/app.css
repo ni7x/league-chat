@@ -262,7 +262,32 @@
 
 .authenticated .friend-search-wrapper  .close-button{
     width: 100%;
-   
+}
+
+.authenticated .friend-search-wrapper .auto-suggestions{
+    background-color: var(--gray);
+    width: 60%;
+    margin-left: -12.75%;
+    border-radius: 0 0 1rem 1rem;
+}
+
+.authenticated .friend-search-wrapper .auto-suggestions p{
+    border-bottom: 1px solid var(--light-gray);
+    width: 100%;
+    margin: 0;
+    padding: 1.5rem 0;
+    color: var(--very-light-gray);
+}
+
+
+.authenticated .friend-search-wrapper .auto-suggestions p span{
+    padding: 0 5%;
+}
+.authenticated .friend-search-wrapper .auto-suggestions p:first-child{
+    border-top: 1px solid var(--light-gray);
+}
+.authenticated .friend-search-wrapper .auto-suggestions p:last-child{
+    border-bottom:0;
 }
 
 @media (min-width: 1250px) {

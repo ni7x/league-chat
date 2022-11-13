@@ -171,8 +171,8 @@ public class UserController {
     }
 
     @PostMapping("/user/autoSuggestion")
-    public List<String> getIngameNameSuggestions(@RequestBody IngameNameAndServer ignAndServer){
-        return userService.getIngameNameSuggestions(ignAndServer.getIngameName(), ignAndServer.getServer());
+    public List<String> getIngameNameSuggestions(@RequestBody AutoSuggestion autoSuggestion){
+        return userService.getIngameNameSuggestions(autoSuggestion.getSuggested_ign(), autoSuggestion.getServer(), autoSuggestion.getCurrent_user_ign());
     }
 
 }
@@ -210,7 +210,8 @@ class PasswordToken{
 } 
 
 @Data
-class IngameNameAndServer{
-    private String ingameName;
+class AutoSuggestion{
+    private String current_user_ign;
+    private String suggested_ign;
     private String server;
 } 
