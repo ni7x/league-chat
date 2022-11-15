@@ -1,4 +1,4 @@
-package de.osiem.leaguechat.auth.service;
+package de.osiem.leaguechat.user.service;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,16 +10,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import de.osiem.leaguechat.auth.model.friendRequest.FriendRequest;
-import de.osiem.leaguechat.auth.model.resetPasswordToken.ResetPasswordToken;
-import de.osiem.leaguechat.auth.model.user.Position;
-import de.osiem.leaguechat.auth.model.user.Role;
-import de.osiem.leaguechat.auth.model.user.Server;
-import de.osiem.leaguechat.auth.model.user.User;
-import de.osiem.leaguechat.auth.model.user.UserDto;
-import de.osiem.leaguechat.auth.repository.FriendRequestRepository;
-import de.osiem.leaguechat.auth.repository.ResetPasswordTokenRepository;
-import de.osiem.leaguechat.auth.repository.UserRepository;
+import de.osiem.leaguechat.user.model.friendRequest.FriendRequest;
+import de.osiem.leaguechat.user.model.resetPasswordToken.ResetPasswordToken;
+import de.osiem.leaguechat.user.model.user.Position;
+import de.osiem.leaguechat.user.model.user.Role;
+import de.osiem.leaguechat.user.model.user.Server;
+import de.osiem.leaguechat.user.model.user.User;
+import de.osiem.leaguechat.user.model.user.UserDto;
+import de.osiem.leaguechat.user.repository.FriendRequestRepository;
+import de.osiem.leaguechat.user.repository.ResetPasswordTokenRepository;
+import de.osiem.leaguechat.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

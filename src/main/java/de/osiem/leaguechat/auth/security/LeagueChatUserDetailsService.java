@@ -5,8 +5,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import de.osiem.leaguechat.auth.model.user.User;
-import de.osiem.leaguechat.auth.service.UserService;
+import de.osiem.leaguechat.user.model.user.User;
+import de.osiem.leaguechat.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 @Service

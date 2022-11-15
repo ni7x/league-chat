@@ -1,13 +1,13 @@
-package de.osiem.leaguechat.auth.service;
+package de.osiem.leaguechat.user.service;
 
 import java.util.List;
 
 import org.springframework.web.server.ResponseStatusException;
 
-import de.osiem.leaguechat.auth.model.friendRequest.FriendRequest;
-import de.osiem.leaguechat.auth.model.resetPasswordToken.ResetPasswordToken;
-import de.osiem.leaguechat.auth.model.user.User;
-import de.osiem.leaguechat.auth.model.user.UserDto;
+import de.osiem.leaguechat.user.model.friendRequest.FriendRequest;
+import de.osiem.leaguechat.user.model.resetPasswordToken.ResetPasswordToken;
+import de.osiem.leaguechat.user.model.user.User;
+import de.osiem.leaguechat.user.model.user.UserDto;
 
 public interface UserService {
     //user

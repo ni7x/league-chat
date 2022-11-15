@@ -1,4 +1,4 @@
-package de.osiem.leaguechat.auth.model.user;
+package de.osiem.leaguechat.user.model.user;
 
 public enum Position {
     TOPLANE, JUNGLE, MIDLANE, BOTTOM, SUPPORT, FILL

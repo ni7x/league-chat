@@ -1,4 +1,4 @@
-package de.osiem.leaguechat.auth.model.user;
+package de.osiem.leaguechat.user.model.user;
 
 import java.util.*;
 import javax.persistence.*;
@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import de.osiem.leaguechat.auth.model.friendRequest.FriendRequest;
+import de.osiem.leaguechat.user.model.friendRequest.FriendRequest;
 import lombok.*;
 
 @Entity 

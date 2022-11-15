@@ -1,4 +1,4 @@
-package de.osiem.leaguechat.auth.repository;
+package de.osiem.leaguechat.user.repository;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import de.osiem.leaguechat.auth.model.user.Server;
-import de.osiem.leaguechat.auth.model.user.User;
+import de.osiem.leaguechat.user.model.user.Server;
+import de.osiem.leaguechat.user.model.user.User;
 
 public interface UserRepository extends JpaRepository<User, Long>{
     User findByUsername(String username);

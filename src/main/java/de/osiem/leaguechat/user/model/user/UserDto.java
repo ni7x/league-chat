@@ -1,4 +1,4 @@
-package de.osiem.leaguechat.auth.model.user;
+package de.osiem.leaguechat.user.model.user;
 
 import java.util.Set;
 import lombok.Data;

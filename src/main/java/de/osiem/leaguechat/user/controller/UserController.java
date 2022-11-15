@@ -1,9 +1,8 @@
-package de.osiem.leaguechat.auth.controller;
+package de.osiem.leaguechat.user.controller;
 
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -23,13 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import de.osiem.leaguechat.auth.model.resetPasswordToken.ResetPasswordToken;
-import de.osiem.leaguechat.auth.model.user.Position;
-import de.osiem.leaguechat.auth.model.user.Server;
-import de.osiem.leaguechat.auth.model.user.User;
-import de.osiem.leaguechat.auth.model.user.UserDto;
-import de.osiem.leaguechat.auth.service.MailService;
-import de.osiem.leaguechat.auth.service.UserService;
+import de.osiem.leaguechat.user.model.resetPasswordToken.ResetPasswordToken;
+import de.osiem.leaguechat.user.model.user.User;
+import de.osiem.leaguechat.user.model.user.UserDto;
+import de.osiem.leaguechat.user.service.MailService;
+import de.osiem.leaguechat.user.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package de.osiem.leaguechat.auth.service;
+package de.osiem.leaguechat.user.service;
 
 import javax.transaction.Transactional;
 
