@@ -9,7 +9,7 @@ const Navbar = () => {
         return (
             <nav className="navbar">
                 <ul>
-                    <li><img src={process.env.PUBLIC_URL + "/profile-image.jpg"} alt="Profile image"></img></li>
+                    <li><a href="/"><img src={process.env.PUBLIC_URL + "/profile-image.jpg"} alt="Profile image"></img></a></li>
                 </ul>
                 <ul>
                     <li><NavLink to={"/"}> <i className="fa-solid fa-house"></i></NavLink></li>

@@ -3,6 +3,7 @@ package de.osiem.leaguechat.auth.controller;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -23,7 +24,10 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import de.osiem.leaguechat.auth.model.resetPasswordToken.ResetPasswordToken;
+import de.osiem.leaguechat.auth.model.user.Position;
+import de.osiem.leaguechat.auth.model.user.Server;
 import de.osiem.leaguechat.auth.model.user.User;
+import de.osiem.leaguechat.auth.model.user.UserDto;
 import de.osiem.leaguechat.auth.service.MailService;
 import de.osiem.leaguechat.auth.service.UserService;
 import lombok.Data;
@@ -50,18 +54,9 @@ public class UserController {
             return ResponseEntity.created(uri).body(newUser);
     }
 
-    @PutMapping("/user/username/{username}")
-    public ResponseEntity<User> updateUser(@PathVariable String username, Authentication authentication, @Valid @RequestBody User user) throws ResponseStatusException{
-        if(authentication.getName().equals(username)){
-            userService.updateUser(user);
-            return ResponseEntity.ok().body(user);
-        }
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-    }
-
-    @PutMapping("/user/id/{id}")
-    public ResponseEntity<User> updateUserById(@PathVariable Long id, Authentication authentication, @Valid @RequestBody User user) throws ResponseStatusException{
-        if(authentication.getName().equals(userService.getUserById(id).getUsername())){
+    @PutMapping("/user/")
+    public ResponseEntity<User> updateUser(Authentication authentication, @Valid @RequestBody UserDto user) throws ResponseStatusException{
+        if(authentication.getName().equals(userService.getUserById(user.getId()).getUsername())){
             User updated = userService.updateUser(user);
             return ResponseEntity.ok().body(updated);
         }
@@ -182,7 +177,7 @@ public class UserController {
     }
 
     @PostMapping("/user/validation/ingamename")
-    public Boolean isIngameNameUnique(@RequestBody ServerIngameName serverIgn){
+    public Boolean isIngameNameUnique(@RequestBody UserDto serverIgn){
         return userService.getUserByIGNandServer(serverIgn.getIngameName(), serverIgn.getServer()) == null;
     }
 
@@ -202,11 +197,6 @@ class RoleToUser{
     private String roleName;
 } 
 
-@Data
-class PositionToUser{
-    private String username;
-    private String positionName;
-} 
 
 @Data
 class FriendToUser{
@@ -232,10 +222,4 @@ class AutoSuggestion{
     private String current_user_ign;
     private String suggested_ign;
     private String server;
-} 
-
-@Data
-class ServerIngameName{
-    private String server;
-    private String ingameName;
 } 

@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
+import { useUserDetails } from "../../services/UserService";
+
 const PasswordValidation = (props) => {
-    
-    const [ isPasswordLengthValid, setIsPasswordLengthValid ] = useState(false);
-    const [ containsLowercase, setContainsLowercase ] = useState(false); 
-    const [ containsUpperCase, setContainsUpperCase ] = useState(false); 
-    const [ containsDigit, setContainsDigit ] = useState(false);
-    const [ containsSpecialCharacter, setContainsSpecialCharacter ] = useState(false);
+    const [ userDetails,  ] = useUserDetails();   
+    const [ isPasswordLengthValid, setIsPasswordLengthValid ] =  useState(() => userDetails !== null ? true : false);
+    const [ containsLowercase, setContainsLowercase ] =  useState(() => userDetails !== null ? true : false);
+    const [ containsUpperCase, setContainsUpperCase ] =  useState(() => userDetails !== null ? true : false);
+    const [ containsDigit, setContainsDigit ] =  useState(() => userDetails !== null ? true : false);
+    const [ containsSpecialCharacter, setContainsSpecialCharacter ] =  useState(() => userDetails !== null ? true : false);
     const [ isCapsOn, setIsCapsOn ] =  useState(false);
     const [ isPasswordShown, setIsPasswordShown ] =  useState(false);
     
@@ -33,36 +35,45 @@ const PasswordValidation = (props) => {
 
     let passwordValidation = (e) => {
         detectCapsLock(e);
-
-        if(e.target.value.length >= 8 && e.target.value.length <= 20){
+        if(userDetails !== null &&  e.target.value === ""){
             setIsPasswordLengthValid(true);
-        }else{
-            setIsPasswordLengthValid(false);
-        }
-
-        if(e.target.value !== e.target.value.toUpperCase() && e.target.value.length > 0){
-            setContainsLowercase(true)
-        }else{
-            setContainsLowercase(false);
-        }
-
-        if(e.target.value !== e.target.value.toLowerCase() && e.target.value.length > 0){
-            setContainsUpperCase(true)
-        }else{
-            setContainsUpperCase(false);
-        }
-
-        if(/\d/.test(e.target.value)){
             setContainsDigit(true);
-        }else{
-            setContainsDigit(false);
-        }
-
-        if(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(e.target.value) && e.target.value.length > 0){
+            setContainsUpperCase(true);
+            setContainsLowercase(true);
             setContainsSpecialCharacter(true);
         }else{
-            setContainsSpecialCharacter(false);
+            if(e.target.value.length >= 8 && e.target.value.length <= 20){
+                setIsPasswordLengthValid(true);
+            }else{
+                setIsPasswordLengthValid(false);
+            }
+    
+            if(e.target.value !== e.target.value.toUpperCase() && e.target.value.length > 0){
+                setContainsLowercase(true)
+            }else{
+                setContainsLowercase(false);
+            }
+    
+            if(e.target.value !== e.target.value.toLowerCase() && e.target.value.length > 0){
+                setContainsUpperCase(true)
+            }else{
+                setContainsUpperCase(false);
+            }
+    
+            if(/\d/.test(e.target.value)){
+                setContainsDigit(true);
+            }else{
+                setContainsDigit(false);
+            }
+    
+            if(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(e.target.value) && e.target.value.length > 0){
+                setContainsSpecialCharacter(true);
+            }else{
+                setContainsSpecialCharacter(false);
+            }
         }
+
+        
     }
 
     return(
@@ -72,7 +83,7 @@ const PasswordValidation = (props) => {
                 <span className="caps-warrning" style={isCapsOn? {"display" : "block"} : {"display" : "none"}}>Caps Lock is on!</span>
             </label>
             <div className="password-box">
-                <input type={isPasswordShown ? "text":"password"} name="password" onKeyUp={passwordValidation}></input>
+                <input type={isPasswordShown ? "text":"password"} name="password" onKeyDown={passwordValidation}></input>
                 <button onClick={passwordToggle}><i className={isPasswordShown ? "fa-solid fa-eye":"fa-sharp fa-solid fa-eye-slash"}></i></button>
             </div>
             <div className="tips">

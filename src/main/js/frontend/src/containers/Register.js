@@ -7,6 +7,7 @@ import PasswordValidation from "../components/Form/PasswordValidation";
 import UsernameValidation from "../components/Form/UsernameValidation";
 import IngameNameValidation from "../components/Form/IngameNameValidation";
 import EmailValidation from "../components/Form/EmailValidation";
+import ServerSelect from "../components/Form/ServerSelect";
 
 
 const Register = () => {
@@ -17,7 +18,8 @@ const Register = () => {
     const [ isIngameNameValid, setIsIngameNameValid ] = useState(false);
     const [ isPasswordValid, setIsPasswordValid] = useState(false);
     const [ isFirstPhase, setIsFirstPhase ] = useState(true);
-    
+    const [ server, setServer ] = useState("BR");
+
 
     const navigate = useNavigate();
     let formData = useRef();
@@ -73,7 +75,11 @@ const Register = () => {
                     <button onClick={e=>setIsFirstPhase(true)} className="go-back">
                         <i className="fa-solid fa-arrow-left-long"></i>
                     </button>
-                    <IngameNameValidation setIsIngameNameValid={setIsIngameNameValid}/>
+                    <IngameNameValidation setIsIngameNameValid={setIsIngameNameValid} server={server}/>
+                    <div>
+                        <label htmlFor="server">Server: </label>
+                        <ServerSelect setServer={setServer}/>   
+                    </div>   
                     <input type="submit" name="submit" value="Register"></input>
                 </div>
                 <p className="redirect">Or click <a href="/login">here</a> to login</p>

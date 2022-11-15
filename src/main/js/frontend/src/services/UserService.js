@@ -47,7 +47,7 @@ export const  isUserValid = (username, ingameName, password) =>{
 }
 
 export const updateUser = async (id, username, email, ingamename, password, positions, server, token) => {
-    
+    console.log("Xd");
     let data = {
         "id" : id,
         "username" : username,
@@ -57,7 +57,7 @@ export const updateUser = async (id, username, email, ingamename, password, posi
         "positions" :  positions,
         "server": server
     };
-    const response = await fetch(URL_PREFIX + "/api/user/id/" + id, {
+    const response = await fetch(URL_PREFIX + "/api/user/", {
         method: "PUT",
         body: JSON.stringify(data),
         headers: {

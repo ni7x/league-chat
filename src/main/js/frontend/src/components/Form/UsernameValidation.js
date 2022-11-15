@@ -1,10 +1,12 @@
-
 import { useEffect, useState } from "react";
 import { checkUsernameUniqueness } from "../../services/UserService";
+import { useUserDetails } from "../../services/UserService";
+
 
 const UsernameValidation = (props) => {
+    const [ userDetails, ] = useUserDetails();
 
-    const [ isUsernameLengthValid, setIsUsernameLengthValid ] = useState(false);
+    const [ isUsernameLengthValid, setIsUsernameLengthValid ] =  useState(() => userDetails !== null ? true : false);
     const [ isUsernameUnqiue, setIsUsernameUnique ] = useState(true);
 
     useEffect(()=>{
@@ -17,7 +19,10 @@ const UsernameValidation = (props) => {
 
   
     let usernameValidation = (e) => {
-        if(e.target.value.length >= 4 && e.target.value.length <= 25){
+        if(userDetails !== null && (userDetails.username === e.target.value || e.target.value === "")){
+            setIsUsernameLengthValid(true);
+            setIsUsernameUnique(true);
+        }else if(e.target.value.length >= 4 && e.target.value.length <= 25){
             setIsUsernameLengthValid(true);
             checkUsernameUniqueness(e.target.value).then(result=>setIsUsernameUnique(result)); 
         }else{

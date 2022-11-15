@@ -16,6 +16,7 @@ import de.osiem.leaguechat.auth.model.user.Position;
 import de.osiem.leaguechat.auth.model.user.Role;
 import de.osiem.leaguechat.auth.model.user.Server;
 import de.osiem.leaguechat.auth.model.user.User;
+import de.osiem.leaguechat.auth.model.user.UserDto;
 import de.osiem.leaguechat.auth.repository.FriendRequestRepository;
 import de.osiem.leaguechat.auth.repository.ResetPasswordTokenRepository;
 import de.osiem.leaguechat.auth.repository.UserRepository;
@@ -94,25 +95,23 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User updateUser(User updatedUser) throws ResponseStatusException{
+    public User updateUser(UserDto updatedUser) throws ResponseStatusException{
         System.out.println("xd  ");
         User user = userRepository.findById(updatedUser.getId()).get();
         if(user != null){
             String currentUsername = user.getUsername();
             String newUsername = updatedUser.getUsername();
-            if(!currentUsername.equals(newUsername)){
-                if(!newUsername.isBlank()){
-                    if(isUsernameUnique(newUsername)){
-                        user.setUsername(newUsername);
-                    }else{                    
-                        throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Username is not unique");
-                    }
-                }
+            if(!currentUsername.equals(newUsername) && !newUsername.isBlank()){
+                if(isUsernameUnique(newUsername)){
+                    user.setUsername(newUsername);
+                }else{                    
+                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Username is not unique");
+                }  
             }
 
             String currentEmail = user.getEmail();
             String newEmail = updatedUser.getEmail();
-            if(!currentEmail.equals(newEmail)){
+            if(!currentEmail.equals(newEmail) && !newEmail.isBlank()){
                 if(isEmailUnqiue(newEmail)){
                     user.setEmail(newEmail);
                 }else{                    
@@ -122,7 +121,7 @@ public class UserServiceImpl implements UserService{
 
 
             Server currentServer = user.getServer();
-            Server newServer = updatedUser.getServer();
+            Server newServer = Server.valueOf(updatedUser.getServer());
             if(!currentServer.equals(newServer)){
                 if(isIngameNameUnqiue(user.getIngameName(), newServer)){
                     user.setServer(newServer);
@@ -133,7 +132,7 @@ public class UserServiceImpl implements UserService{
 
             String currentIngameName = user.getIngameName();
             String newIngameName = updatedUser.getIngameName();
-            if(!currentIngameName.equals(newIngameName)){
+            if(!currentIngameName.equals(newIngameName) && !newIngameName.isBlank()){
                 if(isIngameNameUnqiue(newIngameName, user.getServer())){
                     user.setIngameName(newIngameName);
                 }else{

@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { checkIngameNameUniqueness } from "../../services/UserService";
-import ServerSelect from "./ServerSelect";
-const IngameNameValidation = (props) => {
+import { useUserDetails } from "../../services/UserService";
 
-    const [ isIngameNameLengthValid, setIsIngameNameLengthValid ] = useState(false);
+const IngameNameValidation = (props) => {
+    const [ userDetails,  ] = useUserDetails();
+    const [ isIngameNameLengthValid, setIsIngameNameLengthValid ] =  useState(() => userDetails !== null ? true : false);
     const [ isIngameNameUnqiue, setIsIngameNameUnique ] = useState(true);
-   
 
     useEffect(()=>{
         if(isIngameNameLengthValid && isIngameNameUnqiue){
@@ -17,8 +17,11 @@ const IngameNameValidation = (props) => {
 
   
     let ingameNameValidation = (e) => {
-        
-        if(e.target.value.length >= 2 && e.target.value.length <= 16){
+        if(userDetails !== null && (userDetails.ingameName === e.target.value || e.target.value === "")){
+            setIsIngameNameLengthValid(true);
+            setIsIngameNameUnique(true);
+        }
+        else if(e.target.value.length >= 2 && e.target.value.length <= 16){
             setIsIngameNameLengthValid(true);
             checkIngameNameUniqueness(e.target.value, props.server).then(result=>setIsIngameNameUnique(result)); 
         }else{

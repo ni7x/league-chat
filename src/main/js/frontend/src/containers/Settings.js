@@ -15,10 +15,10 @@ const Settings = () => {
     const [ userToken, setUserToken ] = useUserToken(); 
     const [ userDetails, setUserDetails ] = useUserDetails();
 
-    const [ isPasswordValid, setIsPasswordValid] = useState(false);
-    const [ isIngameNameValid, setIsIngameNameValid] = useState(false);
-    const [ isUsernameValid, setIsUsernameValid] = useState(false);
-    const [ isEmailValid, setIsEmailValid] = useState(false);
+    const [ isPasswordValid, setIsPasswordValid] = useState(true);
+    const [ isIngameNameValid, setIsIngameNameValid] = useState(true);
+    const [ isUsernameValid, setIsUsernameValid] = useState(true);
+    const [ isEmailValid, setIsEmailValid] = useState(true);
 
     const [ server, setServer ] = useState("BR");
 
@@ -26,23 +26,21 @@ const Settings = () => {
     const formData = useRef();
 
     let isUserValid = () => {
-        let {username, email, ingamename, password, positions, server} = formData.current;
-        if(!isUsernameValid && username.value != ""){
+        if(!isUsernameValid){
             return false;
         }
-        if(!isEmailValid && email.value != userDetails.email){
+        if(!isEmailValid){
             return false;
         }
-        if(!isIngameNameValid && ingamename.value != userDetails.ingameName){
+        if(!isIngameNameValid){
             return false;
         }
-        if(!isPasswordValid  && ingamename.value != ""){
+        if(!isPasswordValid){
             return false;
         }
         
         return true;
     }
-
 
     const handleUpdate = async (e) => {
         e.preventDefault();
@@ -84,11 +82,14 @@ const Settings = () => {
                 <UsernameValidation setIsUsernameValid={setIsUsernameValid} currentValue={userDetails.username}/>
                 <EmailValidation setIsEmailValid={setIsEmailValid} currentValue={userDetails.email}/>
                 <IngameNameValidation setIsIngameNameValid={setIsIngameNameValid} server={server} currentValue={userDetails.ingameName}/>
-                <ServerSelect setServer={setServer} currentValue={userDetails.server}/>     
+                <div className="setting">
+                    <label htmlFor="server">Server: </label>
+                    <ServerSelect setServer={setServer} currentValue={userDetails.server}/>   
+                </div>  
                 <PasswordValidation setIsPasswordValid={setIsPasswordValid}/>
                 <PositionSelect setServer={setServer}/>
                 <div className="buttons">
-                    <input type="submit" name="submit" placeholder="Submit"></input>
+                    <input type="submit" name="submit" value="Save"></input>
                     <button onClick={handleDelete} className="delete">Delete account</button>
                 </div>
           
