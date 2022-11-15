@@ -5,6 +5,15 @@
     height: 4rem;
     justify-content: center;
 }
+
+.authenticated .sidebar .sidebar-top-panel button{
+        width: 100%;
+}
+.authenticated .sidebar .sidebar-top-panel button:hover{
+    color: var(--electric-blue);
+    transition: 0.25s;
+}
+
 .authenticated .sidebar{
     height: 100vh;
     background-color: var(--black);
@@ -62,7 +71,8 @@
     font-weight: 500;
     background-color: var(--black);
     width: 85%;
-    padding: 2rem 0 1.25rem 0;
+    margin: 1rem 0;
+    padding: 1rem 0;
     text-align: center;
 }
 
@@ -73,6 +83,12 @@
     border-radius: 20%;
 }
 
+.authenticated .sidebar .friend-requests-alert:hover{
+    background-color: var(--light-black);
+    transform: 0.25s;
+    cursor: pointer;
+    border-radius: 1rem;
+}
 
 .hidden-on-mobile, .block-hidden-on-mobile{
     display: none;

@@ -38,7 +38,24 @@
 
 .authenticated .navbar ul li{
     padding: 0.75rem 0;
-  
+}
+
+
+
+.authenticated .navbar ul .link{
+    padding: 0.5rem 0.75rem;
+    border-radius: 1rem;
+}
+
+
+.authenticated .navbar ul .link a{
+    color: var(--dark-white);
+   
+}
+
+.authenticated .navbar ul .link:hover{
+    background-color: var(--gray);
+    transition: 0.25s; 
 }
 
 .authenticated .navbar img{
@@ -46,12 +63,17 @@
     margin: 0 15%;
 }
 
-.authenticated .navbar ul li a{
-    color: var(--dark-white);
-}
 
 .authenticated .navbar .logout-button{
+    padding: 0.5rem 0.75rem;
     color: var(--red);
+    border-radius: 1rem;
+}
+
+
+.authenticated .navbar button:hover{
+    background-color: var(--gray);
+    transition: 0.25s; 
 }
 
 .authenticated .main{
@@ -151,13 +173,20 @@
     text-decoration: underline;
  }
 
+.friend-request button:hover{
+    border-bottom: 1px solid var(--white);
+}
+
 .friend-request .decline{
     color: var(--red);
+    border-color: var(--red)!important;
 }
+
 
 .friend-request .accept{
     margin-left: 1rem;
     color: var(--spring-green);
+    border-color: var(--spring-green)!important;
 }
 
 .friend-requests-wrapper .friend-requests.hidden{
@@ -174,6 +203,12 @@
     font-weight: 600;
     color: var(--red);
     font-size: 1.6rem;
+}
+
+.friend-request-modal .close-button:hover{
+    background-color: var(--red);
+    transition: 0.25s;
+    color: var(--white);
 }
 
 
@@ -251,7 +286,16 @@
     background-color: var(--light-gray);
     color: var(--spring-green);
     float: right;
+    font-weight: 600;
+
 }
+
+.authenticated .friend-search-wrapper .friend-search input[type="submit"]:hover{
+    background-color: var(--spring-green);
+    color: var(--black);
+    transition: 0.25s;
+}
+
 
 .authenticated .friend-search-wrapper .error{
     width: 80%;
@@ -269,6 +313,12 @@
     width: 100%;
 }
 
+.authenticated .friend-search-wrapper  .close-button:hover{
+    background-color: var(--red);
+    color: var(--white);
+    transition: 0.25s;
+}
+
 .authenticated .friend-search-wrapper .auto-suggestions{
     background-color: var(--gray);
     width: 60%;
@@ -284,6 +334,11 @@
     color: var(--very-light-gray);
 }
 
+.authenticated .friend-search-wrapper .auto-suggestions p:hover{
+    background-color: var(--light-gray);
+    cursor: pointer;
+    transition: 0.2s;
+}
 
 .authenticated .friend-search-wrapper .auto-suggestions p span{
     padding: 0 5%;

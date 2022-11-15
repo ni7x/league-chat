@@ -123,10 +123,19 @@
     background-color: var(--red);
     color: var(--white);
     font-weight: 600;
-    margin-top: 1rem;
-    padding: 1.5rem 0;
+    margin-top: 1.3rem;
+    padding: 1.3rem 0;
     border-radius: 0.5rem;
+    border: 0.2rem solid var(--red);
 }
+
+.authenticated .settings-wrapper .buttons .delete:hover{
+    background-color: var(--light-black);
+    color: var(--red);
+    border: 0.2rem solid var(--red);
+    transition: 0.25s;
+}
+
 
 .authenticated .settings-wrapper  input[type="submit"]{
     width: 100%;
@@ -135,6 +144,12 @@
     border: 0.2rem solid var(--spring-green);
     font-weight: 600;
     margin-top: 1.5rem;
+}
+
+.authenticated .settings-wrapper  input[type="submit"]:hover{
+    background-color: var(--spring-green);
+    color: var(--black);
+    transition: 0.25s;
 }
 
 .authenticated .settings-wrapper select {

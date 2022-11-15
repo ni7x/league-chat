@@ -68,7 +68,7 @@ input:-webkit-autofill:active  {
 .auth form input[type="submit"]:hover{
     background-color: var(--spring-green);
     color: var(--white);
-    transition-duration: 0.5s;
+    transition-duration: 0.3s;
 }
 
 .auth.login .error, .auth.forgot .error, .auth.login .loading, .auth.login .success{
@@ -226,8 +226,6 @@ input:-webkit-autofill:active  {
     top: -1.5rem;
     left: -1.5rem;
 }
-
-
 
 .auth.login .forgot-password-button{
     float: right;
