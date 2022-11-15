@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
+import de.osiem.leaguechat.conversations.service.ConversationService;
 import de.osiem.leaguechat.user.model.friendRequest.FriendRequest;
 import de.osiem.leaguechat.user.model.resetPasswordToken.ResetPasswordToken;
 import de.osiem.leaguechat.user.model.user.Position;
@@ -32,6 +32,7 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final FriendRequestRepository frRepository;
     private final ResetPasswordTokenRepository rptRepository;
+    private final ConversationService conversationService;
 
     private final PasswordEncoder passwordEncoder;
     private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#%&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
@@ -264,6 +265,7 @@ public class UserServiceImpl implements UserService{
             user.getFriends().add(friend);
             friend.getFriends().add(user);
             userRepository.save(user);
+            conversationService.createConversation(Set.of(user, friend));
             return user;
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);

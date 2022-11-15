@@ -1,7 +1,6 @@
 package de.osiem.leaguechat.user.model.resetPasswordToken;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +10,6 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 import de.osiem.leaguechat.user.model.user.User;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

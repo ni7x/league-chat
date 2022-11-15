@@ -1,3 +1,4 @@
+import Conversation from "../components/Conversation/Conversation";
 import { useUserDetails } from "../services/UserService";
 
 const Home = () => {
@@ -5,7 +6,9 @@ const Home = () => {
     
     return(
         <>  
-            There will be messages
+            {userDetails.conversations.map((conversation) => {
+                return <Conversation key={conversation.id} conversation={conversation}/>
+            })}
         </>
     )
 }

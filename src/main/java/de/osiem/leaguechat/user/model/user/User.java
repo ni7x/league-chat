@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import de.osiem.leaguechat.conversations.model.Conversation;
 import de.osiem.leaguechat.user.model.friendRequest.FriendRequest;
 import lombok.*;
 
@@ -52,13 +53,16 @@ public class User implements UserDetails{
     @JsonIgnoreProperties("from")
     private Set<FriendRequest> friendRequestsFrom = new HashSet<>();
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnoreProperties("friends")
     private Set<User> friends = new HashSet<>();
 
     @ElementCollection
     @Enumerated(EnumType.STRING)
     private Set<Position> positions = new HashSet<>();
+
+    @ManyToMany
+    private Set<Conversation> conversations;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

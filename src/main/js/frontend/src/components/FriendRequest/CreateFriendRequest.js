@@ -9,6 +9,7 @@ const CreateFriendRequest = (props) => {
     const [ errorMessage, setErrorMessage ] = useState(""); 
     const [ suggestions, setSuggestions ] = useState([]);
     const [ ingameName, setIngameName ] = useState(""); 
+    const [ server, setServer ] = useState("BR");
 
     let changeInputText = (e) => {
         setIngameName(e.target.innerText);
@@ -62,7 +63,7 @@ const CreateFriendRequest = (props) => {
             <div>
                 <div className="friend-search">
                     <form onSubmit={handleSubmit} ref={formData}>
-                        <ServerSelect/>
+                        <ServerSelect setServer={setServer}/>
                         <input  type="submit" value="Invite"></input>
                         <input type="text" name="friendName" value={ingameName}  onChange={e=>setIngameName(e.target.value)}></input>
                     </form>

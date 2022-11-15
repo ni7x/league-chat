@@ -1,9 +1,6 @@
 package de.osiem.leaguechat.user.service;
 
 import javax.transaction.Transactional;
-
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
