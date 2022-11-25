@@ -1,15 +1,19 @@
-import Conversation from "../components/Conversation/Conversation";
+import ConversationDetailed from "../components/Conversation/ConversationDetailed";
+import ConversationList from "../components/Conversation/ConversationList";
 import { useUserDetails } from "../services/UserService";
+import "../styles/conversation.css";
 
-const Home = () => {
+const Home = (props) => {
     const [ userDetails, ] = useUserDetails();
-    
     return(
-        <>  
-            {userDetails.conversations.map((conversation) => {
-                return <Conversation key={conversation.id} conversation={conversation}/>
-            })}
-        </>
+        <div className="conversations">  
+            <div className="list">
+                <ConversationList conversations={userDetails.conversations}/>
+            </div>
+            <div className="current-conversation">
+                {props.children}
+            </div>
+        </div>
     )
 }
 

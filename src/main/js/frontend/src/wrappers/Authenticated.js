@@ -5,6 +5,7 @@ import Sidebar from "../components/Sidebar/Sidebar";
 import FriendRequests from "../components/FriendRequest/FriendRequests";
 import CreateFriendRequest from "../components/FriendRequest/CreateFriendRequest";
 
+        
 let Authenticated = ( props ) => {
     const [ userToken, ] = useUserToken();
     const [ userDetails, ] = useUserDetails();
@@ -41,7 +42,6 @@ let Authenticated = ( props ) => {
             <Sidebar toggleFriendRequests={toggleFriendRequests} toggleFriendSearch={toggleFriendSearch} />
         </div>
     )
-
 }
 
 export default Authenticated;

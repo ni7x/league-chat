@@ -29,4 +29,7 @@ public class Conversation {
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<Message> messages = new HashSet<Message>();
 
+    public Message getLastMessage(){
+        return messages.toArray(new Message[messages.size()])[messages.size() - 1];
+    }
 }

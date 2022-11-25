@@ -1,5 +1,6 @@
 package de.osiem.leaguechat.conversations.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -9,6 +10,7 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import de.osiem.leaguechat.conversations.model.Conversation;
+import de.osiem.leaguechat.conversations.model.ConversationDto;
 import de.osiem.leaguechat.conversations.model.Message;
 import de.osiem.leaguechat.conversations.model.MessageDto;
 import de.osiem.leaguechat.conversations.repository.ConversationRepository;
@@ -24,6 +26,11 @@ public class ConversationServiceImpl implements ConversationService{
     private final ConversationRepository conversationRepository;
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
+
+    @Override
+    public Conversation getConversation(Long conversationId) {
+        return conversationRepository.findById(conversationId).get();
+    }
     
     @Override
     public Conversation createConversation(Set<User> users) {
@@ -57,6 +64,18 @@ public class ConversationServiceImpl implements ConversationService{
         }
 
         return null;    
+    }
+
+    @Override
+    public List<ConversationDto> getAllConversations(String name) {
+        List<ConversationDto> conversationList = new ArrayList<>();
+        User user = userRepository.findByUsername(name);
+        for(Conversation conv: user.getConversations()){
+            List<String> participantNames = new ArrayList<>();
+            conv.getParticipants().forEach(participant->participantNames.add(participant.getIngameName()));
+            conversationList.add(new ConversationDto(conv.getLastMessage(), participantNames, conv.getId()));
+        }
+        return conversationList;
     }
 
 }

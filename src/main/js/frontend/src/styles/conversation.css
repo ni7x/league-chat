@@ -1,0 +1,96 @@
+.conversations{
+    display: grid;
+    grid-template-columns: 1fr 0fr; 
+    gap: 0px 0px; 
+    height: 100vh;
+    grid-template-areas: 
+        "list current-conversation"; 
+}
+.conversations .list{
+    background-color: var(--black);
+    grid-area: list;
+    border-left: 1px solid var(--gray);
+}
+
+.conversations .list ul{
+    list-style: none;
+}
+
+.conversations .list{
+    height: 100vh;
+    background-color: var(--black);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    grid-area: list;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.conversations .list ul {
+    list-style: none;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    margin: 0.5rem 0;
+    padding: 0;
+}
+
+
+.conversations .list ul li{
+    padding: 1vw;
+    width: 100%;
+    height:10vw ;
+    background-color: red;
+}
+
+.conversations .list ul li a{
+    background-color: blue;
+}
+
+.conversations .list ul .link{
+    padding: 0.5rem 0.75rem;
+    border-radius: 1rem;
+}
+
+.conversations .list .hidden-on-mobile{
+    height: 5rem; 
+    line-height: 0;
+    font-size: 1.4rem;
+    font-weight: 500;
+    width: 50%;
+    flex-wrap: wrap;
+    gap:0;
+    flex-direction: column;
+}
+
+.conversations .list .hidden-on-mobile p{
+    margin-top: 1rem;
+}
+
+.conversations .list img{
+    margin-left: 1vw;
+    height: 100%;
+    float: left;
+}
+
+.conversations .current-conversation{
+    background-color: var(--light-black);
+    border-left: 1px solid var(--gray);
+    grid-area: current-conversation;
+}
+
+
+@media (min-width: 1250px) {
+    .conversations{
+        grid-template-columns: 0.3fr 1fr; 
+    }
+
+    .conversations .list img{
+        margin-left: 5%;
+        max-width: 5rem;
+    }
+ 
+}

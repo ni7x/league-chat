@@ -18,6 +18,7 @@ import ForgotPassword from "./containers/ForgotPassword";
 import { useEffect, useMemo, useState } from 'react';
 import { UserContext } from "./UserContext";
 import Authenticated from './wrappers/Authenticated';
+import ConversationDetailed from './components/Conversation/ConversationDetailed';
 
 const App = () => {
     const [ userToken, setUserToken ] = useState(localStorage.getItem("token"));
@@ -56,6 +57,12 @@ const App = () => {
                     <Routes>
                         <Route element={<AuthGuard/>}>
                             <Route path="/" element={<Authenticated><Home /></Authenticated>} />
+                            <Route path="/conversation/:id" element={
+                                <Authenticated>
+                                    <Home>
+                                        <ConversationDetailed/>
+                                    </Home>
+                                </Authenticated>} />
                             <Route path="/settings" element={<Authenticated><Settings /></Authenticated>} />
                             <Route path="/user/:server/:name" element={<Authenticated><User /></Authenticated>} />
                         </Route> 

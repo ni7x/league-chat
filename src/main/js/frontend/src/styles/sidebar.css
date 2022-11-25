@@ -21,6 +21,7 @@
     flex-direction: column;
     align-items: center;
     grid-area: sidebar;
+    border-left: 1px solid var(--gray);
    
 }
 .authenticated .sidebar ul {
