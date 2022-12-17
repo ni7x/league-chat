@@ -15,7 +15,6 @@ const EmailValidation = (props) => {
             props.setIsEmailValid(false);
         }    
     })
-
   
     let emailValidation = (e) => {
         if(userDetails !== null && (userDetails.email === e.target.value || e.target.value === "")){

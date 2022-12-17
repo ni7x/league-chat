@@ -1,18 +1,12 @@
-import ConversationDetailed from "../components/Conversation/ConversationDetailed";
-import ConversationList from "../components/Conversation/ConversationList";
-import { useUserDetails } from "../services/UserService";
+import ConversationWrapper from "../components/Conversation/ConversationWrapper";
+import { useUserToken } from "../services/UserService";
+import { getConversations } from "../services/MessageService";
 import "../styles/conversation.css";
 
-const Home = (props) => {
-    const [ userDetails, ] = useUserDetails();
+const Home = () => {
     return(
-        <div className="conversations">  
-            <div className="list">
-                <ConversationList conversations={userDetails.conversations}/>
-            </div>
-            <div className="current-conversation">
-                {props.children}
-            </div>
+        <div className="home">  
+            <ConversationWrapper id={3}/>
         </div>
     )
 }

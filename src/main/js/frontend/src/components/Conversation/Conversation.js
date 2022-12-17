@@ -2,10 +2,14 @@ const Conversation = (props) => {
     return (
         <li>
             <a href={"/conversation/" + props.conversation.id}><img src={process.env.PUBLIC_URL + "/profile-image.jpg"} alt="Profile image"></img></a>
-            <p>{props.conversation.messages[props.conversation.messages.length - 1].author.ingameName}: {props.conversation.messages[props.conversation.messages.length - 1].content}</p>
-            <span className="hidden-on-mobile">
-                <p>{props.conversation.messages[props.conversation.messages.length - 1].author.ingameName}: {props.conversation.messages[props.conversation.messages.length - 1].content}</p>
-            </span>
+            <div>
+                <b>{props.conversation.participantsNames.filter(name => name != props.userName)} </b>
+                {props.conversation.lastMessage != null ?
+                    <p><i>{props.conversation.lastMessage.author.username == props.userName ? "You": props.conversation.lastMessage.author.username}: {props.conversation.lastMessage.content}</i></p>
+                :
+                <p><i>Start the conversation!</i></p>
+                 }
+            </div>
         </li>
     )
 }

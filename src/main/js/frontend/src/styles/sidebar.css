@@ -60,6 +60,7 @@
     margin-left: 15%;
     margin-right: 5%;
     float: left;
+    border-radius: 0.75rem;
 }
 
 .authenticated .sidebar ul li a{

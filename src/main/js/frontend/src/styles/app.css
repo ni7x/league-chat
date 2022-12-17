@@ -61,6 +61,7 @@
 .authenticated .navbar img{
     width: 70%;
     margin: 0 15%;
+    border-radius: 0.75rem;
 }
 
 

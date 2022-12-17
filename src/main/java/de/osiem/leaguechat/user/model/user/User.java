@@ -37,7 +37,7 @@ public class User implements UserDetails{
     @Column(unique = true)
     private String email;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
@@ -45,11 +45,11 @@ public class User implements UserDetails{
     @Enumerated(EnumType.STRING)
     private Server server;
 
-    @OneToMany(mappedBy = "to")
+    @OneToMany(mappedBy = "to", fetch = FetchType.EAGER) // for now eager
     @JsonIgnoreProperties({"to"})
     private Set<FriendRequest> friendRequestsTo = new HashSet<>();
 
-    @OneToMany(mappedBy = "from")
+    @OneToMany(mappedBy = "from", fetch = FetchType.EAGER)
     @JsonIgnoreProperties("from")
     private Set<FriendRequest> friendRequestsFrom = new HashSet<>();
 
@@ -57,7 +57,7 @@ public class User implements UserDetails{
     @JsonIgnoreProperties("friends")
     private Set<User> friends = new HashSet<>();
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private Set<Position> positions = new HashSet<>();
 

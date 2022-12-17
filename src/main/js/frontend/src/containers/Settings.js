@@ -21,8 +21,7 @@ const Settings = () => {
     const [ isEmailValid, setIsEmailValid] = useState(true);
 
     const [ server, setServer ] = useState("BR");
-
-
+    
     const formData = useRef();
 
     let isUserValid = () => {

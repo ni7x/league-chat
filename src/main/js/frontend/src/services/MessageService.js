@@ -1,5 +1,24 @@
 const URL_PREFIX = "http://127.0.0.1:8080/api/conversation/";
 
+
+export const getConversations = async (token) => {
+    const response = await fetch(URL_PREFIX, {
+        method: "GET",
+        headers: {
+            "Authorization" : "Bearer " + token,
+            "Content-Type": "application/json"
+    }});
+    if(response.ok){
+        return response;
+    }else{
+        let json = await response.json();
+        let message = json.message;
+        console.log(response);
+        return Promise.reject(message);
+    }
+}
+
+
 export const getConversation = async (conversationId, token) => {
     const response = await fetch(URL_PREFIX + "id/" + conversationId, {
         method: "GET",
@@ -12,7 +31,6 @@ export const getConversation = async (conversationId, token) => {
     }else{
         let json = await response.json();
         let message = json.message;
-        console.log(response);
         return Promise.reject(message);
     }
 }
