@@ -16,6 +16,10 @@ const CreateFriendRequest = (props) => {
     }
 
     useEffect(()=>{
+        setIngameName("");
+    }, [])
+
+    useEffect(()=>{
         async function fetchData() {
             const URL = "http://127.0.0.1:8080/api/user/autoSuggestion";
             let { friendName, server } = formData.current;
@@ -35,7 +39,7 @@ const CreateFriendRequest = (props) => {
         }
         fetchData();
 
-    }, [ingameName])
+    }, [ingameName, server])
 
 
     const handleSubmit = async (e) => {

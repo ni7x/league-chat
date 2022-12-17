@@ -49,6 +49,7 @@ const CurrentConversation = (props) => {
         if(client){
             client.send('/app/conversation/'+ props.id, {}, JSON.stringify(data));
         }
+       
     
     }
 

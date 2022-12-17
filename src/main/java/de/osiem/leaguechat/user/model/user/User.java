@@ -6,6 +6,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,7 +39,8 @@ public class User implements UserDetails{
     @Column(unique = true)
     private String email;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
+    @Fetch(FetchMode.JOIN)
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
@@ -45,23 +48,28 @@ public class User implements UserDetails{
     @Enumerated(EnumType.STRING)
     private Server server;
 
-    @OneToMany(mappedBy = "to", fetch = FetchType.EAGER) // for now eager
+    @OneToMany(mappedBy = "to")
+    @Fetch(FetchMode.JOIN)
     @JsonIgnoreProperties({"to"})
     private Set<FriendRequest> friendRequestsTo = new HashSet<>();
 
-    @OneToMany(mappedBy = "from", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "from")
+    @Fetch(FetchMode.JOIN)
     @JsonIgnoreProperties("from")
     private Set<FriendRequest> friendRequestsFrom = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany()
+    @Fetch(FetchMode.JOIN)
     @JsonIgnoreProperties("friends")
     private Set<User> friends = new HashSet<>();
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
     @Enumerated(EnumType.STRING)
+    @Fetch(FetchMode.JOIN)
     private Set<Position> positions = new HashSet<>();
 
     @ManyToMany
+    @Fetch(FetchMode.JOIN)
     private Set<Conversation> conversations;
 
     @Override

@@ -2,7 +2,6 @@ package de.osiem.leaguechat.conversations.model;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,7 +25,7 @@ public class Conversation {
     private Long id;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"conversations", "friends"})
+    @JsonIgnoreProperties({"conversations", "friends", "friend_requests_to", "friend_requests_from"})
     private Set<User> participants = new HashSet<User>();
 
     @ManyToMany(fetch = FetchType.LAZY)
