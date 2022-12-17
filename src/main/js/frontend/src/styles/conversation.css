@@ -33,7 +33,6 @@
 
 .conversations .current-conversation{
     display: flex;
-    
 }
 
 
@@ -108,7 +107,7 @@
 }
 
 .conversations .current-conversation .messages{
-    width: 100%;
+    width: 99%;
     height: 90%;
     overflow-y: auto;
     display: flex;
@@ -161,6 +160,10 @@
         display: flex;
     }
 
+    .home .conversations .current-conversation{
+        display: flex;
+    }
+
     .conversations .list{
         display: flex;
     }
@@ -174,3 +177,17 @@
     }
  
 }
+
+::-webkit-scrollbar {
+    width: 1rem;
+}
+  
+::-webkit-scrollbar-thumb {
+    background: var(--gray); 
+    border-radius: 10px;
+}
+  
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--spring-green); 
+ }
