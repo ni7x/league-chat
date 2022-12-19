@@ -2,10 +2,13 @@ package de.osiem.leaguechat.auth.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.Message;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,7 +56,7 @@ public class SecurityConfig {
                     .antMatchers("/api/user/validation/**").permitAll()
                     .antMatchers("/api/user/autoSuggestion").permitAll()
                     .antMatchers("**").permitAll()//for now
-                    .antMatchers("/api/users").hasAuthority("ADMIN")
+                    //.antMatchers("/api/users").hasAuthority("ADMIN")
                     .anyRequest().authenticated())
                 .oauth2ResourceServer(authorize -> authorize
                     .jwt(jwt -> jwt.jwtAuthenticationConverter(new JWTAuthenticationConverter())))

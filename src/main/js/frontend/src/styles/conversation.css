@@ -45,7 +45,6 @@
     width: 90%;
     display: flex;
     flex-direction: column;
-    align-items: center;
     height: 100%;
     margin: 0 5%;
     padding: 0;
@@ -149,6 +148,10 @@
     outline: none;
 }
 
+.conversations .current-conversation .new-message input:disabled{
+    color: var(--light-gray);
+}
+
 @media (min-width: 1250px) {
     .conversations{
         grid-template-columns: 0.3fr 1fr; 
@@ -167,8 +170,11 @@
     .conversations .list{
         display: flex;
     }
+
     .conversations .list ul li{
         height: 5rem;
+        max-width: 80%;
+        overflow: hidden;
     }
 
     .conversations .list img{

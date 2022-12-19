@@ -16,4 +16,5 @@ public interface ConversationService {
 
     Message createMessage(MessageDto message);
     List<ConversationDto> getAllConversations(String name);
+    List<ConversationDto> getAllConversations();
 }

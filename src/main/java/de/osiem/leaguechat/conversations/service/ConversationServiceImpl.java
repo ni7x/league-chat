@@ -52,8 +52,8 @@ public class ConversationServiceImpl implements ConversationService{
     @Override
     public Message createMessage(MessageDto message) {
         Message newMessage = new Message();
-        System.out.println(message);
         Optional<User> author = userRepository.findById(message.getAuthorId());
+        System.out.println(author);//don't touch xd
         Optional<Conversation> conversation = conversationRepository.findById(message.getConversationId());
         if(author.isPresent() && conversation.isPresent()){
             newMessage.setAuthor(author.get());
@@ -71,6 +71,17 @@ public class ConversationServiceImpl implements ConversationService{
         List<ConversationDto> conversationList = new ArrayList<>();
         User user = userRepository.findByUsername(name);
         for(Conversation conv: user.getConversations()){
+            List<String> participantNames = new ArrayList<>();
+            conv.getParticipants().forEach(participant->participantNames.add(participant.getIngameName()));
+            conversationList.add(new ConversationDto(conv.getLastMessage(), participantNames, conv.getId()));
+        }
+        return conversationList;
+    }
+
+    
+    public List<ConversationDto> getAllConversations() {
+        List<ConversationDto> conversationList = new ArrayList<>();
+        for(Conversation conv: conversationRepository.findAll()){
             List<String> participantNames = new ArrayList<>();
             conv.getParticipants().forEach(participant->participantNames.add(participant.getIngameName()));
             conversationList.add(new ConversationDto(conv.getLastMessage(), participantNames, conv.getId()));

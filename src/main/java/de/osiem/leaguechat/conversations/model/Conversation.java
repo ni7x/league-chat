@@ -8,6 +8,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.ManyToMany;
@@ -25,7 +27,7 @@ public class Conversation {
     private Long id;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"conversations", "friends", "friend_requests_to", "friend_requests_from"})
+    @JsonIgnoreProperties({"conversations", "friends", "friendRequestsTo", "friendRequestsFrom"})
     private Set<User> participants = new HashSet<User>();
 
     @ManyToMany(fetch = FetchType.LAZY)

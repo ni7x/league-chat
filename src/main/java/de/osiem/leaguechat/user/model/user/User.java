@@ -33,6 +33,7 @@ public class User implements UserDetails{
     @Column(unique = true)
     private String username;
     
+    @JsonIgnore
     private String password;
 
     @Email(regexp = "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$")
@@ -50,26 +51,22 @@ public class User implements UserDetails{
 
     @OneToMany(mappedBy = "to")
     @Fetch(FetchMode.JOIN)
-    @JsonIgnoreProperties({"to"})
+    @JsonIgnoreProperties({"friendRequestsTo"})
     private Set<FriendRequest> friendRequestsTo = new HashSet<>();
 
     @OneToMany(mappedBy = "from")
-    @Fetch(FetchMode.JOIN)
-    @JsonIgnoreProperties("from")
+    @JsonIgnoreProperties("friendRequestsFrom")
     private Set<FriendRequest> friendRequestsFrom = new HashSet<>();
 
     @ManyToMany()
-    @Fetch(FetchMode.JOIN)
     @JsonIgnoreProperties("friends")
     private Set<User> friends = new HashSet<>();
 
     @ElementCollection
     @Enumerated(EnumType.STRING)
-    @Fetch(FetchMode.JOIN)
     private Set<Position> positions = new HashSet<>();
 
     @ManyToMany
-    @Fetch(FetchMode.JOIN)
     private Set<Conversation> conversations;
 
     @Override

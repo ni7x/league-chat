@@ -30,7 +30,7 @@ public class Message {
     private Conversation conversation;
 
     @ManyToOne
-    @JsonIgnoreProperties({"messages", "conversations", "friends"})
+    @JsonIgnoreProperties({"conversations", "friends", "friendRequestsTo", "friendRequestsFrom"})
     private User author;
 
     private String content;

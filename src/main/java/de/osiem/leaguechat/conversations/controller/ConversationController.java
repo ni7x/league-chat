@@ -6,14 +6,15 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.osiem.leaguechat.conversations.model.Conversation;
 import de.osiem.leaguechat.conversations.model.ConversationDto;
-import de.osiem.leaguechat.conversations.model.Message;
 import de.osiem.leaguechat.conversations.model.MessageDto;
 import de.osiem.leaguechat.conversations.service.ConversationService;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,11 @@ public class ConversationController {
     @GetMapping("api/conversation/")
     public List<ConversationDto> getAllConversations(Authentication authentication){
         return service.getAllConversations(authentication.getName());
+    }
+
+    @GetMapping("api/conversations/")
+    public List<ConversationDto> getAllConversations2(){
+        return service.getAllConversations();
     }
     
 

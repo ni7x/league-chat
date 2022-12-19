@@ -4,15 +4,19 @@ import {getConversation,  } from "../../services/MessageService";
 
 import { useUserDetails, useUserToken } from "../../services/UserService";
 import Message from "./Message";
-import * as SockJS from 'sockjs-client';
+import SockJS from 'sockjs-client';
 import * as Stomp from 'stompjs';
 
-let client = null;
 
 const CurrentConversation = (props) => {
     let [ userToken,  ] = useUserToken();
     let [ userDetails,  ] = useUserDetails(); 
     let [ messages, setMessages ] = useState([]);
+    let [ connected, setConnected ] = useState(false);
+    let [ newMessage, setNewMessage ] = useState("");
+
+    const client = useRef(null);
+    let bottomRef = useRef();
 
     useEffect(()=>{
         getConversation(props.id, userToken).then(response=>response.json()).then(json=>setMessages(json.messages));
@@ -22,55 +26,54 @@ const CurrentConversation = (props) => {
         scrollToBottom();
     }, [messages])
 
-
-    let formData = useRef();
-    let bottomRef = useRef();
-
-    useEffect(()=>{
+    let connect = () => {
         let sock = new SockJS("/stomp");
-        client = Stomp.over(sock); 
-        client.connect({"Authorization" : "Bearer " + userToken}, frame => {
-            client.subscribe("/message/private/" + props.id, payload => {
+        client.current = Stomp.over(sock); 
+        client.current.reconnect_delay = 5000;
+        client.current.connect({}, frame => {
+            client.current.subscribe("/message/private/" + props.id, payload => {
                 setMessages(messages=>[...messages, JSON.parse(payload.body)]);
             });
+            setConnected(true);
         })
+    }
+
+    useEffect(()=>{
+        connect();
     }, [])
 
     let sendMessage = (e) => {
         e.preventDefault();
-        let { messageContent } = formData.current;
 
         let data = {
             authorId :  userDetails.id,
-            content:  messageContent.value,
+            content:  newMessage,
             conversationId:  props.id,
         };
         
-        if(client){
-            client.send('/app/conversation/'+ props.id, {}, JSON.stringify(data));
-        }
-       
-    
+        if(connected){
+            client.current.send('/app/conversation/'+ props.id, {}, JSON.stringify(data));
+            setNewMessage("");
+        }   
     }
 
     let scrollToBottom = () => {
         bottomRef?.current?.scrollIntoView({ behavior: 'auto' })
     }
 
-
     return (
        <>   
             <div className="messages">
                 <ul>
                     {messages.map(message=>{
-                            return <Message message={message} />
+                            return <Message key={message.id} message={message} />
                     })}
                     <div ref={bottomRef}></div>
                 </ul>
             </div>
-            <form onSubmit={sendMessage} ref={formData} className="new-message">
-                <input type="text" name="messageContent"></input>
-                <input type="submit"></input>
+            <form onSubmit={sendMessage} className="new-message">
+                <input type="text" name="messageContent" onChange={(e)=>setNewMessage(e.target.value)} value={newMessage}></input>
+                <input type="submit" disabled={connected ? false: true}></input>
             </form>
         
        </>

@@ -4,6 +4,8 @@ import RecievedRequest from "../components/FriendRequest/RecievedRequest";
 import SentRequest from "../components/FriendRequest/SentRequest";
 import { endFriendship, getUserByIGNandServer, sendFriendRequest, useUserDetails, useUserToken } from "../services/UserService";
 
+import "../styles/userpage.css";
+
 const UserPage = () => {
     const [ userDetails, setUserDetails] = useUserDetails();
     const [ userToken, ] = useUserToken();
@@ -52,19 +54,20 @@ const UserPage = () => {
     }
 
     return(
-        <>
-           {isFriend() ?
-                <button onClick={() => handleFriendRequest("remove")}>Remove from friends</button>
-                :
-                isInSentRequests() !== undefined ?
-                    <SentRequest to={currentUser} id={isInSentRequests().id}/>
-                :
-                    isInReceivedRequests() !== undefined  ?
-                        <RecievedRequest from={currentUser} id={isInReceivedRequests().id}/>
+            <div className="user-page">
+                <p>Page of user {currentUser.ingameName}</p>
+                {isFriend() ?
+                         <button onClick={() => handleFriendRequest("remove")}>Remove from friends</button>
                         :
-                        <button onClick={() => handleFriendRequest("send")}>Send friend request</button>
-           }
-        </>
+                        isInSentRequests() !== undefined ?
+                            <SentRequest to={currentUser} id={isInSentRequests().id}/>
+                        :
+                            isInReceivedRequests() !== undefined  ?
+                                <RecievedRequest from={currentUser} id={isInReceivedRequests().id}/>
+                                :
+                                <button onClick={() => handleFriendRequest("send")}>Send friend request</button>
+                }
+           </div>
     )
 }
 
