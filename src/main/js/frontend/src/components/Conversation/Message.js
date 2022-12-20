@@ -1,9 +1,17 @@
+import ReactTimeAgo from 'react-time-ago';
+
 const Message = (props) => {
+
+
     return (
-        <li>
-            {props.message.createdAt.substring(0, 10)} <b>{props.message.author.ingameName}: </b>
-            {props.message.content}
+        <li className="message">
+            <div className="content">
+                <b><u>{props.message.author.ingameName}</u></b>
+                <ReactTimeAgo className="date" onMouseEnter={null} date={props.message.createdAt} locale="en-US"/>
+                <p>{props.message.content}</p>
+            </div>
         </li>
+       
     )
 }
 export default Message ;

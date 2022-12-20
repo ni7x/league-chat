@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createMessage } from "../../services/MessageService";
 import {getConversation,  } from "../../services/MessageService";
-
 import { useUserDetails, useUserToken } from "../../services/UserService";
 import Message from "./Message";
 import SockJS from 'sockjs-client';

@@ -1,4 +1,8 @@
+b{
+    font-weight: 600;
+}
 .conversations{
+
     display: grid;
     grid-template-columns: 1fr; 
     gap: 0px 0px; 
@@ -124,7 +128,7 @@
 
 .conversations .current-conversation .messages ul li{
     width: 80%;
-    padding: 1rem 0;
+    padding: 0rem 0;
 }
 
 .conversations .current-conversation .new-message{
@@ -149,7 +153,21 @@
 }
 
 .conversations .current-conversation .new-message input:disabled{
-    color: var(--light-gray);
+    color: var(--very-light-gray);
+}
+
+.conversations .current-conversation .message .date{
+    margin-left: 1rem;
+    color: var(--very-light-gray);
+}
+
+.conversations .current-conversation .message .content{
+    width: 100%;
+    float: left;
+}
+
+.conversations .current-conversation .message .content p{
+    margin-top: 0rem;
 }
 
 @media (min-width: 1250px) {
