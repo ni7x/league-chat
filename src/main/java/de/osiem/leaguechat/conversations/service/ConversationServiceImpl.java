@@ -45,6 +45,11 @@ public class ConversationServiceImpl implements ConversationService{
     }
 
     @Override
+    public void deleteMessage(Message message){
+        messageRepository.delete(message);
+    }
+
+    @Override
     public void deleteConversation(Conversation conversation) {
         conversationRepository.delete(conversation); 
     }

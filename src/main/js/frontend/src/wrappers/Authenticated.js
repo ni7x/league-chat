@@ -23,6 +23,7 @@ let Authenticated = ( props ) => {
     if(userToken === null){
         return <a href="/login"></a>
     }
+    
     if(userDetails === null){
         return <>Loading</>
     }

@@ -6,7 +6,7 @@ const ConversationList = (props) => {
     return(
             <ul>
                 {props.conversations.map(conversation=>{
-                    return <Conversation key={conversation.id} conversation={conversation} userName={userDetails.ingameName}/>
+                    return <Conversation key={conversation.id} conversation={conversation} ingameName={userDetails.ingameName}/>
                 })}
             </ul>
         

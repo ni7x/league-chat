@@ -1,9 +1,11 @@
 package de.osiem.leaguechat.user.model.friendRequest;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -17,11 +19,11 @@ public class FriendRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne()
     @JsonIgnoreProperties({"friendRequestsFrom", "friendRequestsTo"})
     private User from;
 
-    @ManyToOne
+    @ManyToOne()
     @JsonIgnoreProperties({"friendRequestsFrom", "friendRequestsTo"})
     private User to;
 

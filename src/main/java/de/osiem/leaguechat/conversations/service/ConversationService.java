@@ -15,6 +15,8 @@ public interface ConversationService {
     Conversation getConversation(Long conversationId);
 
     Message createMessage(MessageDto message);
+    void deleteMessage(Message message);
+    
     List<ConversationDto> getAllConversations(String name);
     List<ConversationDto> getAllConversations();
 }

@@ -3,7 +3,7 @@ import { useUserToken } from "../services/UserService";
 
 
 const AuthGuard = () => {
-    const [userToken, setUserToken] = useUserToken();
+    const [userToken, ] = useUserToken();
     
     let hasJWT = () => {
         return userToken === null ? false : true;

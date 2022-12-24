@@ -32,30 +32,30 @@ public class User implements UserDetails{
     @Size(min=4, max=25)
     @Column(unique = true)
     private String username;
-    
-    @JsonIgnore
+
     private String password;
 
     @Email(regexp = "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$")
     @Column(unique = true)
     private String email;
 
+    @Column(length = 64)
+    private String avatar = "default-avatar.jpg";
+
     @ElementCollection
     @Fetch(FetchMode.JOIN)
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private Server server;
 
-    @OneToMany(mappedBy = "to")
-    @Fetch(FetchMode.JOIN)
-    @JsonIgnoreProperties({"friendRequestsTo"})
+    @OneToMany(mappedBy="to", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"to"})
     private Set<FriendRequest> friendRequestsTo = new HashSet<>();
 
-    @OneToMany(mappedBy = "from")
-    @JsonIgnoreProperties("friendRequestsFrom")
+    @OneToMany(mappedBy="from", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("from")
     private Set<FriendRequest> friendRequestsFrom = new HashSet<>();
 
     @ManyToMany()
@@ -66,8 +66,13 @@ public class User implements UserDetails{
     @Enumerated(EnumType.STRING)
     private Set<Position> positions = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany()
     private Set<Conversation> conversations;
+
+    public void deleteFriends(){
+        friends.forEach(friend -> friend.getFriends().remove(this));
+        setFriends(null);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -78,6 +83,7 @@ public class User implements UserDetails{
         });
         return authorities;
     }
+    
 
     @Override
     @JsonIgnore

@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import de.osiem.leaguechat.conversations.model.Conversation;
 import de.osiem.leaguechat.conversations.service.ConversationService;
 import de.osiem.leaguechat.user.model.friendRequest.FriendRequest;
 import de.osiem.leaguechat.user.model.resetPasswordToken.ResetPasswordToken;
@@ -160,11 +162,23 @@ public class UserServiceImpl implements UserService{
     public void deleteUser(String username) throws ResponseStatusException{
         log.info("Deleting user {}", username);
         User user = getUser(username);
-        user.getFriends().forEach((friend)->{
-            friend.getFriends().remove(user);
-        });
-        user.setFriends(null);
-        userRepository.delete(user);
+
+        for (FriendRequest friendRequest : user.getFriendRequestsFrom()) {
+            frRepository.delete(friendRequest);
+        }
+        user.setFriendRequestsFrom(null);
+
+        for (FriendRequest friendRequest : user.getFriendRequestsTo()) {
+            frRepository.delete(friendRequest);
+        }
+        user.setFriendRequestsTo(null);
+       
+        user.deleteFriends();
+        user.setIngameName(null);
+        user.setUsername(null);
+        user.setEmail(null);
+   
+       
     }
 
     @Override
@@ -234,6 +248,7 @@ public class UserServiceImpl implements UserService{
             friendRequest.setTo(to);
             frRepository.save(friendRequest);
             from.getFriendRequestsFrom().add(friendRequest);
+            to.getFriendRequestsTo().add(friendRequest);
             return from;
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This user doesn't exist");

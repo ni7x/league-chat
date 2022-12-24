@@ -6,7 +6,9 @@ const Message = (props) => {
     return (
         <li className="message">
             <div className="content">
-                <b><u>{props.message.author.ingameName}</u></b>
+                <b><u>
+                    {props.message.author.ingameName !== null ? props.message.author.ingameName : "[Deleted User]" }
+                </u></b>
                 <ReactTimeAgo className="date" onMouseEnter={null} date={props.message.createdAt} locale="en-US"/>
                 <p>{props.message.content}</p>
             </div>
