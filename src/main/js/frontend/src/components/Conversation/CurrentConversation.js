@@ -30,8 +30,7 @@ const CurrentConversation = (props) => {
     }, [messages])
 
     let connect = () => {
-        let sock = new SockJS("/stomp");
-        client.current = Stomp.over(sock); 
+        client.current = Stomp.client("ws://localhost:8080/stompOnly"); 
         client.current.reconnect_delay = 5000;
         client.current.connect({}, frame => {
           subscribe();
