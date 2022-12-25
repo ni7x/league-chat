@@ -6,7 +6,6 @@ import Message from "./Message";
 import SockJS from 'sockjs-client';
 import * as Stomp from 'stompjs';
 
-
 const CurrentConversation = (props) => {
     let [ userToken,  ] = useUserToken();
     let [ userDetails,  ] = useUserDetails(); 

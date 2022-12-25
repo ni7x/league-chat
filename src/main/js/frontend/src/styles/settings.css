@@ -47,7 +47,7 @@
     padding: 1.1rem 0;
 }
 
-.authenticated .settings input{
+.authenticated .settings input, .authenticated .settings-wrapper #upload-avatar{
     -moz-box-sizing:border-box;
     -webkit-box-sizing:border-box;
     box-sizing:border-box;
@@ -168,19 +168,26 @@
     display:table-cell;
 }
 
+.authenticated .settings-wrapper input[type="file"] {
+   display: none;
+}
+
+.authenticated .settings-wrapper #upload-avatar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 @media (min-width: 800px) {
     .authenticated .settings .setting{
         width: 45%;
      }
 
-    .authenticated .buttons input,.authenticated .buttons button {
-        width: 23%!important;
-    }
 
     .authenticated .settings-wrapper .buttons{
-        flex-direction: unset;
-        width: 94%;
+        flex-direction: row;
+        width: 95%;
+        margin-top: 1.2rem;
     }
 }
 

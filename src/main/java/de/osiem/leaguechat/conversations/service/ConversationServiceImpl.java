@@ -1,6 +1,7 @@
 package de.osiem.leaguechat.conversations.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -13,6 +14,7 @@ import de.osiem.leaguechat.conversations.model.Conversation;
 import de.osiem.leaguechat.conversations.model.ConversationDto;
 import de.osiem.leaguechat.conversations.model.Message;
 import de.osiem.leaguechat.conversations.model.MessageDto;
+import de.osiem.leaguechat.conversations.model.Participant;
 import de.osiem.leaguechat.conversations.repository.ConversationRepository;
 import de.osiem.leaguechat.conversations.repository.MessageRepository;
 import de.osiem.leaguechat.user.model.user.User;
@@ -76,9 +78,9 @@ public class ConversationServiceImpl implements ConversationService{
         List<ConversationDto> conversationList = new ArrayList<>();
         User user = userRepository.findByUsername(name);
         for(Conversation conv: user.getConversations()){
-            List<String> participantNames = new ArrayList<>();
-            conv.getParticipants().forEach(participant->participantNames.add(participant.getIngameName()));
-            conversationList.add(new ConversationDto(conv.getLastMessage(), participantNames, conv.getId()));
+            Set<Participant> participants = new HashSet<>();
+            conv.getParticipants().forEach(participant->participants.add(new Participant(participant.getIngameName(), participant.getAvatar())));
+            conversationList.add(new ConversationDto(conv.getLastMessage(), participants, conv.getId()));
         }
         return conversationList;
     }
@@ -87,9 +89,9 @@ public class ConversationServiceImpl implements ConversationService{
     public List<ConversationDto> getAllConversations() {
         List<ConversationDto> conversationList = new ArrayList<>();
         for(Conversation conv: conversationRepository.findAll()){
-            List<String> participantNames = new ArrayList<>();
-            conv.getParticipants().forEach(participant->participantNames.add(participant.getIngameName()));
-            conversationList.add(new ConversationDto(conv.getLastMessage(), participantNames, conv.getId()));
+            Set<Participant> participants = new HashSet<>();
+            conv.getParticipants().forEach(participant->participants.add(new Participant(participant.getIngameName(), participant.getAvatar())));
+            conversationList.add(new ConversationDto(conv.getLastMessage(), participants, conv.getId()));
         }
         return conversationList;
     }

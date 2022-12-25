@@ -89,10 +89,12 @@ const Settings = () => {
                 </div>  
                 <PasswordValidation setIsPasswordValid={setIsPasswordValid}/>
                 <PositionSelect setServer={setServer}/>
-                <AvatarUpload setAvatar={setAvatar}/>
-                <div className="buttons">
-                    <input type="submit" name="submit" value="Save"></input>
-                    <button onClick={handleDelete} className="delete">Delete account</button>
+                <AvatarUpload avatar={avatar} setAvatar={setAvatar}/>
+                <div className="setting">
+                    <div className="buttons">
+                        <input type="submit" name="submit" value="Save"></input>
+                        <button onClick={handleDelete} className="delete">Delete account</button>
+                    </div>
                 </div>
           
             </form>
