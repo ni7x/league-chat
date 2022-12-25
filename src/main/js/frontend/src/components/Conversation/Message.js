@@ -1,8 +1,6 @@
 import ReactTimeAgo from 'react-time-ago';
 
 const Message = (props) => {
-
-
     return (
         <li className="message">
             <div className="content">
@@ -12,7 +10,7 @@ const Message = (props) => {
                 <b><u>
                     {props.message.author.ingameName !== null ? props.message.author.ingameName : "[Deleted User]" }
                 </u></b>
-                <ReactTimeAgo className="date" onMouseEnter={null} date={props.message.createdAt} locale="en-US"/>
+                <ReactTimeAgo className="date" onMouseEnter={null} date={Date.parse(props.message.createdAt)} locale="en-US"/>
                 {props.message.isDeleted 
                     ? <p>Deleted message</p>
                     : <p>{props.message.content}</p>
@@ -20,7 +18,6 @@ const Message = (props) => {
                
             </div>
         </li>
-       
     )
 }
 export default Message ;

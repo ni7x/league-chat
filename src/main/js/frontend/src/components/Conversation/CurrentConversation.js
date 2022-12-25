@@ -30,11 +30,15 @@ const CurrentConversation = (props) => {
         client.current = Stomp.over(sock); 
         client.current.reconnect_delay = 5000;
         client.current.connect({}, frame => {
-            client.current.subscribe("/message/private/" + props.id, payload => {
-                setMessages(messages=>[...messages, JSON.parse(payload.body)]);
-            });
-            setConnected(true);
+          subscribe();
         })
+    }
+
+    let subscribe = () => {
+        client.current.subscribe("/message/private/" + props.id, payload => {
+            setMessages(messages=>[...messages, JSON.parse(payload.body)]);
+        });
+        setConnected(true);
     }
 
     useEffect(()=>{
