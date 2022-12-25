@@ -58,14 +58,15 @@
 }
 
 .authenticated .navbar img{
-    width: 70%;
-    margin: 0 15%;
+    margin-left: calc((100% - 5rem)/2);
     border-radius: 0.75rem;
 }
 
 .authenticated .user-avatar{
-    height: 5rem;
     width: 5rem;
+    height: 5rem;
+
+    border-radius: 0.75rem;
     size: cover;
 }
 
@@ -156,7 +157,6 @@
 }
 
 .friend-requests-wrapper .friend-requests .friend-request img {
-    height: 5rem;
     margin-right: 5%;
  }
 

@@ -51,8 +51,11 @@ const CurrentConversation = (props) => {
         };
         
         if(connected){
-            client.current.send('/app/conversation/'+ props.id, {}, JSON.stringify(data));
-            setNewMessage("");
+            if(newMessage.length <= 2000){
+                client.current.send('/app/conversation/'+ props.id, {}, JSON.stringify(data));
+                setNewMessage("");
+            }
+           
         }   
     }
 
@@ -72,6 +75,7 @@ const CurrentConversation = (props) => {
             </div>
             <form onSubmit={sendMessage} className="new-message">
                 <input type="text" name="messageContent" onChange={(e)=>setNewMessage(e.target.value)} value={newMessage}></input>
+                <div className={newMessage.length > 2000 ? "error": ""}>{newMessage.length}/2000</div>
                 <input type="submit" disabled={connected ? false: true}></input>
             </form>
         

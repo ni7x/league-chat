@@ -56,11 +56,9 @@
 }
 
 .authenticated .sidebar img{
-    width: 70%;
-    margin-left: 15%;
+    margin-left: calc((100% - 5rem)/2);
     margin-right: 5%;
     float: left;
-    border-radius: 0.75rem;
 }
 
 .authenticated .sidebar ul li a{

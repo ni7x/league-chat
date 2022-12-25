@@ -3,6 +3,7 @@ package de.osiem.leaguechat.conversations.model;
 import java.util.Date;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,10 +31,12 @@ public class Message {
     @ManyToOne
     @JsonIgnoreProperties({"conversations", "friends", "friendRequestsTo", "friendRequestsFrom"})
     private User author;
-
+    
+    @Column(length = 2000)
     private String content;
     private Date createdAt = new Date();
 
+    private boolean isDeleted = false;
 
     @Override
     public boolean equals(Object o) {

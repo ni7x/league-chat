@@ -68,6 +68,8 @@ public class User implements UserDetails{
     @ManyToMany()
     private Set<Conversation> conversations;
 
+    private boolean isEnabled = true;
+
     public void deleteFriends(){
         friends.forEach(friend -> friend.getFriends().remove(this));
         setFriends(null);

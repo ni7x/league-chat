@@ -200,6 +200,8 @@ public class UserServiceImpl implements UserService{
         user.setIngameName(null);
         user.setUsername(null);
         user.setEmail(null);
+        user.setEnabled(false);
+        // do more with it
    
        
     }

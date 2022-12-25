@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useUserDetails } from "../../services/UserService";
 
+const specialCharacters = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+
 const PasswordValidation = (props) => {
     const [ userDetails,  ] = useUserDetails();   
     const [ isPasswordLengthValid, setIsPasswordLengthValid ] =  useState(() => userDetails !== null ? true : false);
@@ -16,8 +18,7 @@ const PasswordValidation = (props) => {
             props.setIsPasswordValid(true);
         }else{
             props.setIsPasswordValid(false);
-        }
-        
+        }   
     })
 
     const detectCapsLock = (e) => {
@@ -35,38 +36,41 @@ const PasswordValidation = (props) => {
 
     let passwordValidation = (e) => {
         detectCapsLock(e);
-        if(userDetails !== null &&  e.target.value === ""){
+        console.log(e.target.value)
+        if(userDetails !== null && e.target.value === ""){
             setIsPasswordLengthValid(true);
             setContainsDigit(true);
             setContainsUpperCase(true);
             setContainsLowercase(true);
             setContainsSpecialCharacter(true);
         }else{
-            if(e.target.value.length >= 8 && e.target.value.length <= 20){
+            let password = e.target.value;
+            
+            if(password.length >= 8 && password.length <= 20){
                 setIsPasswordLengthValid(true);
             }else{
                 setIsPasswordLengthValid(false);
             }
     
-            if(e.target.value !== e.target.value.toUpperCase() && e.target.value.length > 0){
+            if(password !== password.toUpperCase() && password.length > 0){
                 setContainsLowercase(true)
             }else{
                 setContainsLowercase(false);
             }
     
-            if(e.target.value !== e.target.value.toLowerCase() && e.target.value.length > 0){
+            if(password !== password.toLowerCase() && password.length > 0){
                 setContainsUpperCase(true)
             }else{
                 setContainsUpperCase(false);
             }
     
-            if(/\d/.test(e.target.value)){
+            if(/\d/.test(password)){
                 setContainsDigit(true);
             }else{
                 setContainsDigit(false);
             }
     
-            if(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(e.target.value) && e.target.value.length > 0){
+            if(specialCharacters.test(password)){
                 setContainsSpecialCharacter(true);
             }else{
                 setContainsSpecialCharacter(false);
@@ -83,7 +87,7 @@ const PasswordValidation = (props) => {
                 <span className="caps-warrning" style={isCapsOn? {"display" : "block"} : {"display" : "none"}}>Caps Lock is on!</span>
             </label>
             <div className="password-box">
-                <input type={isPasswordShown ? "text":"password"} name="password" onKeyDown={passwordValidation}></input>
+                <input type={isPasswordShown ? "text":"password"} name="password" onKeyUp={passwordValidation}></input>
                 <button onClick={passwordToggle}><i className={isPasswordShown ? "fa-solid fa-eye":"fa-sharp fa-solid fa-eye-slash"}></i></button>
             </div>
             <div className="tips">

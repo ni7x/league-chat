@@ -92,7 +92,8 @@ b{
 
 .conversations .list img{
     margin-left: 1vw;
-    height: 100%;
+    width: 5rem;
+    height: 5rem;
     border-radius: 0.75rem;
     float: left;
 }
@@ -128,7 +129,7 @@ b{
 
 .conversations .current-conversation .messages ul li{
     width: 80%;
-    padding: 0rem 0;
+    padding: 0.5rem 0;
 }
 
 .conversations .current-conversation .new-message{
@@ -164,7 +165,28 @@ b{
 .conversations .current-conversation .message .content{
     width: 100%;
     float: left;
+    height: 100%;
 }
+
+.conversations .current-conversation .message .content .left-side{
+    margin-right: 1.5rem;
+    float: left;
+    height: 100%;
+}
+
+.new-message .error{
+    color: var(--red);
+   
+ }
+
+ .new-message div{
+    background-color: var(--gray);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: var(--very-light-gray);
+ }
+
 
 .conversations .current-conversation .message .content p{
     margin-top: 0rem;
