@@ -16,8 +16,13 @@ const CurrentConversation = (props) => {
     const client = useRef(null);
     let bottomRef = useRef();
 
-    useEffect(()=>{
+    let fetchMessages = () => {
         getConversation(props.id, userToken).then(response=>response.json()).then(json=>setMessages(json.messages));
+    }
+
+    useEffect(()=>{
+        fetchMessages();
+        connect();
     }, [])
 
     useEffect(()=>{
@@ -35,14 +40,25 @@ const CurrentConversation = (props) => {
 
     let subscribe = () => {
         client.current.subscribe("/message/private/" + props.id, payload => {
-            setMessages(messages=>[...messages, JSON.parse(payload.body)]);
+            let json = JSON.parse(payload.body);
+           
+            if(json.type === "create"){
+                setMessages(messages=>[...messages, json.value]);
+            }else if(json.type === "delete"){
+                setMessages(messages =>
+                    messages.map(obj => {
+                      if (obj.id === json.value) {
+                        return {...obj, deleted: true};
+                      }
+              
+                      return obj;
+                    }),
+                  );
+            }
         });
         setConnected(true);
     }
 
-    useEffect(()=>{
-        connect();
-    }, [])
 
     let sendMessage = (e) => {
         e.preventDefault();
@@ -66,12 +82,16 @@ const CurrentConversation = (props) => {
         bottomRef?.current?.scrollIntoView({ behavior: 'auto' })
     }
 
+    let deleteMessage = (messageId) => {
+        client.current.send('/app/conversation/'+ props.id + '/delete', {},  JSON.stringify(messageId));
+    }
+
     return (
        <>   
             <div className="messages">
                 <ul>
                     {messages.map(message=>{
-                            return <Message key={message.id} message={message} />
+                            return <Message key={message.id} message={message} deleteMessage={deleteMessage}/>
                     })}
                     <div ref={bottomRef}></div>
                 </ul>

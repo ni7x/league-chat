@@ -11,10 +11,13 @@ const Message = (props) => {
                     {props.message.author.ingameName !== null ? props.message.author.ingameName : "[Deleted User]" }
                 </u></b>
                 <ReactTimeAgo className="date" onMouseEnter={null} date={Date.parse(props.message.createdAt)} locale="en-US"/>
-                {props.message.isDeleted 
+                <button onClick={e => props.deleteMessage(props.message.id)}>Delete</button>
+                {props.message.deleted 
                     ? <p>Deleted message</p>
                     : <p>{props.message.content}</p>
                 }
+
+                
                
             </div>
         </li>

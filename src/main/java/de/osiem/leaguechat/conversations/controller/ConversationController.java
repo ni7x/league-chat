@@ -15,6 +15,7 @@ import de.osiem.leaguechat.conversations.model.ConversationDto;
 import de.osiem.leaguechat.conversations.model.MessageDto;
 import de.osiem.leaguechat.conversations.service.ConversationService;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @RestController
 @AllArgsConstructor
@@ -27,8 +28,15 @@ public class ConversationController {
     @MessageMapping("/conversation/{conversationId}") // handles messages in app/conversatioon
    // @SendTo("/message/private") // sends to 
     public void send(MessageDto message, @DestinationVariable Long conversationId) throws Exception {
-        template.convertAndSend("/message/private/" + message.getConversationId(), service.createMessage(message));
+        template.convertAndSend("/message/private/" + message.getConversationId(), new ResponseAction("create",  service.createMessage(message)));
     }
+
+    @MessageMapping("/conversation/{conversationId}/delete") // handles messages in app/conversatioon
+    // @SendTo("/message/private") // sends to 
+     public void delete(Long messageId, @DestinationVariable Long conversationId) throws Exception {
+         service.deleteMessage(messageId);
+         template.convertAndSend("/message/private/" + conversationId,new ResponseAction("delete",  messageId));
+     }
 
     @GetMapping("api/conversation/")
     public List<ConversationDto> getAllConversations(Authentication authentication){
@@ -48,3 +56,9 @@ public class ConversationController {
     
 }
 
+@Data
+@AllArgsConstructor
+class ResponseAction {
+    private String type;
+    private Object value;
+}
