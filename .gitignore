@@ -5,7 +5,7 @@ node_modules/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-**/uploads/avatars/
+*/uploads/avatars/*
 
 ### STS ###
 .apt_generated
