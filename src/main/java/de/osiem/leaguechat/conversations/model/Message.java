@@ -1,8 +1,6 @@
 package de.osiem.leaguechat.conversations.model;
 
-import java.sql.Time;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;

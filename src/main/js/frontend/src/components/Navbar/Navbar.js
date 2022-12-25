@@ -9,7 +9,7 @@ const Navbar = () => {
         return (
             <nav className="navbar">
                 <ul>
-                    <li><a href="/"><img src={"http://localhost:8080/uploads/avatars/" + userDetails.avatar} alt="Profile image"></img></a></li>
+                    <li><a href="/"><img src={"http://localhost:8080/uploads/avatars/" + userDetails.avatar}  className="user-avatar" alt="Profile image"></img></a></li>
                 </ul>
                 <ul>
                     <li className="link"><NavLink to={"/"}> <i className="fa-solid fa-house"></i></NavLink></li>

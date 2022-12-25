@@ -16,7 +16,7 @@ const SentRequest = (props) => {
     
     return(
         <div className="friend-request">  
-            <img src={process.env.PUBLIC_URL + "/profile-image.jpg"} alt="Profile image"></img>
+            <img src={"http://localhost:8080/uploads/avatars/" + props.to.avatar} className="user-avatar" alt="Profile image"></img>
             <div className="text">
                 <p>
                     <a href={"/user/" + props.to.server + "/" + props.to.ingameName}>{props.to.ingameName}</a>

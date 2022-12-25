@@ -12,4 +12,5 @@ public class UserDto{
     private String server;
     private String email;
     private Set<Position> positions;
+    private String avatar;
 }

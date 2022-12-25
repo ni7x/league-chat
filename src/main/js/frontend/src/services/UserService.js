@@ -46,23 +46,28 @@ export const  isUserValid = (username, ingameName, password) =>{
     return true;
 }
 
-export const updateUser = async (id, username, email, ingamename, password, positions, server, token) => {
-    let data = {
+export const updateUser = async (id, username, email, ingamename, password, positions, server, oldAvatar,  newAvatar, token) => {
+    let formData = new FormData();
+    let userData = {
         "id" : id,
         "username" : username,
         "email": email,
         "ingameName" : ingamename,
         "password" :  password,
         "positions" :  positions,
-        "server": server
+        "server": server,
+        "avatar" :  newAvatar.name
     };
+    formData.append("userString", JSON.stringify(userData));
+    formData.append("avatar", newAvatar);
+    formData.append("oldAvatar", oldAvatar);
     const response = await fetch(URL_PREFIX + "/api/user/", {
         method: "PUT",
-        body: JSON.stringify(data),
+        body: formData,
         headers: {
             "Authorization" : "Bearer " + token,
-            "Content-Type": "application/json"
     }});
+    console.log(response);
     if(response.ok){
         return response;
     }else{

@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import de.osiem.leaguechat.conversations.model.Conversation;
 import de.osiem.leaguechat.conversations.service.ConversationService;
 import de.osiem.leaguechat.user.model.friendRequest.FriendRequest;
 import de.osiem.leaguechat.user.model.resetPasswordToken.ResetPasswordToken;
@@ -97,6 +96,27 @@ public class UserServiceImpl implements UserService{
         return user;
     }
 
+    private String generateFilename(String fileName, Long id){
+        String millis = String.valueOf(System.currentTimeMillis());
+        if(millis.length() > 15){
+            millis = millis.substring(0, 15);
+        }
+        String [] splitted = fileName.split("\\.");
+        if(splitted.length >= 2){
+            String name = splitted[0];
+            String ext = splitted[1];
+            String fullName =  millis + "U" + id + name + (String.valueOf(Math.random())).substring(4, 8);
+            if(fullName.length() > (60 - ext.length())){
+                return fullName.substring(0, (60 - ext.length())) + "." + ext;
+            }else{
+                return fullName + "." + ext;
+            }
+        }else{
+            return millis + "U" + fileName;
+        }
+      
+    }
+
     @Override
     public User updateUser(UserDto updatedUser) throws ResponseStatusException{
         System.out.println("xd  ");
@@ -151,6 +171,8 @@ public class UserServiceImpl implements UserService{
                 user.setPositions(newPositions);
             }
 
+            user.setAvatar(generateFilename(updatedUser.getAvatar(), updatedUser.getId()));
+
             userRepository.save(user);
             return user;
             
@@ -171,6 +193,7 @@ public class UserServiceImpl implements UserService{
         for (FriendRequest friendRequest : user.getFriendRequestsTo()) {
             frRepository.delete(friendRequest);
         }
+        
         user.setFriendRequestsTo(null);
        
         user.deleteFriends();

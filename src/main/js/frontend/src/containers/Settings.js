@@ -9,6 +9,7 @@ import { logout } from "../services/AuthService";
 import { deleteUser, updateUser, useUserToken } from "../services/UserService";
 import { useUserDetails } from "../services/UserService";
 import "../styles/settings.css";
+import AvatarUpload from "../components/Form/AvatarUpload";
 
 
 const Settings = () => {
@@ -21,6 +22,8 @@ const Settings = () => {
     const [ isEmailValid, setIsEmailValid] = useState(true);
 
     const [ server, setServer ] = useState("BR");
+    const [ avatar, setAvatar ] = useState("");
+    console.log(userToken);
     
     const formData = useRef();
 
@@ -44,12 +47,12 @@ const Settings = () => {
     const handleUpdate = async (e) => {
         e.preventDefault();
 
-        let {username, ingamename, email,  password, positions, server} = formData.current;
+        let {username, ingamename, email,  password, positions, server, avtr} = formData.current;
         let positionsArray = Array.from(positions.options).filter(option=>option.selected).map(option=>option.value);
        
         if(isUserValid()){
             try{
-                const data = await updateUser(userDetails.id, username.value, email.value, ingamename.value, password.value, positionsArray, server.value, userToken);
+                const data = await updateUser(userDetails.id, username.value, email.value, ingamename.value, password.value, positionsArray, server.value, userDetails.avatar, avatar, userToken);
                 let updatedUser = await data.json();
                 if(updatedUser.username !== userDetails.username){
                     logout();
@@ -57,12 +60,11 @@ const Settings = () => {
                 }
                 setUserDetails(updatedUser);
             }catch(err){
-                alert("Unknown error");
+                console.log(err);
+                alert(err);
             }
         }
         }
-
-    
 
     const handleDelete = async () => {
         const data = await deleteUser(userDetails.username, userToken);
@@ -77,7 +79,7 @@ const Settings = () => {
 
     return(
         <div className="settings-wrapper">
-            <form ref={formData} onSubmit={handleUpdate} className="settings">
+            <form ref={formData} onSubmit={handleUpdate} className="settings" encType='multipart/form-data'>
                 <UsernameValidation setIsUsernameValid={setIsUsernameValid} currentValue={userDetails.username}/>
                 <EmailValidation setIsEmailValid={setIsEmailValid} currentValue={userDetails.email}/>
                 <IngameNameValidation setIsIngameNameValid={setIsIngameNameValid} server={server} currentValue={userDetails.ingameName}/>
@@ -87,6 +89,7 @@ const Settings = () => {
                 </div>  
                 <PasswordValidation setIsPasswordValid={setIsPasswordValid}/>
                 <PositionSelect setServer={setServer}/>
+                <AvatarUpload setAvatar={setAvatar}/>
                 <div className="buttons">
                     <input type="submit" name="submit" value="Save"></input>
                     <button onClick={handleDelete} className="delete">Delete account</button>

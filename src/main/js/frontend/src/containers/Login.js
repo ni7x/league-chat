@@ -94,7 +94,7 @@ const Login = () => {
                 </label>
                 <div className="password-box">
                     <input type={isPasswordShown ? "text":"password"} name="password" onKeyUp={detectCapsLock}></input>
-                    <button onClick={passwordToggle}><i className={isPasswordShown? "fa-solid fa-eye":"fa-sharp fa-solid fa-eye-slash"}></i></button>
+                    <button tabIndex={-1}  onClick={passwordToggle}><i className={isPasswordShown? "fa-solid fa-eye":"fa-sharp fa-solid fa-eye-slash"}></i></button>
                 </div>
                 <button onClick={passwordRecoveryToggle} className="forgot-password-button">Forgot password?</button>
 

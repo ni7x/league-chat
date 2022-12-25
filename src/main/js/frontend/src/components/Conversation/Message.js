@@ -6,6 +6,7 @@ const Message = (props) => {
     return (
         <li className="message">
             <div className="content">
+                <img src={"http://localhost:8080/uploads/avatars/" +  props.message.author.avatar} className="user-avatar" alt="Profile image"></img>
                 <b><u>
                     {props.message.author.ingameName !== null ? props.message.author.ingameName : "[Deleted User]" }
                 </u></b>

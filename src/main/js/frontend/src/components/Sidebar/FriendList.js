@@ -7,7 +7,7 @@ const FriendList = () => {
     return(
         <ul> 
             {userDetails.friends.map(friend => {
-                return <Friend key={friend.id} id={friend.id} ingameName={friend.ingameName} username={friend.username} server={friend.server}/>
+                return <Friend key={friend.id} id={friend.id} ingameName={friend.ingameName} username={friend.username} server={friend.server} avatar={friend.avatar}/>
             })}
         </ul>
     )  

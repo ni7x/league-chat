@@ -18,13 +18,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.osiem.leaguechat.user.model.resetPasswordToken.ResetPasswordToken;
 import de.osiem.leaguechat.user.model.user.User;
 import de.osiem.leaguechat.user.model.user.UserDto;
+import de.osiem.leaguechat.user.service.FileStorageService;
 import de.osiem.leaguechat.user.service.MailService;
 import de.osiem.leaguechat.user.service.UserService;
 import lombok.Data;
@@ -37,6 +43,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
     private final UserService userService;
     private final MailService mailService;
+    private final FileStorageService storageService;
 
     @GetMapping("/user/current")
 	public ResponseEntity<User> getCurrentUser(Authentication authentication) throws ResponseStatusException{
@@ -51,13 +58,29 @@ public class UserController {
             return ResponseEntity.created(uri).body(newUser);
     }
 
+    
+
     @PutMapping("/user/")
-    public ResponseEntity<User> updateUser(Authentication authentication, @Valid @RequestBody UserDto user) throws ResponseStatusException{
-        if(authentication.getName().equals(userService.getUserById(user.getId()).getUsername())){
-            User updated = userService.updateUser(user);
-            return ResponseEntity.ok().body(updated);
+    public ResponseEntity<User> updateUser(Authentication authentication, @RequestPart String userString, @RequestPart MultipartFile avatar, @RequestPart String oldAvatar) throws ResponseStatusException{
+        try {
+            UserDto user = new ObjectMapper().readValue(userString, UserDto.class);
+            if(authentication.getName().equals(userService.getUserById(user.getId()).getUsername())){
+                User updated = userService.updateUser(user);   
+                try {  
+                    storageService.save(avatar, updated.getAvatar());
+                    if(!oldAvatar.equals("default-avatar.jpg")){
+                        storageService.delete(oldAvatar);
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                return ResponseEntity.ok().body(updated);
+            }
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
@@ -185,6 +208,12 @@ public class UserController {
 
     
 
+}
+
+@Data
+class UserDtoAndAvatar{
+    private UserDto userDto;
+    private MultipartFile avatar;
 }
 
 

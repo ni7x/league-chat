@@ -3,7 +3,6 @@ package de.osiem.leaguechat.user.model.user;
 import java.util.*;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Fetch;
