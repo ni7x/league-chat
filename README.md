@@ -2,5 +2,9 @@ todo:
   - auth: 
     - jwt token storage in cookies instead of storage
     - oauth
-  - messaging:
-    -everything
+    - refresh token
+    - websocket additional security
+ - messaging:
+    - paging
+    - more stuff
+   
