@@ -4,11 +4,13 @@ import { useUserDetails, useUserToken } from "../../services/UserService";
 import { useParams } from 'react-router-dom';
 import ConversationList from "./ConversationList";
 import CurrentConversation from "./CurrentConversation";
+import CreateConversation from "./CreateConversation";
 
 const ConversationWrapper = () => {
     let [ userToken,  ] = useUserToken();
     let [ conversations, setConversations ]  = useState([]);
     let { id } = useParams();
+    let [ isCreateConversationShown, setIsCreateConversationShown ] = useState(false);
 
     if(isNaN(id)){
         if(conversations.length > 0){
@@ -22,18 +24,23 @@ const ConversationWrapper = () => {
         getConversations(userToken).then(response => response.json()).then(conversations => setConversations(conversations));
     }, [])
 
-    if(!isNaN(id)){
-        return(
+   
+        return( 
             <div className="conversations">
-                <div className="list">
+                <CreateConversation isActive={isCreateConversationShown} setActive={setIsCreateConversationShown}/>
+                 <div className="list">
+                    <div className="top-panel">
+                         <button onClick={e => setIsCreateConversationShown(true)}><i class="fa-solid fa-square-plus"></i></button>
+                    </div>
+                    
                     <ConversationList conversations={conversations}/>
-                </div>
+                 </div>
                 <div className="current-conversation">
-                    <CurrentConversation id={id}/>
+                    {!isNaN(id) ?  <CurrentConversation id={id}/> : null }
                 </div>
-             </div>
+            </div>
         )
-    }
+    
    
 }
 

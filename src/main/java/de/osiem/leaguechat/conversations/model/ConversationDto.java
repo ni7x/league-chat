@@ -1,19 +1,15 @@
 package de.osiem.leaguechat.conversations.model;
 
-import java.util.List;
 import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class ConversationDto {
-    @JsonIgnoreProperties({"conversations"})
-    private Message lastMessage;
-    private Set<Participant> participants;
-    private Long id;
-
+@NoArgsConstructor
+public class  ConversationDto{
+    private Set<Long> ids;
 }
+

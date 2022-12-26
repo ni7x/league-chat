@@ -7,13 +7,21 @@ const Message = (props) => {
                 <div className="left-side">
                     <img src={"http://localhost:8080/uploads/avatars/" +  props.message.author.avatar} className="user-avatar" alt="Profile image"></img>
                 </div>
-                <b><u>
-                    {props.message.author.ingameName !== null ? props.message.author.ingameName : "[Deleted User]" }
-                </u></b>
+                <b>
+                    {props.message.author.ingameName !== null 
+                        ? <u>{props.message.author.ingameName}</u>
+                        : <span className="deleted-user">[Deleted User]</span> 
+                    }
+                </b>
                 <ReactTimeAgo className="date" onMouseEnter={null} date={Date.parse(props.message.createdAt)} locale="en-US"/>
-                <button onClick={e => props.deleteMessage(props.message.id)}>Delete</button>
+
+                {!props.message.deleted && props.userId === props.message.author.id
+                    ? <button onClick={e => props.deleteMessage(props.message.id)} className="delete-message"><i className="fa-solid fa-trash-can"></i> </button>
+                    : null
+                }
+
                 {props.message.deleted 
-                    ? <p>Deleted message</p>
+                    ? <p className="deleted-message">Deleted message</p>
                     : <p>{props.message.content}</p>
                 }
 

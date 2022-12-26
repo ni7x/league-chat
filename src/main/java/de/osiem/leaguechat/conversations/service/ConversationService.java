@@ -5,18 +5,20 @@ import java.util.Set;
 
 import de.osiem.leaguechat.conversations.model.Conversation;
 import de.osiem.leaguechat.conversations.model.ConversationDto;
+import de.osiem.leaguechat.conversations.model.ConversationPreview;
 import de.osiem.leaguechat.conversations.model.Message;
 import de.osiem.leaguechat.conversations.model.MessageDto;
 import de.osiem.leaguechat.user.model.user.User;
 
 public interface ConversationService {
     Conversation createConversation(Set<User> users);
+    Conversation createConversation(ConversationDto conversationDto);
     void deleteConversation(Conversation conversation);
     Conversation getConversation(Long conversationId);
 
     Message createMessage(MessageDto message);
     void deleteMessage(Long messageId);
     
-    List<ConversationDto> getAllConversations(String name);
-    List<ConversationDto> getAllConversations();
+    List<ConversationPreview> getAllConversations(String name);
+    List<ConversationPreview> getAllConversations();
 }

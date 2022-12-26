@@ -2,7 +2,6 @@ b{
     font-weight: 600;
 }
 .conversations{
-
     display: grid;
     grid-template-columns: 1fr; 
     gap: 0px 0px; 
@@ -15,14 +14,16 @@ b{
     grid-area: list;
     border-left: 1px solid var(--gray);
     display: none;
+    height: 100vh;
+    overflow: auto;
 }
 
 .conversations .list ul{
     list-style: none;
+ 
 }
 
 .conversations .list{
-    height: 100vh;
     background-color: var(--black);
     flex-direction: column;
     align-items: center;
@@ -33,6 +34,7 @@ b{
 .home .conversations .list{
     grid-area: list;
     display: flex;
+
 }
 
 .conversations .current-conversation{
@@ -44,11 +46,29 @@ b{
     display: none;
 }
 
+.conversations .list button{
+    color: var(--white);
+    font-size: 2.5rem;
+    float: right;
+    margin-right: 1rem;
+}
+
+.conversations .top-panel{
+    width: 100%;
+    display: flex;
+    height: 4rem;
+    min-height: 4rem;
+    align-items: center;
+    justify-content: flex-end;
+    background-color: var(--gray);
+}
+
 .conversations .list ul {
     list-style: none;
     width: 90%;
     display: flex;
     flex-direction: column;
+ 
     height: 100%;
     margin: 0 5%;
     padding: 0;
@@ -58,13 +78,12 @@ b{
 .conversations .list ul li{
     padding: 0.25vw 1vw;
     width: 90%;
-    height:10vw;
     max-width: 30rem;
     margin-top: 2rem;
     display: flex;
     flex-direction: row;
-    overflow-y: visible;
 }
+
 
 .conversations .list ul li div{
     height: 100%;
@@ -76,7 +95,7 @@ b{
 
 
 .conversations .list ul li div p{
-    min-height: 1rem;
+    margin: 0;
     white-space: nowrap;
 }
 
@@ -174,6 +193,23 @@ b{
     height: 100%;
 }
 
+.conversations .deleted-message{
+    color: var(--very-light-gray);
+    font-style: italic;
+}
+
+.deleted-user{
+    color: var(--very-light-gray);
+}
+
+.conversations .delete-message{
+    margin-left: 1rem;
+    color: var(--very-light-gray);
+}
+.conversations .delete-message:hover{
+    color: var(--red);
+}
+
 .new-message .error{
     color: var(--red);
    
@@ -192,9 +228,82 @@ b{
     margin-top: 0rem;
 }
 
-@media (min-width: 1250px) {
+.authenticated .create-conversation-wrapper{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.authenticated .create-conversation-modal{
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.authenticated .create-conversation-modal.active{
+    display: flex;
+}
+
+.authenticated .create-conversation-wrapper .create-conversation{
+    background-color: var(--black);
+    border-radius: 1rem; 
+    width: 30%;
+    height: 50%;
+    padding: 2rem;
+}
+
+.authenticated .create-conversation-wrapper .create-conversation form{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.authenticated .create-conversation-wrapper .create-conversation .buttons{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+
+}
+
+.authenticated .create-conversation-wrapper .create-conversation div p{
+    color: var(--very-light-gray);
+}
+
+.authenticated .create-conversation-wrapper .create-conversation input[type="submit"], .authenticated .create-conversation-wrapper .create-conversation button{
+    width: 45%;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 1rem;
+}
+
+.authenticated .create-conversation-wrapper .create-conversation input[type="submit"]{
+    background-color: var(--black);
+    color: var(--spring-green);
+    border: 2px solid var(--spring-green);
+}
+
+.authenticated .create-conversation-wrapper .create-conversation button{
+    background-color: var(--red);
+    margin-right: 1rem;
+    border: 2px solid var(--red);
+    font-weight: 600;
+}
+
+@media (min-width: 600px) {
     .conversations{
-        grid-template-columns: 0.3fr 1fr; 
+        grid-template-columns: 0.35fr 1fr; 
         grid-template-areas: 
             "list current-conversation"; 
     }
@@ -212,14 +321,35 @@ b{
     }
 
     .conversations .list ul li{
-        height: 5rem;
-        max-width: 80%;
+        height: 5rem!important;
+        max-width: 90%;
+    }
+    .conversations .list ul li div{
         overflow: hidden;
     }
 
     .conversations .list img{
         margin-left: 5%;
         max-width: 5rem;
+    }
+
+    .hidden-on-tablet{
+        display: none!important;
+    }
+
+    .conversations .list ul li{
+        justify-content: center;
+    }
+    
+}
+
+@media (min-width: 1250px) {
+    .hidden-on-tablet{
+        display: block!important;
+    }
+
+    .conversations .list ul li{
+        justify-content: flex-start;
     }
  
 }

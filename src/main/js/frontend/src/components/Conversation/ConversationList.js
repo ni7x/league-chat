@@ -1,4 +1,4 @@
-import Conversation from "./Conversation.js";
+import ConversationPreview from "./ConversationPreview.js";
 import { useUserDetails, useUserToken } from "../../services/UserService.js";
 
 const ConversationList = (props) => {
@@ -6,7 +6,7 @@ const ConversationList = (props) => {
     return(
             <ul>
                 {props.conversations.map(conversation=>{
-                    return <Conversation key={conversation.id} conversation={conversation} ingameName={userDetails.ingameName}/>
+                    return <ConversationPreview key={conversation.id} conversation={conversation} ingameName={userDetails.ingameName}/>
                 })}
             </ul>
         

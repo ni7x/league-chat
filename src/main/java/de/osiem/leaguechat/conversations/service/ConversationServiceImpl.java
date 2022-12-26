@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import de.osiem.leaguechat.conversations.model.Conversation;
 import de.osiem.leaguechat.conversations.model.ConversationDto;
+import de.osiem.leaguechat.conversations.model.ConversationPreview;
 import de.osiem.leaguechat.conversations.model.Message;
 import de.osiem.leaguechat.conversations.model.MessageDto;
 import de.osiem.leaguechat.conversations.model.Participant;
@@ -33,23 +34,38 @@ public class ConversationServiceImpl implements ConversationService{
     public Conversation getConversation(Long conversationId) {
         return conversationRepository.findById(conversationId).get();
     }
+
+    @Override
+    public  Conversation createConversation(ConversationDto conversationDto){
+        Set<User> users = new HashSet<>();
+        conversationDto.getIds().forEach(id->users.add(userRepository.findById(id).get()));
+        return createConversation(users);
+    }
     
     @Override
     public Conversation createConversation(Set<User> users) {
+        
         Conversation conversation = new Conversation();
+        System.out.println(conversation.getId());
         conversation.setParticipants(users);
-        conversationRepository.save(conversation);
+        conversation = conversationRepository.save(conversation);
+        System.out.println(conversation.getId());
+        System.out.println("NIGGER");
         for(User user: users){
             user.getConversations().add(conversation);
         }
-        
-        return conversation;
+
+        return  conversation;
     }
 
     @Override
     public void deleteMessage(Long messageId){
-        Message message = messageRepository.getReferenceById(messageId);
-        message.setDeleted(true);
+        Message message = messageRepository.findById(messageId).get();
+        if(!message.isDeleted()){
+            message.setDeleted(true);
+            message.setContent(null);
+        }
+        
     }
 
     @Override
@@ -75,24 +91,24 @@ public class ConversationServiceImpl implements ConversationService{
     }
 
     @Override
-    public List<ConversationDto> getAllConversations(String name) {
-        List<ConversationDto> conversationList = new ArrayList<>();
+    public List<ConversationPreview> getAllConversations(String name) {
+        List<ConversationPreview> conversationList = new ArrayList<>();
         User user = userRepository.findByUsername(name);
         for(Conversation conv: user.getConversations()){
             Set<Participant> participants = new HashSet<>();
             conv.getParticipants().forEach(participant->participants.add(new Participant(participant.getIngameName(), participant.getAvatar())));
-            conversationList.add(new ConversationDto(conv.getLastMessage(), participants, conv.getId()));
+            conversationList.add(new ConversationPreview(conv.getLastMessage(), participants, conv.getId()));
         }
         return conversationList;
     }
 
     
-    public List<ConversationDto> getAllConversations() {
-        List<ConversationDto> conversationList = new ArrayList<>();
+    public List<ConversationPreview> getAllConversations() {
+        List<ConversationPreview> conversationList = new ArrayList<>();
         for(Conversation conv: conversationRepository.findAll()){
             Set<Participant> participants = new HashSet<>();
             conv.getParticipants().forEach(participant->participants.add(new Participant(participant.getIngameName(), participant.getAvatar())));
-            conversationList.add(new ConversationDto(conv.getLastMessage(), participants, conv.getId()));
+            conversationList.add(new ConversationPreview(conv.getLastMessage(), participants, conv.getId()));
         }
         return conversationList;
     }

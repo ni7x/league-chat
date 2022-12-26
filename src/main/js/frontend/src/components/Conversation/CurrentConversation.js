@@ -1,28 +1,39 @@
 import { useEffect, useRef, useState } from "react";
-import { createMessage } from "../../services/MessageService";
 import {getConversation,  } from "../../services/MessageService";
 import { useUserDetails, useUserToken } from "../../services/UserService";
 import Message from "./Message";
-import SockJS from 'sockjs-client';
 import * as Stomp from 'stompjs';
 
 const CurrentConversation = (props) => {
     let [ userToken,  ] = useUserToken();
     let [ userDetails,  ] = useUserDetails(); 
     let [ messages, setMessages ] = useState([]);
+    let [ participants, setParticipants ] = useState([]);
     let [ connected, setConnected ] = useState(false);
     let [ newMessage, setNewMessage ] = useState("");
 
     const client = useRef(null);
     let bottomRef = useRef();
 
+    let isAllowed = userDetails.conversations.filter(conversation => conversation.id === parseInt(props.id)).length > 0;
+   
     let fetchMessages = () => {
-        getConversation(props.id, userToken).then(response=>response.json()).then(json=>setMessages(json.messages));
+        getConversation(props.id, userToken).then(response=>response.json())
+            .then(json=>{
+                setMessages(json.messages);         
+        });
     }
 
     useEffect(()=>{
-        fetchMessages();
-        connect();
+        if(isAllowed){
+            fetchMessages();
+        }
+    }, [])
+
+    useEffect(()=>{
+        if(isAllowed){
+            connect();
+        }
     }, [])
 
     useEffect(()=>{
@@ -41,16 +52,15 @@ const CurrentConversation = (props) => {
         client.current.subscribe("/message/private/" + props.id, payload => {
             let json = JSON.parse(payload.body);
            
-            if(json.type === "create"){
+            if(json.type === "CREATE"){
                 setMessages(messages=>[...messages, json.value]);
-            }else if(json.type === "delete"){
+            }else if(json.type === "DELETE"){
                 setMessages(messages =>
-                    messages.map(obj => {
-                      if (obj.id === json.value) {
-                        return {...obj, deleted: true};
+                    messages.map(message => {
+                      if (message.id === json.value) {
+                        return {...message, deleted: true};
                       }
-              
-                      return obj;
+                      return message;
                     }),
                   );
             }
@@ -85,12 +95,16 @@ const CurrentConversation = (props) => {
         client.current.send('/app/conversation/'+ props.id + '/delete', {},  JSON.stringify(messageId));
     }
 
+    if(!isAllowed){
+        return <>You can't see this conversation</>
+    }
+
     return (
        <>   
             <div className="messages">
                 <ul>
                     {messages.map(message=>{
-                            return <Message key={message.id} message={message} deleteMessage={deleteMessage}/>
+                            return <Message key={message.id} message={message} deleteMessage={deleteMessage} userId={userDetails.id}/>
                     })}
                     <div ref={bottomRef}></div>
                 </ul>
