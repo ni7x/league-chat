@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Participant{
-    private String name;
+    private String ingameName;
+    private Long id;
     private String avatar;
 }

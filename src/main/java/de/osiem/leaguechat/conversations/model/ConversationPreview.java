@@ -15,5 +15,6 @@ public class ConversationPreview {
     private Message lastMessage;
     private Set<Participant> participants;
     private Long id;
+    private String name;
 
 }

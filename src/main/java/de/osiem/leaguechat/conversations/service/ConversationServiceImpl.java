@@ -39,24 +39,34 @@ public class ConversationServiceImpl implements ConversationService{
     public  Conversation createConversation(ConversationDto conversationDto){
         Set<User> users = new HashSet<>();
         conversationDto.getIds().forEach(id->users.add(userRepository.findById(id).get()));
-        return createConversation(users);
+        if(users.size() > 1){
+            Conversation conversation = new Conversation();
+            conversation.setParticipants(users);
+            conversation.setName(conversationDto.getName());
+            conversation = conversationRepository.save(conversation);
+            for(User user: users){
+                user.getConversations().add(conversation);
+            }
+            return  conversation;
+        }
+       return null;
     }
     
     @Override
     public Conversation createConversation(Set<User> users) {
-        
-        Conversation conversation = new Conversation();
-        System.out.println(conversation.getId());
-        conversation.setParticipants(users);
-        conversation = conversationRepository.save(conversation);
-        System.out.println(conversation.getId());
-        System.out.println("NIGGER");
-        for(User user: users){
-            user.getConversations().add(conversation);
+        if(users.size() > 1){
+            Conversation conversation = new Conversation();
+            conversation.setParticipants(users);
+            conversation = conversationRepository.save(conversation);
+            for(User user: users){
+                user.getConversations().add(conversation);
+            }
+            return  conversation;
         }
-
-        return  conversation;
+       return null;
     }
+
+    
 
     @Override
     public void deleteMessage(Long messageId){
@@ -96,8 +106,8 @@ public class ConversationServiceImpl implements ConversationService{
         User user = userRepository.findByUsername(name);
         for(Conversation conv: user.getConversations()){
             Set<Participant> participants = new HashSet<>();
-            conv.getParticipants().forEach(participant->participants.add(new Participant(participant.getIngameName(), participant.getAvatar())));
-            conversationList.add(new ConversationPreview(conv.getLastMessage(), participants, conv.getId()));
+            conv.getParticipants().forEach(participant->participants.add(new Participant(participant.getIngameName(),participant.getId(), participant.getAvatar())));
+            conversationList.add(new ConversationPreview(conv.getLastMessage(), participants, conv.getId(), conv.getName()));
         }
         return conversationList;
     }
@@ -107,8 +117,8 @@ public class ConversationServiceImpl implements ConversationService{
         List<ConversationPreview> conversationList = new ArrayList<>();
         for(Conversation conv: conversationRepository.findAll()){
             Set<Participant> participants = new HashSet<>();
-            conv.getParticipants().forEach(participant->participants.add(new Participant(participant.getIngameName(), participant.getAvatar())));
-            conversationList.add(new ConversationPreview(conv.getLastMessage(), participants, conv.getId()));
+            conv.getParticipants().forEach(participant->participants.add(new Participant(participant.getIngameName(), participant.getId(), participant.getAvatar())));
+            conversationList.add(new ConversationPreview(conv.getLastMessage(), participants, conv.getId(), conv.getName()));
         }
         return conversationList;
     }

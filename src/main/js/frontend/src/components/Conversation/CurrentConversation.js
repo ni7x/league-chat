@@ -3,12 +3,14 @@ import {getConversation,  } from "../../services/MessageService";
 import { useUserDetails, useUserToken } from "../../services/UserService";
 import Message from "./Message";
 import * as Stomp from 'stompjs';
+import ConversationName from "./ConversationName";
 
 const CurrentConversation = (props) => {
     let [ userToken,  ] = useUserToken();
     let [ userDetails,  ] = useUserDetails(); 
     let [ messages, setMessages ] = useState([]);
-    let [ participants, setParticipants ] = useState([]);
+    let [ conversation, setConversation ] = useState();
+    let [ conversationImage, setConversationImage ] = useState("");
     let [ connected, setConnected ] = useState(false);
     let [ newMessage, setNewMessage ] = useState("");
 
@@ -20,7 +22,8 @@ const CurrentConversation = (props) => {
     let fetchMessages = () => {
         getConversation(props.id, userToken).then(response=>response.json())
             .then(json=>{
-                setMessages(json.messages);         
+                setMessages(json.messages); 
+                setConversation(json);       
         });
     }
 
@@ -98,9 +101,12 @@ const CurrentConversation = (props) => {
     if(!isAllowed){
         return <>You can't see this conversation</>
     }
-
     return (
        <>   
+            <div className="conversation-top-panel">
+                <img src={"http://localhost:8080/uploads/avatars/" + conversationImage}/>
+                {conversation && <ConversationName conversation={conversation} setConversationImage={setConversationImage} userId={userDetails.id}/> }
+            </div>
             <div className="messages">
                 <ul>
                     {messages.map(message=>{

@@ -6,6 +6,7 @@ const CreateConversation = (props) => {
     const [ userDetails, ] = useUserDetails();
     const [ userToken, ] = useUserToken();
     const [ selected, setSelected ] = useState(new Map());
+    const [ name, setName ] = useState("");
 
     let handleSubmit = (e) => { 
         e.preventDefault();
@@ -16,7 +17,8 @@ const CreateConversation = (props) => {
                 ids.push(k);
             }
         })
-        createConversation(ids, userToken);
+        createConversation(name, ids, userToken);
+        props.setActive(false);
     }
 
     let toggleSelect = (id) => {
@@ -28,20 +30,25 @@ const CreateConversation = (props) => {
         }
     }
 
-
     return(
         <div className={"create-conversation-modal " + (props.isActive ? "active": "")}>
             <div className="create-conversation-wrapper"> 
                 <div className="create-conversation">
                     <form onSubmit={handleSubmit}>
                         <div>
-                            <b>Create new conversation</b>
-                            <p>Select users you want to add</p>
-                            {userDetails.friends.map(friend=>{
-                            return(
-                                <p>{friend.ingameName} #{friend.server} <input type="checkbox" onChange={e => toggleSelect(friend.id)} value={friend.id}></input></p>
-                            ) 
-                            })}
+                            <p>Conversation name:</p>
+                            <input type="text" value={name} onChange={e=>setName(e.target.value)}></input>
+                            <p>Conversation participants:</p>
+                            <div className="friends-select">
+                                {userDetails.friends.map(friend=>{
+                                    return(
+                                        <p className={"friend-select " + (selected.get(friend.id) ? "selected" : "")} onClick={e => toggleSelect(friend.id)} value={friend.id}>
+                                            {friend.ingameName} #{friend.server}
+                                            <span><i class="fa-regular fa-circle-check"></i></span> 
+                                        </p>
+                                    ) 
+                                })}
+                            </div>
                         </div>
                         <div className="buttons">
                             <button type="button" onClick={e => props.setActive(false)}>Close</button>

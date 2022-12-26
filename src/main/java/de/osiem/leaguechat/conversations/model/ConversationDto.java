@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class  ConversationDto{
+    private String name;
     private Set<Long> ids;
 }
 

@@ -35,6 +35,8 @@ public class Conversation {
     @OrderBy("createdAt ASC")
     private Set<Message> messages = new HashSet<Message>();
 
+    private String name;
+
     public Message getLastMessage(){
         if(messages.size() > 0){
             return messages.toArray(new Message[messages.size()])[messages.size() - 1];

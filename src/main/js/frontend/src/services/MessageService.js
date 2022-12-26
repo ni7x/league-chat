@@ -35,8 +35,9 @@ export const getConversation = async (conversationId, token) => {
     }
 }
 
-export const createConversation = async (userIdList, token) => {
+export const createConversation = async (name, userIdList, token) => {
     let data = {
+        "name": name,
         "ids": userIdList
     };
     console.log(data)
