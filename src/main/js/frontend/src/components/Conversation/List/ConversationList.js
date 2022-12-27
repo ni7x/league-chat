@@ -1,5 +1,5 @@
 import ConversationPreview from "./ConversationPreview.js";
-import { useUserDetails, useUserToken } from "../../services/UserService.js";
+import { useUserDetails, useUserToken } from "../../../services/UserService.js";
 
 const ConversationList = (props) => {
     let [ userDetails, ] = useUserDetails();

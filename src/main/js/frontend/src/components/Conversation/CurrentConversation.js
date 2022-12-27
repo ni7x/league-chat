@@ -3,7 +3,7 @@ import {getConversation,  } from "../../services/MessageService";
 import { useUserDetails, useUserToken } from "../../services/UserService";
 import Message from "./Message";
 import * as Stomp from 'stompjs';
-import ConversationName from "./ConversationName";
+import ConversationName from "./List/ConversationName";
 
 const CurrentConversation = (props) => {
     let [ userToken,  ] = useUserToken();

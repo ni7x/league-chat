@@ -1,6 +1,5 @@
 package de.osiem.leaguechat.conversations.model;
 
-import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

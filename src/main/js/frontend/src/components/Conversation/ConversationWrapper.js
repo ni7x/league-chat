@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import {getConversation, getConversations } from "../../services/MessageService";
 import { useUserDetails, useUserToken } from "../../services/UserService";
 import { useParams } from 'react-router-dom';
-import ConversationList from "./ConversationList";
+import ConversationList from "./List/ConversationList";
 import CurrentConversation from "./CurrentConversation";
 import CreateConversation from "./CreateConversation";
 

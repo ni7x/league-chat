@@ -1,8 +1,6 @@
 package de.osiem.leaguechat.conversations.controller;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -21,7 +19,6 @@ import de.osiem.leaguechat.conversations.model.ConversationDto;
 import de.osiem.leaguechat.conversations.model.ConversationPreview;
 import de.osiem.leaguechat.conversations.model.MessageDto;
 import de.osiem.leaguechat.conversations.service.ConversationService;
-import de.osiem.leaguechat.user.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
