@@ -7,10 +7,13 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,6 +22,7 @@ import de.osiem.leaguechat.conversations.model.ConversationDto;
 import de.osiem.leaguechat.conversations.model.ConversationPreview;
 import de.osiem.leaguechat.conversations.model.MessageDto;
 import de.osiem.leaguechat.conversations.service.ConversationService;
+import de.osiem.leaguechat.user.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -38,10 +42,10 @@ public class ConversationController {
 
     @MessageMapping("/conversation/{conversationId}/delete") // handles messages in app/conversatioon
     // @SendTo("/message/private") // sends to 
-     public void delete(Long messageId, @DestinationVariable Long conversationId) throws Exception {
+    public void delete(Long messageId, @DestinationVariable Long conversationId) throws Exception {
          service.deleteMessage(messageId);
          template.convertAndSend("/message/private/" + conversationId, new ResponseAction("DELETE",  messageId));
-     }
+    }
 
     @GetMapping("api/conversation/")
     public List<ConversationPreview> getAllConversations(Authentication authentication){
@@ -49,8 +53,13 @@ public class ConversationController {
     }
 
     @PostMapping("api/conversation/")
-    public Conversation createConversation(Authentication authentication, @RequestBody ConversationDto conversationDto){
+    public ConversationPreview createConversation(Authentication authentication, @RequestBody ConversationDto conversationDto){
         return service.createConversation(conversationDto);
+    }
+
+    @PutMapping("api/conversation/leave/id/{coversationId}")
+    public Conversation leaveConversation(Authentication authentication, @PathVariable Long coversationId){
+        return service.leaveConversation(coversationId, authentication.getName());
     }
 
     @GetMapping("api/conversations/")

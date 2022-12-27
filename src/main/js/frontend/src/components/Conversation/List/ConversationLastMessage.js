@@ -27,7 +27,7 @@ const ConversationLastMessage = (props) => {
                     {props.conversation.lastMessage != null 
                         ? !props.conversation.lastMessage.deleted
                             ? <>: {props.conversation.lastMessage.content.slice(0, 20)}</> 
-                            : <span className="deleted-message">Deleted Message</span>
+                            : <span className="deleted-message">: Deleted Message</span>
                         : <>Start the conversation!</>
                     }
                  </span>

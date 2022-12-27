@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {getConversation,  } from "../../services/MessageService";
+import {getConversation, leaveConversation,  } from "../../services/MessageService";
 import { useUserDetails, useUserToken } from "../../services/UserService";
 import Message from "./Message";
 import * as Stomp from 'stompjs';
@@ -7,36 +7,36 @@ import ConversationName from "./List/ConversationName";
 
 const CurrentConversation = (props) => {
     let [ userToken,  ] = useUserToken();
-    let [ userDetails,  ] = useUserDetails(); 
+    let [ userDetails, ] = useUserDetails(); 
     let [ messages, setMessages ] = useState([]);
     let [ conversation, setConversation ] = useState();
     let [ conversationImage, setConversationImage ] = useState("");
     let [ connected, setConnected ] = useState(false);
     let [ newMessage, setNewMessage ] = useState("");
-
+    let [ isAllowed, setIsAllowed ] = useState(false); 
     const client = useRef(null);
     let bottomRef = useRef();
 
-    let isAllowed = userDetails.conversations.filter(conversation => conversation.id === parseInt(props.id)).length > 0;
+    useEffect(()=>{
+        setIsAllowed(conversation && conversation.participants.filter(participant => participant.id === parseInt(userDetails.id)).length > 0);
+    }, [conversation])
+
+
    
     let fetchMessages = () => {
         getConversation(props.id, userToken).then(response=>response.json())
             .then(json=>{
-                setMessages(json.messages); 
-                setConversation(json);       
-        });
+                setConversation(json);
+                setMessages(json.messages);  
+        }).catch(setIsAllowed(false));
     }
 
     useEffect(()=>{
-        if(isAllowed){
-            fetchMessages();
-        }
+         fetchMessages();
     }, [])
 
     useEffect(()=>{
-        if(isAllowed){
-            connect();
-        }
+        connect();
     }, [])
 
     useEffect(()=>{
@@ -71,7 +71,6 @@ const CurrentConversation = (props) => {
         setConnected(true);
     }
 
-
     let sendMessage = (e) => {
         e.preventDefault();
 
@@ -98,14 +97,22 @@ const CurrentConversation = (props) => {
         client.current.send('/app/conversation/'+ props.id + '/delete', {},  JSON.stringify(messageId));
     }
 
+    let leaveConv = async () => {
+        await leaveConversation(props.id, userToken).then(response => response.json()).then(json => setConversation(json));
+        props.getConversationPreviews();
+    }
+
     if(!isAllowed){
         return <>You can't see this conversation</>
     }
     return (
        <>   
             <div className="conversation-top-panel">
-                <img src={"http://localhost:8080/uploads/avatars/" + conversationImage}/>
-                {conversation && <ConversationName conversation={conversation} setConversationImage={setConversationImage} userId={userDetails.id}/> }
+                <div>
+                    <img src={"http://localhost:8080/uploads/avatars/" + conversationImage}/>
+                    {conversation && <ConversationName conversation={conversation} setConversationImage={setConversationImage} userId={userDetails.id}/> }
+                </div>
+                <button onClick={leaveConv}><i class="fa-solid fa-right-from-bracket"></i></button>
             </div>
             <div className="messages">
                 <ul>

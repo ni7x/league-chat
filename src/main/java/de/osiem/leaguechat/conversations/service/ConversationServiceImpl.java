@@ -32,11 +32,11 @@ public class ConversationServiceImpl implements ConversationService{
 
     @Override
     public Conversation getConversation(Long conversationId) {
-        return conversationRepository.findById(conversationId).get();
+        return conversationRepository.findById(conversationId).get();//make optional<> work later
     }
 
     @Override
-    public  Conversation createConversation(ConversationDto conversationDto){
+    public  ConversationPreview createConversation(ConversationDto conversationDto){
         Set<User> users = new HashSet<>();
         conversationDto.getIds().forEach(id->users.add(userRepository.findById(id).get()));
         if(users.size() > 1){
@@ -47,7 +47,10 @@ public class ConversationServiceImpl implements ConversationService{
             for(User user: users){
                 user.getConversations().add(conversation);
             }
-            return  conversation;
+
+            Set<Participant> participants = new HashSet<>();
+            conversation.getParticipants().forEach(participant->participants.add(new Participant(participant.getIngameName(),participant.getId(), participant.getAvatar())));
+            return new ConversationPreview(conversation.getLastMessage(), participants, conversation.getId(), conversation.getName());
         }
        return null;
     }
@@ -66,7 +69,24 @@ public class ConversationServiceImpl implements ConversationService{
        return null;
     }
 
-    
+    @Override
+    public Conversation leaveConversation(Long coversationId, String name) {
+        Optional<Conversation> conversationOpt = conversationRepository.findById(coversationId);
+        if(conversationOpt.isPresent()){
+            Conversation conversation = conversationOpt.get();
+            User user = userRepository.findByUsername(name);
+            conversation.getParticipants().remove(user);
+            user.getConversations().remove(conversation);
+            if(conversation.getParticipants().size() < 2){
+                conversation.getParticipants().forEach(p -> p.getConversations().remove(conversation));
+                deleteConversation(conversation);
+            }
+            return conversation;
+        }else{
+            return null;
+        }
+      
+    }
 
     @Override
     public void deleteMessage(Long messageId){
@@ -74,8 +94,7 @@ public class ConversationServiceImpl implements ConversationService{
         if(!message.isDeleted()){
             message.setDeleted(true);
             message.setContent(null);
-        }
-        
+        }  
     }
 
     @Override
@@ -123,4 +142,5 @@ public class ConversationServiceImpl implements ConversationService{
         return conversationList;
     }
 
+ 
 }

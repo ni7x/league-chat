@@ -20,14 +20,19 @@ const ConversationWrapper = () => {
         }
     }
 
+    let getConversationPreviews =  () => {
+         getConversations(userToken).then(response => response.json()).then(conversations => setConversations(conversations));
+    }
+    
+
     useEffect(()=>{
-        getConversations(userToken).then(response => response.json()).then(conversations => setConversations(conversations));
+        getConversationPreviews();
     }, [])
 
    
         return( 
             <div className="conversations">
-                <CreateConversation isActive={isCreateConversationShown} setActive={setIsCreateConversationShown}/>
+                <CreateConversation isActive={isCreateConversationShown} setActive={setIsCreateConversationShown} setConversations={setConversations}/>
                  <div className="list">
                     <div className="top-panel">
                          <button onClick={e => setIsCreateConversationShown(true)}><i class="fa-solid fa-square-plus"></i></button>
@@ -36,7 +41,7 @@ const ConversationWrapper = () => {
                     <ConversationList conversations={conversations}/>
                  </div>
                 <div className="current-conversation">
-                    {!isNaN(id) ?  <CurrentConversation id={id}/> : null }
+                    {!isNaN(id) ?  <CurrentConversation id={id} getConversationPreviews={getConversationPreviews}/> : null }
                 </div>
             </div>
         )

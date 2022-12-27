@@ -8,7 +8,7 @@ const CreateConversation = (props) => {
     const [ selected, setSelected ] = useState(new Map());
     const [ name, setName ] = useState("");
 
-    let handleSubmit = (e) => { 
+    let handleSubmit = async (e) => { 
         e.preventDefault();
         let ids = [];
         ids.push(userDetails.id);
@@ -17,7 +17,8 @@ const CreateConversation = (props) => {
                 ids.push(k);
             }
         })
-        createConversation(name, ids, userToken);
+        let newConv = await createConversation(name, ids, userToken).then(response=>response.json());
+        props.setConversations(conversations => [...conversations, newConv]);
         props.setActive(false);
     }
 

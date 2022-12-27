@@ -57,6 +57,24 @@ export const createConversation = async (name, userIdList, token) => {
     }
 }
 
+export const leaveConversation = async (id, token) => {
+
+    const response = await fetch(URL_PREFIX + "leave/id/" + id, {
+        method: "PUT",
+        headers: {
+            "Authorization" : "Bearer " + token,
+            "Content-Type": "application/json"
+    }});
+    if(response.ok){
+        return response;
+    }else{
+        let json = await response.json();
+        let message = json.message;
+        return Promise.reject(message);
+    }
+}
+
+
 export const createMessage = async (userId, messageContent, conversationId, token) => {
     let data = {
         "authorId" : userId,

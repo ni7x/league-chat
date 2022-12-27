@@ -12,9 +12,11 @@ import de.osiem.leaguechat.user.model.user.User;
 
 public interface ConversationService {
     Conversation createConversation(Set<User> users);
-    Conversation createConversation(ConversationDto conversationDto);
+    ConversationPreview createConversation(ConversationDto conversationDto);
     void deleteConversation(Conversation conversation);
     Conversation getConversation(Long conversationId);
+    Conversation leaveConversation(Long coversationId, String name);
+
 
     Message createMessage(MessageDto message);
     void deleteMessage(Long messageId);
