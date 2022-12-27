@@ -48,7 +48,6 @@ public class SecurityConfig {
                 })
                 .and().authorizeRequests(auth->auth
                     .antMatchers("/api/user/save", "/api/user/forgotPassword", "/api/user/changePassword", "/api/user/validation/**","/api/user/autoSuggestion").permitAll()
-                  
                     .antMatchers("/uploads/**").permitAll()
                     .antMatchers("/stompOnly/**").permitAll()
                     .antMatchers("/api/users").hasAuthority("ADMIN")

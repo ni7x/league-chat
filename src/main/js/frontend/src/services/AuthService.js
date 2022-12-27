@@ -1,16 +1,16 @@
-const URL_PREFIX = "http://127.0.0.1:8080";
+const URL_PREFIX = "http://127.0.0.1:8080/api/";
 
 export const login = async (username, password) => {
-    const response = await fetch(URL_PREFIX + "/token", {
+    const response = await fetch(URL_PREFIX + "tokens", {
         method: "POST",
         headers: {
             "Authorization": "Basic " + btoa(username + ":" + password)
         }
     });
     if(response.ok){
-        let token = await response.text();
-        localStorage.setItem("token", token);
-        return token;
+        let tokens = await response.json();
+        localStorage.setItem("token", tokens.accessToken);
+        return tokens.accessToken;
     }else{
         return Promise.reject("Couldn't authorize");
     }   
@@ -28,7 +28,7 @@ export const register = async (username, email, ingameName, password, server) =>
         "password": password,
         "server": server
     };
-    const response = await fetch(URL_PREFIX + "/api/user/save", {
+    const response = await fetch(URL_PREFIX + "user/save", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {
@@ -45,7 +45,7 @@ export const register = async (username, email, ingameName, password, server) =>
 }
 
 export const forgotPassword = async ( email ) => { 
-    const response = await fetch(URL_PREFIX + "/api/user/forgotPassword", {
+    const response = await fetch(URL_PREFIX + "user/forgotPassword", {
         method: "POST",
         body: email,
         headers: {
@@ -66,7 +66,7 @@ export const changePassword = async (password, token) => {
         "password": password,
         "token": token
     };
-    const response = await fetch(URL_PREFIX + "/api/user/changePassword", {
+    const response = await fetch(URL_PREFIX + "user/changePassword", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {
