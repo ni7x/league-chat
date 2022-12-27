@@ -8,5 +8,3 @@ todo:
     - paging
     - more stuff
     
-   leave only icons left on tablet size
-   
