@@ -47,13 +47,11 @@ public class SecurityConfig {
                     return corsConfig;
                 })
                 .and().authorizeRequests(auth->auth
-                    .antMatchers("/api/user/save").permitAll()
-                    .antMatchers("/api/user/forgotPassword").permitAll()
-                    .antMatchers("/api/user/changePassword").permitAll()
-                    .antMatchers("/api/user/validation/**").permitAll()
-                    .antMatchers("/api/user/autoSuggestion").permitAll()
-                    .antMatchers("**").permitAll()//for now
-                    //.antMatchers("/api/users").hasAuthority("ADMIN")
+                    .antMatchers("/api/user/save", "/api/user/forgotPassword", "/api/user/changePassword", "/api/user/validation/**","/api/user/autoSuggestion").permitAll()
+                  
+                    .antMatchers("/uploads/**").permitAll()
+                    .antMatchers("/stompOnly/**").permitAll()
+                    .antMatchers("/api/users").hasAuthority("ADMIN")
                     .anyRequest().authenticated())
                 .oauth2ResourceServer(authorize -> authorize
                     .jwt(jwt -> jwt.jwtAuthenticationConverter(new JWTAuthenticationConverter())))

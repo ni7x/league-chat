@@ -43,9 +43,9 @@ const CreateConversation = (props) => {
                             <div className="friends-select">
                                 {userDetails.friends.map(friend=>{
                                     return(
-                                        <p className={"friend-select " + (selected.get(friend.id) ? "selected" : "")} onClick={e => toggleSelect(friend.id)} value={friend.id}>
+                                        <p key={friend.id} className={"friend-select " + (selected.get(friend.id) ? "selected" : "")} onClick={e => toggleSelect(friend.id)} value={friend.id}>
                                             {friend.ingameName} #{friend.server}
-                                            <span><i class="fa-regular fa-circle-check"></i></span> 
+                                            <span><i className="fa-regular fa-circle-check"></i></span> 
                                         </p>
                                     ) 
                                 })}

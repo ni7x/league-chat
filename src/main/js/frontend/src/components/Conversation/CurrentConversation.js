@@ -112,7 +112,7 @@ const CurrentConversation = (props) => {
                     <img src={"http://localhost:8080/uploads/avatars/" + conversationImage}/>
                     {conversation && <ConversationName conversation={conversation} setConversationImage={setConversationImage} userId={userDetails.id}/> }
                 </div>
-                <button onClick={leaveConv}><i class="fa-solid fa-right-from-bracket"></i></button>
+                <button onClick={leaveConv}><i className="fa-solid fa-right-from-bracket"></i></button>
             </div>
             <div className="messages">
                 <ul>

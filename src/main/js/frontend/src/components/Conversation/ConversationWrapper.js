@@ -35,7 +35,7 @@ const ConversationWrapper = () => {
                 <CreateConversation isActive={isCreateConversationShown} setActive={setIsCreateConversationShown} setConversations={setConversations}/>
                  <div className="list">
                     <div className="top-panel">
-                         <button onClick={e => setIsCreateConversationShown(true)}><i class="fa-solid fa-square-plus"></i></button>
+                         <button onClick={e => setIsCreateConversationShown(true)}><i className="fa-solid fa-square-plus"></i></button>
                     </div>
                     
                     <ConversationList conversations={conversations}/>
