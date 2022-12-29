@@ -4,6 +4,7 @@ import { useUserDetails, useUserToken } from "../../services/UserService";
 import Message from "./Message";
 import * as Stomp from 'stompjs';
 import ConversationName from "./List/ConversationName";
+import LoadingSpinner from "../LoadingSpinner";
 
 const CurrentConversation = (props) => {
     let [ userToken,  ] = useUserToken();
@@ -14,6 +15,7 @@ const CurrentConversation = (props) => {
     let [ connected, setConnected ] = useState(false);
     let [ newMessage, setNewMessage ] = useState("");
     let [ isAllowed, setIsAllowed ] = useState(false); 
+    let [ isLoading, setIsLoading ] = useState(false);
     const client = useRef(null);
     let bottomRef = useRef();
 
@@ -24,11 +26,16 @@ const CurrentConversation = (props) => {
 
    
     let fetchMessages = () => {
+        setIsLoading(true);
         getConversation(props.id, userToken).then(response=>response.json())
             .then(json=>{
                 setConversation(json);
                 setMessages(json.messages);  
-        }).catch(setIsAllowed(false));
+                setIsLoading(false);
+        }).catch(e => {
+            setIsLoading(false);
+            setIsAllowed(false);
+        });
     }
 
     useEffect(()=>{
@@ -102,9 +109,14 @@ const CurrentConversation = (props) => {
         props.getConversationPreviews();
     }
 
+    if(isLoading){
+        return <LoadingSpinner/>
+    }
+
     if(!isAllowed){
         return <>You can't see this conversation</>
     }
+   
     return (
        <>   
             <div className="conversation-top-panel">

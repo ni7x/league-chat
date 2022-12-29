@@ -64,7 +64,10 @@ public class TokenService {
 
     public String genrateNewAccessToken(String refreshTokenStr) {
         RefreshToken refreshToken = refreshTokenRepository.findByToken(refreshTokenStr);
-        return generateToken(refreshToken.getUsername(), refreshToken.getId());
+        if(refreshToken != null){
+            return generateToken(refreshToken.getUsername(), refreshToken.getId());
+        }
+        return null;     
     }
 
     public Jwt decodeJwt(HttpServletRequest request){

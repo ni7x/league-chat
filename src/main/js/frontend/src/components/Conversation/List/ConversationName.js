@@ -19,7 +19,7 @@ const ConversationName = (props) => {
 
     return(
         <b>
-             {props.conversation.name !== null 
+             {props.conversation.name !== null && props.conversation.name !== "" 
                     ? props.conversation.name  
                     :
                     participantsNames.map(name=>{

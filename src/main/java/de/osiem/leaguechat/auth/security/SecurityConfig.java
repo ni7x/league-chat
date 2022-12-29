@@ -20,13 +20,11 @@ import lombok.AllArgsConstructor;
 @EnableWebSecurity
 public class SecurityConfig {
     private final LeagueChatUserDetailsService userDetailsService;
-    private final JwtSecurityFilter securityFilter;
     private final JwtLogoutHandler jwtLogoutHandler;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(csfr -> csfr.disable())
                 .cors().configurationSource(request -> {
                     CorsConfiguration corsConfig = new CorsConfiguration();

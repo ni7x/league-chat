@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar/Navbar";
 import Sidebar from "../components/Sidebar/Sidebar";
 import FriendRequests from "../components/FriendRequest/FriendRequests";
 import CreateFriendRequest from "../components/FriendRequest/CreateFriendRequest";
+import LoadingSpinner from "../components/LoadingSpinner";
 
         
 let Authenticated = ( props ) => {
@@ -25,7 +26,7 @@ let Authenticated = ( props ) => {
     }
     
     if(userDetails === null){
-        return <>No user details</>
+        return <><LoadingSpinner/></>
     }
 
     return(

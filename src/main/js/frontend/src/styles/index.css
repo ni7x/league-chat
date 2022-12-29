@@ -56,3 +56,28 @@ button{
         font-size: 1.45rem;
     }
 }
+
+@keyframes spinner {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .loading-spinner {
+    width: 5rem;
+    height: 5rem;
+    border: 1rem solid var(--light-gray); 
+    border-top: 1rem solid var(--gray); 
+    border-radius: 50%;
+    animation: spinner 1.5s linear infinite;
+  }
+  
+  .spinner-container {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 10%);
+  }

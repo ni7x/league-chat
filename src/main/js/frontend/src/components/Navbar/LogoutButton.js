@@ -5,8 +5,8 @@ const LogoutButton = () => {
     const [ userToken, setUserToken ] = useUserToken();
 
     const handleClick = () => {
-        logout();
-        setUserToken(null);
+        logout(userToken);
+        setUserToken(null); 
     }
     
     return(

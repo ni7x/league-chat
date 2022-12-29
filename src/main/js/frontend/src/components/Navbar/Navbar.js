@@ -1,14 +1,12 @@
 import LogoutButton from './LogoutButton';
 import { NavLink } from 'react-router-dom';
 import { useUserDetails, useUserToken } from "../../services/UserService";
-import { getNewAccessToken } from '../../services/AuthService';
 const Navbar = () => {
     const [ userDetails, ] = useUserDetails();
 
     if(userDetails !== null){
         return (
             <nav className="navbar">
-                <button onClick={(e)=>getNewAccessToken(localStorage.getItem("refreshToken"))}>genreate new access</button>
                 <ul>
                     <li><a href="/"><img src={"http://localhost:8080/uploads/avatars/" + userDetails.avatar}  className="user-avatar" alt="Profile image"></img></a></li>
                 </ul>

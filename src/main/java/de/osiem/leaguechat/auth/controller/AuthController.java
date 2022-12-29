@@ -1,7 +1,12 @@
 package de.osiem.leaguechat.auth.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties.Lettuce.Cluster.Refresh;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +49,15 @@ public class AuthController {
         //System.out.println("Refreshed token " + newToken);
         return ResponseEntity.ok().body(newToken);
 	}
+
+    @PostMapping("/logout")
+    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        Jwt decoded = tokenService.decodeJwt(request);
+        if(decoded != null){
+            String refreshTokenId = decoded.getClaimAsString("refreshTokenId");
+            tokenService.logout(refreshTokenId);
+        }
+    }
 
 
 }

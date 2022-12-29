@@ -37,8 +37,21 @@ export const getNewAccessToken = async (refreshToken) => {
 }
 
 
-export const logout = () => {
-    localStorage.removeItem("token");
+export const logout = async (token) => {
+    const response = await fetch(URL_PREFIX + "logout", {
+        method: "POST",
+     
+        headers: {
+            "Authorization" : "Bearer " + token,
+        }
+    });
+    if(response.ok){
+        localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+    }else{
+        return Promise.reject("Couldn't logout");
+    }   
+
 }
 
 export const register = async (username, email, ingameName, password, server) => {
