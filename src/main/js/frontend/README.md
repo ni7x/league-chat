@@ -6,4 +6,5 @@ Things done:
 - CRUD operations
 - forgot password email sending
 - Storing images in app
+- 
 Learnt big chunk of stuff doing that, may not be cleanest ever in some moments tho.
