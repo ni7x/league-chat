@@ -26,7 +26,6 @@ export const getNewAccessToken = async (refreshToken) => {
             "Content-Type": "application/json"
         }
     });
-    console.log(response)
     if(response.ok){
         let token = await response.text();
         console.log(token);

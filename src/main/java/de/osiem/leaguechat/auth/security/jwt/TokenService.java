@@ -86,6 +86,10 @@ public class TokenService {
         return null;
     }
 
+    public void logout (String refreshTokenId){
+        refreshTokenRepository.deleteById(refreshTokenId);
+    }
+
     
 
 

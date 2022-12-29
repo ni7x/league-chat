@@ -21,6 +21,7 @@ import lombok.AllArgsConstructor;
 public class SecurityConfig {
     private final LeagueChatUserDetailsService userDetailsService;
     private final JwtSecurityFilter securityFilter;
+    private final JwtLogoutHandler jwtLogoutHandler;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
@@ -45,6 +46,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider())
                 .httpBasic(Customizer.withDefaults())
+                .logout().addLogoutHandler(jwtLogoutHandler).and()
                 .build();
     }
 

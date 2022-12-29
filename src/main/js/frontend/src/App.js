@@ -27,47 +27,34 @@ const App = () => {
     const token = useMemo(() => ({userToken, setUserToken}, [userToken, setUserToken]));
     const [ userDetails, setUserDetails ] = useState(null);
     const user = useMemo(() => ({userDetails, setUserDetails}, [userDetails, setUserDetails]));
+    
     console.log(userToken);
     useEffect(()=>{
         if(userToken === null){
             setUserDetails(null);
         }else{
             const fetchUser = async () => {
-                try{
-                    const data = await fetch("http://127.0.0.1:8080/api/user/current", {
-                        method: "GET",
-                        headers: {
-                            "Authorization" : "Bearer " + userToken
-                          }
-                    }) 
-                    if(data.ok){
-                        const json = await data.json();
-                        setUserDetails(json);   
-                    }else{
-                        console.log("Data not OK");
-                        try{
-                            console.log("XD");
-                            let newToken = await getNewAccessToken(refreshToken);
-                            console.log(newToken)
-                            setUserToken(newToken);
-                            console.log("NEw token set")
-                        }catch(e){
-                            setUserDetails(null);  
-                            setUserToken(null);
-                        }
-                       
+                const data = await fetch("http://127.0.0.1:8080/api/user/current", {
+                    method: "GET",
+                    headers: {
+                        "Authorization" : "Bearer " + userToken
                     }
-                }catch{
-                    console.log("EXCEPTION UNATHURIZED");
+                }) 
+                if(data.ok){
+                    const json = await data.json();
+                    setUserDetails(json);   
+                }else if(data.status === 401){      
                     try{
+                        console.log("401");
                         let newToken = await getNewAccessToken(refreshToken);
                         setUserToken(newToken);
                     }catch(e){
                         setUserDetails(null);  
                         setUserToken(null);
                     }
+                }else{
+                    console.log("Unknow error")
                 }
-                   
             }
             fetchUser().catch((e)=>console.log(e))
         }
