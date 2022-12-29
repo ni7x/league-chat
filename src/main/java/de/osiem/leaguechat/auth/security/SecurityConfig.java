@@ -9,35 +9,23 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-
-import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
-import com.nimbusds.jose.jwk.source.JWKSource;
-import com.nimbusds.jose.proc.SecurityContext;
-import de.osiem.leaguechat.auth.security.jwt.JWTAuthenticationConverter;
-import de.osiem.leaguechat.auth.security.jwt.RSAKeys;
+//import de.osiem.leaguechat.auth.security.jwt.JWTAuthenticationConverter;
 import lombok.AllArgsConstructor;
 
 @Configuration
 @AllArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
-
-    private final RSAKeys rsaKeys;
-
     private final LeagueChatUserDetailsService userDetailsService;
+    private final JwtSecurityFilter securityFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(csfr -> csfr.disable())
                 .cors().configurationSource(request -> {
                     CorsConfiguration corsConfig = new CorsConfiguration();
@@ -48,12 +36,12 @@ public class SecurityConfig {
                 })
                 .and().authorizeRequests(auth->auth
                     .antMatchers("/api/user/save", "/api/user/forgotPassword", "/api/user/changePassword", "/api/user/validation/**","/api/user/autoSuggestion").permitAll()
-                    .antMatchers("/uploads/**").permitAll()
+                    .antMatchers("/uploads/**", "/api/refresh").permitAll()
                     .antMatchers("/stompOnly/**").permitAll()
                     .antMatchers("/api/users").hasAuthority("ADMIN")
                     .anyRequest().authenticated())
                 .oauth2ResourceServer(authorize -> authorize
-                    .jwt(jwt -> jwt.jwtAuthenticationConverter(new JWTAuthenticationConverter())))
+                    .jwt(/*jwt -> jwt.jwtAuthenticationConverter(new JWTAuthenticationConverter())*/))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider())
                 .httpBasic(Customizer.withDefaults())
@@ -61,24 +49,12 @@ public class SecurityConfig {
     }
 
     @Bean
-	JwtDecoder JWTDecoder() {
-		return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build();
-	}
-	
-	@Bean
-	JwtEncoder JWTEncoder() {
-		JWK jwk = new RSAKey.Builder(rsaKeys.publicKey()).privateKey(rsaKeys.privateKey()).build();
-		JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
-		return new NimbusJwtEncoder(jwks);
-	}
-
-    @Bean
-    public static PasswordEncoder encoder(){
+    static PasswordEncoder encoder(){
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public DaoAuthenticationProvider authProvider() {
+    DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(encoder());

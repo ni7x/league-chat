@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
 
+/*
 public class JWTAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken>{
     
     private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
@@ -34,3 +35,4 @@ public class JWTAuthenticationConverter implements Converter<Jwt, AbstractAuthen
 		return new JwtAuthenticationToken(source, authorities);
 	}
 }
+*/

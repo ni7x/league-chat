@@ -27,9 +27,9 @@ public class AuthController {
 	
 	@PostMapping("/tokens")
 	public ResponseEntity<Tokens> getTokens(Authentication authentication) {
-        RefreshToken refreshToken = tokenService.generateRefreshToken(authentication);
+        RefreshToken refreshToken = tokenService.generateRefreshToken(authentication.getName());
         refreshTokenRepository.save(refreshToken);
-		String token = tokenService.generateToken(authentication, refreshToken.getId());
+		String token = tokenService.generateToken(authentication.getName(), refreshToken.getId());
         Tokens tokens = new Tokens(token, refreshToken.getToken());
         System.out.println("Access " + token);
         System.out.println("Refresh " + refreshToken.getToken());
@@ -37,9 +37,11 @@ public class AuthController {
 	}
 
     @PostMapping("/refresh")
-	public ResponseEntity<String> refreshToken(Authentication authentication, @RequestBody RefreshTokenRequest refreshTokenRequest) {
-        String newToken = tokenService.genrateNewAccessToken(authentication, refreshTokenRequest.getRefreshToken());
-        System.out.println("Refreshed token " + newToken);
+	public ResponseEntity<String> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        System.out.println(refreshTokenRequest.getRefreshToken());
+   
+        String newToken = tokenService.genrateNewAccessToken(refreshTokenRequest.getRefreshToken());
+        //System.out.println("Refreshed token " + newToken);
         return ResponseEntity.ok().body(newToken);
 	}
 

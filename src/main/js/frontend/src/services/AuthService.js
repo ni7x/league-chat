@@ -10,11 +10,33 @@ export const login = async (username, password) => {
     if(response.ok){
         let tokens = await response.json();
         localStorage.setItem("token", tokens.accessToken);
+        localStorage.setItem("refreshToken", tokens.refreshToken);
         return tokens.accessToken;
     }else{
         return Promise.reject("Couldn't authorize");
     }   
 }
+
+export const getNewAccessToken = async (refreshToken) => {
+    console.log("getting new access token")
+    const response = await fetch(URL_PREFIX + "refresh", {
+        method: "POST",
+        body: JSON.stringify({"refreshToken" : refreshToken}),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    console.log(response)
+    if(response.ok){
+        let token = await response.text();
+        console.log(token);
+        localStorage.setItem("token", token);
+        return token;
+    }else{
+        return Promise.reject("Couldn't get new access token");
+    }   
+}
+
 
 export const logout = () => {
     localStorage.removeItem("token");

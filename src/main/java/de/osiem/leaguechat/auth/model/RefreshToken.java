@@ -2,6 +2,7 @@ package de.osiem.leaguechat.auth.model;
 
 
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -28,7 +29,7 @@ public class RefreshToken {
     private String username;
 
     @NotNull
-    private Date expiryDate;
+    private LocalDateTime expiryDate;
 
     @NotNull
     @Column(length = 128)

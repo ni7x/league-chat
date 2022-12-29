@@ -21,11 +21,11 @@ let Authenticated = ( props ) => {
     }
 
     if(userToken === null){
-        return <a href="/login"></a>
+        return <>No user token</>
     }
     
     if(userDetails === null){
-        return <>Loading</>
+        return <>No user details</>
     }
 
     return(

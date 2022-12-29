@@ -19,35 +19,59 @@ import { useEffect, useMemo, useState } from 'react';
 import { UserContext } from "./UserContext";
 import Authenticated from './wrappers/Authenticated';
 import ConversationWrapper from './components/Conversation/ConversationWrapper';
+import { getNewAccessToken } from './services/AuthService';
 
 const App = () => {
     const [ userToken, setUserToken ] = useState(localStorage.getItem("token"));
+    const [ refreshToken, setRefreshToken ] = useState(localStorage.getItem("refreshToken"));
     const token = useMemo(() => ({userToken, setUserToken}, [userToken, setUserToken]));
     const [ userDetails, setUserDetails ] = useState(null);
     const user = useMemo(() => ({userDetails, setUserDetails}, [userDetails, setUserDetails]));
-
+    console.log(userToken);
     useEffect(()=>{
         if(userToken === null){
             setUserDetails(null);
         }else{
             const fetchUser = async () => {
-                const data = await fetch("http://127.0.0.1:8080/api/user/current", {
-                    method: "GET",
-                    headers: {
-                        "Authorization" : "Bearer " + userToken
-                      }
-                }) 
-                if(data.ok){
-                    const json = await data.json();
-                    setUserDetails(json);   
-                }else{
-                    setUserDetails(null);  
-                    setUserToken(null);
+                try{
+                    const data = await fetch("http://127.0.0.1:8080/api/user/current", {
+                        method: "GET",
+                        headers: {
+                            "Authorization" : "Bearer " + userToken
+                          }
+                    }) 
+                    if(data.ok){
+                        const json = await data.json();
+                        setUserDetails(json);   
+                    }else{
+                        console.log("Data not OK");
+                        try{
+                            console.log("XD");
+                            let newToken = await getNewAccessToken(refreshToken);
+                            console.log(newToken)
+                            setUserToken(newToken);
+                            console.log("NEw token set")
+                        }catch(e){
+                            setUserDetails(null);  
+                            setUserToken(null);
+                        }
+                       
+                    }
+                }catch{
+                    console.log("EXCEPTION UNATHURIZED");
+                    try{
+                        let newToken = await getNewAccessToken(refreshToken);
+                        setUserToken(newToken);
+                    }catch(e){
+                        setUserDetails(null);  
+                        setUserToken(null);
+                    }
                 }
                    
             }
             fetchUser().catch((e)=>console.log(e))
         }
+        
     }, [userToken])
 
     return (
