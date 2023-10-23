@@ -1,4 +1,9 @@
+# league-chat
+Spring boot x React. Things done:
 
-Spring boot React, jwt websockets stuff
-
+-JWT authentication, refresh token
+-STOMP messaging
+-Responsible css (kind of)
+-forgot password email sending functionality
+-Storing images in app
 
